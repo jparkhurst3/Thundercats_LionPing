@@ -25,8 +25,38 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //api calls
 
-app.get('/api/services', function(req, res) {
-  res.send(['database', 'server', 'website']);
+var executeQuery = function(query, callback) {
+  var connection = mysql.createConnection({
+    host:'cleggchrsdb.chud162mg8im.us-west-2.rds.amazonaws.com',
+    user:'cclegg7',
+    password:'chrisclegg',
+    database:'lion_ping'
+  });
+  connection.connect();
+  connection.query(query, callback);
+  connection.end(function(err){
+    if (err) {
+      console.log(err);
+    }
+  });
+}
+
+app.get('/api/services', function (req, res) {
+  res.setHeader('Content-Type', 'text/plain');
+  executeQuery('SELECT * FROM SERVICE', function(error, results, fields) {
+    if (error) {
+      console.log(error);
+      res.statusCode = 500;
+      res.end("error");
+    } else {
+      res.statusCode = 200;
+      var serviceNames = results.map(function(row) {
+        return row['Name'];
+      });
+      res.end(JSON.stringify(serviceNames));
+    }
+  });
+  
 });
 
 let pings = {
@@ -84,42 +114,6 @@ app.post('/api/pings', function(req, res) {
   pings[id] = ping;
   res.send('successfully posted ping')
 });
-
-app.get('/listCities', function (req, res) {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  var connection = mysql.createConnection({
-    host:'localhost',
-    user:'cclegg7',
-    password:'00002302a',
-    database:'world'
-  });
-  connection.connect();
-  var queriedName;
-  var rows;
-  connection.query('SELECT * FROM city', function(error, results, fields) {
-    if (error) throw error;
-    console.log("query results:");
-    console.log(results);
-    console.log(fields);
-    console.log(error);
-    queriedName = results[0].District;
-
-    rows = JSON.stringify(results);
-    res.send(rows);
-  });
-
-
-  connection.end(function(err){
-    if (err) {
-      console.log(err);
-    }
-  });
-   // fs.readFile( __dirname + "/" + "users.json", 'utf8', function (err, data) {
-   //     console.log( data );
-   //     res.end( data );
-   // });
-})
 
 
 
