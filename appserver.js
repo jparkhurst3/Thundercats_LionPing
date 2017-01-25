@@ -4,8 +4,10 @@ var express = require('express');
 var app = express();
 var mysql = require('mysql');
 var fs = require("fs");
-var path = require('path')
-var bodyParser = require('body-parser')
+var path = require('path');
+var bodyParser = require('body-parser');
+
+var database = require('./database/database.js');
 
 
 //middleware
@@ -25,25 +27,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //api calls
 
-var executeQuery = function(query, callback) {
-  var connection = mysql.createConnection({
-    host:'cleggchrsdb.chud162mg8im.us-west-2.rds.amazonaws.com',
-    user:'cclegg7',
-    password:'chrisclegg',
-    database:'lion_ping'
-  });
-  connection.connect();
-  connection.query(query, callback);
-  connection.end(function(err){
-    if (err) {
-      console.log(err);
-    }
-  });
-}
-
 app.get('/api/services', function (req, res) {
   res.setHeader('Content-Type', 'text/plain');
-  executeQuery('SELECT * FROM SERVICE', function(error, results, fields) {
+  database.executeQuery('SELECT * FROM SERVICE', function(error, results, fields) {
     if (error) {
       console.log(error);
       res.statusCode = 500;
