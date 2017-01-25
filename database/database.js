@@ -1,12 +1,8 @@
 var mysql = require('mysql');
+var config = require('config');
 
 var executeQuery = function(query, callback) {
-  var connection = mysql.createConnection({
-    host:'cleggchrsdb.chud162mg8im.us-west-2.rds.amazonaws.com',
-    user:'cclegg7',
-    password:'chrisclegg',
-    database:'lion_ping'
-  });
+  var connection = mysql.createConnection(config.get('db'));
   connection.connect();
   connection.query(query, callback);
   connection.end(function(err){
