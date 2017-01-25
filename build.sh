@@ -9,5 +9,5 @@ cp "src/style.css" "build"
 
 echo "Building..."
 
-exec "node_modules\.bin\webpack"
+exec "./node_modules/.bin/webpack"
 
