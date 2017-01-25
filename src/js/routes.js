@@ -12,7 +12,7 @@ class Routes extends React.Component {
   render() {
     return (
       <div>
-        <Router history={hashHistory}>
+        <Router history={browserHistory}>
           <Route path='/' component={Container}>
             <IndexRoute component={Home} />
             <Route path="/pings" component={Pings} />
