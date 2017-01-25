@@ -1,5 +1,8 @@
 {
 	"db" : {
+		"host" : "hostname.com",
+    	"user" : "username",
+    	"password" : "password",
     	"database" : "lion_ping"
 	}
 }
