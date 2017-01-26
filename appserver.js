@@ -9,6 +9,13 @@ var bodyParser = require('body-parser');
 
 var database = require('./database/database.js');
 
+var slack = require('./slack/slack.js');
+
+app.get('/api/slackexample', function(req, res) {
+  console.log('received request to ping slack');
+  
+  slack.postMessage('/services/T25EFUYP7/B3X4YAHUL/JLLTip8VjuNdkauvMRkMim9a', 'Example Slack Message');
+});
 
 //middleware
 app.use(function(req, res, next) {
