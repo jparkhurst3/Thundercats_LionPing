@@ -50,24 +50,17 @@ class NewPingCard extends React.Component {
 	}
 
 	componentWillMount() {
-		// fetchSchedule("Database")
-		console.log("compoent will mount")
-		const _this = this;
 		axios.get("http://localhost:8080/api/services")
-			.then(function(result) {
-				console.log("got services result")
-				console.log(result);
-				_this.setState({services: result.data})
-			}).catch(function(err) {
-				console.log(err)
+			.then((result) => {
+				this.setState({services: result.data});
+			})
+			.catch((error) => {
+				console.log(err);
 			})
 	}
 
 	render() {
-		if (!this.state.services) {
-			return <p>loading</p>
-		}
-		const mappedOptions = this.state.services.map(s => <option>{s}</option>)
+		const mappedOptions = this.state.services ? this.state.services.map(service => <option>{service}</option>) : <option disabled>Loading</option>
 		return (
 		<div class="card">
 		  	<div class="card-header">
@@ -178,30 +171,31 @@ class ServicesTable extends React.Component {
 	}
 
 	componentWillMount() {
-		// fetchSchedule("Database")
-		console.log("compoent will mount")
-		const _this = this;
 		axios.get("http://localhost:8080/api/services")
-			.then(function(result) {
-				console.log("got services result")
-				console.log(result);
-				_this.setState({services: result.data})
-			}).catch(function(err) {
-				console.log(err)
+			.then((result) => {
+				console.log("hdhdhservice")
+				this.setState({services: result.data});
+			})
+			.catch((error) => {
+				console.log(err);
 			})
 	}
 
 	render() {
-		if (!this.state.services) {
-			return (
-				<div className="col-xs-4">
-					<p>loading</p>
-				</div>
-			)
-		}
-		const mappedServiceRows = this.state.services.map(service => 
+		// if (!this.state.services) {
+		// 	return (
+		// 		<div className="col-xs-4">
+		// 			<table class="table table-hover">
+		// 				<thead className="thead-inverse">
+		// 					<tr><th>Services</th></tr>
+		// 				</thead>
+		// 			</table>
+		// 		</div>
+		// 	)
+		// }
+		const mappedServiceRows = this.state.services ? this.state.services.map(service => 
 			<tr><td>{service}</td></tr>
-		)
+		) : <tr><td>loading</td></tr>
 		return (
 			<div className="col-xs-4">
 				<table class="table table-hover">

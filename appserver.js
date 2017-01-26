@@ -42,7 +42,6 @@ app.get('/api/services', function (req, res) {
       res.end(JSON.stringify(serviceNames));
     }
   });
-  
 });
 
 let pings = {

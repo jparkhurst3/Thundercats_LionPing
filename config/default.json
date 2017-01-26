@@ -1,8 +1,17 @@
+// {
+// 	"db" : {
+// 		"host" : "hostname.com",
+//     	"user" : "username",
+//     	"password" : "password",
+//     	"database" : "lion_ping"
+// 	}
+// }
+
 {
-	"db" : {
-		"host" : "hostname.com",
-    	"user" : "username",
-    	"password" : "password",
-    	"database" : "lion_ping"
-	}
+    "db" : {
+        "host" : "lionping.cb05ogkuxyhp.us-west-2.rds.amazonaws.com",
+        "user" : "thundercats",
+        "password" : "thundercat166",
+        "database" : "lion_ping"
+    }
 }

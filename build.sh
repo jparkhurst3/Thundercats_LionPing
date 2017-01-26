@@ -6,6 +6,7 @@ mkdir "build"
 
 cp "src/index.html" "build"
 cp "src/style.css" "build"
+cp -r "faviconit" "build"
 
 echo "Building..."
 

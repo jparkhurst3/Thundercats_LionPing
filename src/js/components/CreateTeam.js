@@ -13,12 +13,12 @@ export default class CreateTeamPage extends React.Component {
 
 	componentWillMount() {
 		const _this = this;
-		axios.get('http://localhost:8080/api/users')
-			.then(function(result) {
-				_this.setState({teamMembers: result.data})
+		axios.get("http://localhost:8080/api/users")
+			.then((result) => {
+				this.setState({teamMembers: result.data});
 			})
-			.catch(function(err) {
-				console.log("errrrr")
+			.catch((error) => {
+				console.log(err);
 			})
 	}
 
