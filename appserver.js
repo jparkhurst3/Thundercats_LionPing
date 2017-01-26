@@ -27,22 +27,37 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //api calls
 
-app.get('/api/services', function (req, res) {
+// app.get('/api/services', function (req, res) {
+//   res.setHeader('Content-Type', 'text/plain');
+//   database.executeQuery('SELECT * FROM SERVICE', function(error, results, fields) {
+//     if (error) {
+//       console.log(error);
+//       res.statusCode = 500;
+//       res.end("error");
+//     } else {
+//       res.statusCode = 200;
+//       var serviceNames = results.map(function(row) {
+//         return row['Name'];
+//       });
+//       res.end(JSON.stringify(serviceNames));
+//     }
+//   });
+// });
+
+app.get('/api/services', (req, res) => {
   res.setHeader('Content-Type', 'text/plain');
-  database.executeQuery('SELECT * FROM SERVICE', function(error, results, fields) {
+  database.executeQuery('SELECT * FROM SERVICE', (error, rows, fields) => {
     if (error) {
-      console.log(error);
+      console.log(err)
       res.statusCode = 500;
       res.end("error");
     } else {
       res.statusCode = 200;
-      var serviceNames = results.map(function(row) {
-        return row['Name'];
-      });
-      res.end(JSON.stringify(serviceNames));
+      const serviceNames = rows.map((row) => row['Name']);
+      res.send(JSON.stringify(serviceNames))
     }
-  });
-});
+  })
+})
 
 let pings = {
   1: 'Processing time degraded...', 

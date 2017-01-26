@@ -49,7 +49,7 @@ class NewPingCard extends React.Component {
 		}
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		axios.get("http://localhost:8080/api/services")
 			.then((result) => {
 				this.setState({services: result.data});
@@ -170,7 +170,7 @@ class ServicesTable extends React.Component {
 		}
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		axios.get("http://localhost:8080/api/services")
 			.then((result) => {
 				console.log("hdhdhservice")
@@ -219,7 +219,7 @@ class ScheduleTable extends React.Component {
 		}
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		// fetchSchedule("Database")
 		console.log("compoent will mount")
 		const _this = this;
@@ -277,7 +277,7 @@ class PingsTable extends React.Component {
 		}
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		// fetchSchedule("Database")
 		console.log("compoent will mount")
 		const _this = this;

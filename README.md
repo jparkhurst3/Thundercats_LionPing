@@ -21,3 +21,7 @@ Go to localhost:8080 in the browser
 2. Run installer
 3. Clone our repo on github - (https://desktop.github.com/ makes this easier)
 4. Open command prompt and cd into the cloned directory
+
+
+## Special thanks and attributions
+Thanks to Petra Prgomet for the lovely favicon
