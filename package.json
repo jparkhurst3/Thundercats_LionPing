@@ -34,7 +34,9 @@
   "scripts": {
     "dev": "./node_modules/.bin/webpack-dev-server --content-base src --inline --hot",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prod": "./build.sh && node appserver.js"
+    "mac": "./build.sh && node appserver.js",
+    "wind": "build.sh && node appserver.js"
+
   },
   "author": "Sam Ford",
   "license": "ISC"

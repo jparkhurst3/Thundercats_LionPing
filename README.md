@@ -4,7 +4,7 @@ Senior Design Project
 
 ## New Build Process (25 January 2016)
 1. Run > npm install
-2. Run > npm run prod
+2. Run > npm run mac OR > npm run wind
 3. This will build project and start the appserver
 4. Go to localhost:8080 in the browser
 
