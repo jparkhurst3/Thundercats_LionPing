@@ -15,6 +15,8 @@ app.get('/api/slackexample', function(req, res) {
   console.log('received request to ping slack');
   
   slack.postMessage('/services/T25EFUYP7/B3X4YAHUL/JLLTip8VjuNdkauvMRkMim9a', 'Example Slack Message');
+
+  res.send("Slack message sent successfully.");
 });
 
 //middleware

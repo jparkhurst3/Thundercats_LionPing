@@ -27,7 +27,7 @@ var postMessage = function(webhook_path, message) {
 
 	// write data to request body
 	req.write(postData);
-	req.end("slack message sent successfully.");
+	req.end();
 }
 
 module.exports = {
