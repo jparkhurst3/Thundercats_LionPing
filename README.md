@@ -8,6 +8,8 @@ Run > npm run prod
 This will build project and start the appserver
 Go to localhost:8080 in the browser
 
+On windows: npm install -> build.sh -> node appserver.js
+
 ## Build and run on Unix
 
 1. Download node from https://nodejs.org/en/
