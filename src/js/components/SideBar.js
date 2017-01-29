@@ -25,7 +25,7 @@ class SideBarElement extends React.Component {
 	constructor(props) {
 		super(props);
 	}
-
+	
 	render() {
 		const mappedLinks = this.props.links.map((link) => 
 			<li class="nav-item">

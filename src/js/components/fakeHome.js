@@ -182,17 +182,6 @@ class ServicesTable extends React.Component {
 	}
 
 	render() {
-		// if (!this.state.services) {
-		// 	return (
-		// 		<div className="col-xs-4">
-		// 			<table class="table table-hover">
-		// 				<thead className="thead-inverse">
-		// 					<tr><th>Services</th></tr>
-		// 				</thead>
-		// 			</table>
-		// 		</div>
-		// 	)
-		// }
 		const mappedServiceRows = this.state.services ? this.state.services.map(service => 
 			<tr><td>{service}</td></tr>
 		) : <tr><td>loading</td></tr>
@@ -221,12 +210,11 @@ class ScheduleTable extends React.Component {
 
 	componentDidMount() {
 		// fetchSchedule("Database")
-		console.log("compoent will mount")
-		const _this = this;
+		console.log("component will mount")
 		axios.get("http://localhost:8080/api/schedule")
-			.then(function(result) {
-				_this.setState({schedule: result.data})
-			}).catch(function(err) {
+			.then((result) => {
+				this.setState({schedule: result.data})
+			}).catch((err) => {
 				console.log(err)
 			})
 	}
@@ -236,7 +224,7 @@ class ScheduleTable extends React.Component {
 			return <p>loading</p>
 		}
 		const mappedRows = this.state.schedule.map(s => <ScheduleRow date={s.date} name={s.name} time={s.time} />)
-		return(
+		return (
 			<div className="col-xs-4">
 				<table className="table">
 				  <thead className="thead-inverse">
@@ -258,13 +246,13 @@ class ScheduleRow extends React.Component {
 
 	render() {
 		return (
-		<tr>
-			<td>{this.props.date}</td>
-			<td>
-				<h4>{this.props.name}</h4>
-				<p>{this.props.time}</p>
-			</td>
-		</tr>
+			<tr>
+				<td>{this.props.date}</td>
+				<td>
+					<h4>{this.props.name}</h4>
+					<p>{this.props.time}</p>
+				</td>
+			</tr>
 		)
 	}
 }

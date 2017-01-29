@@ -3,10 +3,10 @@ Senior Design Project
 
 
 ## New Build Process (25 January 2016)
-Run > npm install
-Run > npm run prod
-This will build project and start the appserver
-Go to localhost:8080 in the browser
+1. Run > npm install
+2. Run > npm run prod
+3. This will build project and start the appserver
+4. Go to localhost:8080 in the browser
 
 ## Build and run on Unix
 
@@ -24,4 +24,4 @@ Go to localhost:8080 in the browser
 
 
 ## Special thanks and attributions
-Thanks to Petra Prgomet for the lovely favicon
+Thanks to Petra Prgomet and Creative Stall for the lovely favicons

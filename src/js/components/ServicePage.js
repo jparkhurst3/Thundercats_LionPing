@@ -1,22 +1,42 @@
 import React from 'react';
 var moment = require('moment');
+import axios from 'axios'
 
 export default class ServicePage extends React.Component {
 	render() {
 		return (
 			<div className="container">
-				<h1>Database Service</h1>
-				<PingTable />
-				<EscalationTable />
+				<h1>{this.props.params.service} Service</h1>
+				<PingTable service={this.props.params.service} />
+				<EscalationTable service={this.props.params.serivce} />
 			</div>
 		)
 	}
 }
 
 class PingTable extends React.Component {
-	// const mappedServices = services.map
-	// const mappedRows = services.map
+	constructor(props) {
+		super(props);
+		this.state = {
+			pings: null
+		}
+	}
+
+	componentDidMount() {
+		//database call for all pings for this service
+		const apiCall = `http://localhost:8080/api/services/${this.props.service}/pings`
+		console.log(apiCall);
+		axios.get(apiCall)
+			.then((result) => {
+				this.setState({ pings: result.data })
+			})
+			.error((error) => {
+				console.log(error)
+			})
+	}
+
 	render() {
+		const mappedPingRows = this.state.pings ? this.state.pings.map((ping) => <PingRow ping={ping} />) : <tr><td>loading</td></tr>
 		return (
 			<div>
 				<h3>Pings</h3>
@@ -29,9 +49,7 @@ class PingTable extends React.Component {
 						</tr>
 					</thead>
 					<tbody>
-						<PingRow />
-						<PingRow />
-						<PingRow />
+						{mappedPingRows}
 					</tbody>
 				</table>
 			</div>
@@ -43,9 +61,9 @@ class PingRow extends React.Component {
 	render() {
 		return (
 			<tr>
-				<td>{moment().format('MMMM Do YYYY, h:mm:ss a')}</td>
-				<td>Servers down</td>
-				<td>Open</td>
+				<td>{this.props.ping.createdAt}</td>
+				<td>{this.props.ping.description}</td>
+				<td>{this.props.ping.status}</td>
 			</tr>
 		)
 	}

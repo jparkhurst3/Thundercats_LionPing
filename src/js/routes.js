@@ -6,6 +6,7 @@ import SideBar from './components/SideBar.js'
 import TeamPage from './components/TeamPage.js'
 import ServicePage from './components/ServicePage.js'
 import CreateTeamPage from './components/CreateTeam.js'
+import ServicesList from './components/ServicesList.js'
 
 
 class Routes extends React.Component {
@@ -20,7 +21,8 @@ class Routes extends React.Component {
             <Route path="/help" component={Help} />
             <Route path='/profile' component={Profile} />
             <Route path='/schedule' component={TeamPage} />
-            <Route path='/services' component={ServicePage} />
+            <Route path='/services' component={ServicesList} />
+            <Route path='/services/:service' component={ServicePage} />
             <Route path='/createTeam' component={CreateTeamPage} />
             <Route path='*' component={NotFound} />
           </Route>

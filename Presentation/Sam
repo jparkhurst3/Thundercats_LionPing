@@ -1,0 +1,21 @@
+-User story for this sprint: As a user, I want to access Lion Ping 24/7, regardless of where I am so that I can always be contacted in case of a high-priority incident.
+-Technical requirements for this sprint was to get the website and slackbot framework setup and connected
+-Started off by getting our github setup and organized
+chose our technology/stack
+-set up the database, site, and slackbot framework
+
+
+The user story for this sprint is "As a user, I want to access Lion Ping 24/7, regardless of where I am so that I can always be contacted in case of a high-priority incident." 
+
+The technical requirements for this sprint was to get a framework for our website and slackbot setup and connected. This process began with setting up a github and choosing a coding framework. We chose Facebook's React for our view layer, Node js for our backend, AWS for our database, and MySQL for our database language. 
+
+React was choosen because I had used it in a previous project and it is designed to force us to write high quality code. 
+
+Node on the backend was an obvious choice because we would only need one language, javascript, for the front end and backend. Also, there's an abundance of tutorials for setting up apps using React and Node.
+
+We decided to host our database on AWS because we had a little bit of experience with it and it's an industry standard. 
+
+We chose to use a relational database as opposed to a document based database again because of familiarity.
+
+
+

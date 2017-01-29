@@ -12,7 +12,6 @@ export default class TeamPage extends React.Component {
 }
 
 class Schedule extends React.Component {
-
 	render() {
 		const tabs = ['Primary', 'Holiday', 'Secondary', 'Sick']
 		const mappedTabs = tabs.map((tab) =>

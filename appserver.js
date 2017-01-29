@@ -87,6 +87,29 @@ app.get('/api/schedule', function(req, res) {
     ])
 })
 
+app.get('/api/services/:service/pings', function(req, res) {
+  console.log('inside pings api')
+  const data = [
+    {
+      createdAt: '26 January 2017',
+      description: 'Servers down',
+      status: 'open'
+    },
+    {
+      createdAt: '23 January 2017',
+      description: 'UI not working',
+      status: 'open'
+    },
+    {
+      createdAt: '22 January 2017',
+      description: 'Something broke',
+      status: 'closed'
+    }
+  ]
+  res.send(data)
+})
+
+
 app.get('/api/users', function(req, res) {
   res.send([
     { label: 'Sam', value: 'Sam' },
