@@ -1,7 +1,6 @@
 # 166_Thundercats
 Senior Design Project
 
-
 ## New Build Process (25 January 2016)
 1. Run > npm install
 2. Run > npm run mac OR > npm run wind

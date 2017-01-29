@@ -4,22 +4,23 @@ import {Link} from 'react-router'
 export default class SideBar extends React.Component {
 	render() {
 		return (
-			<nav class="col-xs-2 hidden-xs-down bg-inverse sidebar">
-				<ul class="nav nav-pills flex-column">
-					<li class="nav-item">
-	            		<Link class="nav-link" activeClassName="activeLink" to={'/'}><h2 style={{'fontFamily': 'Droid Serif', "color": "gold"}}>LION PING</h2></Link>
+			<div className="col-xs-2 bg-inverse sidebar">
+				<ul className="nav nav-pills flex-column">
+					<li className="nav-item">
+	            		<Link className="nav-link" activeClassName="activeLink" to={'/'}><h2 style={{'fontFamily': 'Droid Serif', "color": "gold"}}>LION PING</h2></Link>
 	            	</li>
 					<SideBarElement links={['Received', 'Sent', 'New']} name='Pings' />
 					<SideBarElement links={['Services', 'Find Service', 'Create']} name='Services' />
 					<SideBarElement links={['Schedule', 'Find', 'CreateTeam']} name='Teams' />
-					<li class="nav-item">
-	            		<Link class="nav-link" activeClassName="activeLink" to={'/Help'}><h5>Help</h5></Link>
+					<li className="nav-item">
+	            		<Link className="nav-link" activeClassName="activeLink" to={'/Help'}><h5>Help</h5></Link>
 	            	</li>
 				</ul>
-			</nav>
+			</div>
 		)
 	}
 };
+
 
 class SideBarElement extends React.Component {
 	constructor(props) {

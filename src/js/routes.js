@@ -11,83 +11,87 @@ import ServicesList from './components/ServicesList.js'
 
 class Routes extends React.Component {
   render() {
-    return (
-      <div>
-        <Router history={browserHistory}>
-          <Route path='/' component={Container}>
-            <IndexRoute component={Home} />
-            <Route path="/pings" component={Pings} />
-            <Route path="/teams" component={Teams} />
-            <Route path="/help" component={Help} />
-            <Route path='/profile' component={Profile} />
-            <Route path='/schedule' component={TeamPage} />
-            <Route path='/services' component={ServicesList} />
-            <Route path='/services/:service' component={ServicePage} />
-            <Route path='/createTeam' component={CreateTeamPage} />
-            <Route path='*' component={NotFound} />
-          </Route>
-        </Router>
-      </div>
-    )
+	return (
+	  <div>
+		<Router history={browserHistory}>
+		  <Route path='/' component={Container}>
+			<IndexRoute component={Home} />
+			<Route path="/pings" component={Pings} />
+			<Route path="/teams" component={Teams} />
+			<Route path="/help" component={Help} />
+			<Route path='/profile' component={Profile} />
+			<Route path='/schedule' component={TeamPage} />
+			<Route path='/services' component={ServicesList} />
+			<Route path='/services/:service' component={ServicePage} />
+			<Route path='/createTeam' component={CreateTeamPage} />
+			<Route path='*' component={NotFound} />
+		  </Route>
+		</Router>
+	  </div>
+	)
   }
 };
 
 class Container extends React.Component {
   render() {
+	return (
+	  <div className="container-fluid">
+		<NavBar />
+		<div className="row">
+		  <div className="col-xs-2">
+			<SideBar />
+		  </div>
+		  <div className="col-xs-10">
+			{this.props.children}
+		  </div>
+		</div>
+	  </div>
+	)
+  }
+}
+
+class NavBar extends React.Component{
+  render() {
     return (
-      <div className="container-fluid">
-        <NavBar />
-        <div className="row">
-          <div className="col-xs-2">
-            <SideBar />
-          </div>
-          <div className="col-xs-10">
-            {this.props.children}
-          </div>
-        </div>
+      <div className="header clearfix">
+            <ul className="nav nav-pills float-xs-right" style={{fontSize: '20px'}}>
+              <li className="nav-item">
+              	<Link className="nav-link" to="/profile">Sam Ford</Link>
+              </li>
+            </ul>
       </div>
     )
   }
-}
-
- // style={{'textAlign': 'right'}}
-
-class NavBar extends React.Component {
-  render() {
-    return (
-        <h5 style={{textAlign: 'right'}}><Link class="nav-link" to={'profile'}>Sam Ford</Link></h5>
-    )
-  }
-}
+};
 
 class NotFound extends React.Component {
   render() {
-    return <h1>NOT FOUND</h1>
+	return <h1>NOT FOUND</h1>
   }
 }
 class Pings extends React.Component {
   render() {
-    return (
-      <div>
-        <h1>Pings</h1>
-      </div>
-    )
+	return (
+	  <div>
+		<h1>Pings</h1>
+	  </div>
+	)
   }
 }
 
 class Teams extends React.Component {
   render() {
-    return <h1>Teams</h1>
+	return <h1>Teams</h1>
   }
 }
 class Help extends React.Component {
   render() {
-    return <h1>Help</h1>
+	return <h1>Help</h1>
   }
 }
 class Profile extends React.Component {
   render() {
-    return <h1>Profile</h1>
+	return <h1>Profile</h1>
   }
 }
 
