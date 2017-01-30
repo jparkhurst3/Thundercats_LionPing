@@ -10,8 +10,8 @@ export default class SideBar extends React.Component {
 	            		<Link className="nav-link" activeClassName="activeLink" to={'/'}><h2 style={{'fontFamily': 'Droid Serif', "color": "gold"}}>LION PING</h2></Link>
 	            	</li>
 					<SideBarElement links={['Received', 'Sent', 'New']} name='Pings' />
-					<SideBarElement links={['Services', 'Find Service', 'Create']} name='Services' />
-					<SideBarElement links={['Schedule', 'Find', 'CreateTeam']} name='Teams' />
+					<SideBarElement links={['My Services', 'Find Service', 'Create Service']} name='Services' />
+					<SideBarElement links={['My Teams', 'Find Team', 'Create Team']} name='Teams' />
 					<li className="nav-item">
 	            		<Link className="nav-link" activeClassName="activeLink" to={'/Help'}><h5>Help</h5></Link>
 	            	</li>
