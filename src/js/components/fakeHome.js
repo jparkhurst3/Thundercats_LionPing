@@ -4,9 +4,6 @@ import { connect } from "react-redux"
 import { fetchSchedule, fetchPings } from '../actions/serviceActions'
 import axios from 'axios'
 
-var slackBot = require('../../../slack/slack.js');
-
-
 class HomeCards extends React.Component {
 	constructor(props) {
 		super(props);
@@ -51,8 +48,6 @@ class NewPingCard extends React.Component {
 			services: null,
 			description: ""
 		}
-		this.sendPing = this.sendPing.bind(this);
-		this.handleChange = this.handleChange.bind(this)
 	}
 
 	componentDidMount() {
@@ -65,11 +60,20 @@ class NewPingCard extends React.Component {
 			})
 	}
 
-	sendPing() {
-		slackBot.postMessage('/services/T25EFUYP7/B3X4YAHUL/JLLTip8VjuNdkauvMRkMim9a', this.state.description);
+	sendPing = () => {
+		console.log("send ping");
+
+		axios.post('/api/slack/', {description: this.state.description})
+			.then((response) => {
+				console.log("posted to slack")
+			})
+			.then((error) => {
+				console.log(error)
+			})
 	}
 
-	handleChange(event) {
+	handleChange = (event) => {
+		event.preventDefault()
 		this.setState({
 			description: event.target.value
 		});

@@ -19,6 +19,10 @@ app.get('/api/slackexample', function(req, res) {
   res.send("Slack message sent successfully.");
 });
 
+
+
+
+
 //middleware
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -52,6 +56,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //     }
 //   });
 // });
+
+
+app.post('/api/slack', (req, res) => {
+  console.log(req);
+  console.log(req.body)
+  slack.postMessage('/services/T25EFUYP7/B3X4YAHUL/JLLTip8VjuNdkauvMRkMim9a', req.body.description);
+  res.end('successfully posted to slack')
+})
+
+
+
 
 app.get('/api/services', (req, res) => {
   res.setHeader('Content-Type', 'text/plain');
