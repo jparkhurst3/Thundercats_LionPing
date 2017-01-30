@@ -17,13 +17,15 @@ class Routes extends React.Component {
 		  <Route path='/' component={Container}>
 			<IndexRoute component={Home} />
 			<Route path="/pings" component={Pings} />
-			<Route path="/teams" component={Teams} />
 			<Route path="/help" component={Help} />
 			<Route path='/profile' component={Profile} />
-			<Route path='/schedule' component={TeamPage} />
-			<Route path='/services' component={ServicesList} />
-			<Route path='/services/:service' component={ServicePage} />
-			<Route path='/createTeam' component={CreateTeamPage} />
+			
+			<Route path='/myservices' component={ServicesList} />
+			<Route path='/myservices/:service' component={ServicePage} />
+
+			<Route path='/myteams' component={TeamPage} />
+			<Route path='/createteam' component={CreateTeamPage} />
+
 			<Route path='*' component={NotFound} />
 		  </Route>
 		</Router>

@@ -30,7 +30,7 @@ class SideBarElement extends React.Component {
 	render() {
 		const mappedLinks = this.props.links.map((link) => 
 			<li class="nav-item">
-              <Link class="nav-link" activeClassName="activeLink" to={link}>{link}</Link>
+              <Link class="nav-link" activeClassName="activeLink" to={link.replace(/\s+/g, '')}>{link}</Link>
             </li>
         )
         const id = '#' + this.props.name;
