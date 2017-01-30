@@ -11,7 +11,7 @@ export default class ServicesList extends Component {
 	}
 
 	componentWillMount() {
-		axios.get("http://localhost:8080/api/services")
+		axios.get("http://localhost:8080/api/services/getNames")
 			.then((result) => {
 				console.log('got services')
 				console.log(result.data)

@@ -39,24 +39,15 @@ app.get('/api/slackexample', function(req, res) {
 
 app.post('/api/slack', (req, res) => {
   slack.postMessage('/services/T25EFUYP7/B3X4YAHUL/JLLTip8VjuNdkauvMRkMim9a', req.body.description);
+  console.log(req.body.description);
   res.end('successfully posted to slack')
 })
 
-
-app.get('/api/services', (req, res) => {
-  res.setHeader('Content-Type', 'text/plain');
-  database.executeQuery('SELECT * FROM SERVICE', (error, rows, fields) => {
-    if (error) {
-      console.log(err)
-      res.statusCode = 500;
-      res.end("error");
-    } else {
-      res.statusCode = 200;
-      const serviceNames = rows.map((row) => row['Name']);
-      res.send(JSON.stringify(serviceNames))
-    }
-  })
-})
+//Import module from rest folder, put new modules for other entities in same folder in new module
+var services = require('./rest/services');
+//Link a url to a function from the created rest service layer module
+app.get('/api/services/getNames', services.getNames);
+app.post('/api/services/create', services.create);
 
 let pings = {
   1: 'Processing time degraded...', 

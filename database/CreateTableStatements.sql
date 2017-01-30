@@ -1,13 +1,13 @@
--- drop table user_in_escalation_level;
--- drop table schedule_in_escalation_level;
--- drop table user_in_team;
--- drop table user_manages_team;
--- drop table layer;
--- drop table schedule;
--- drop table team;
--- drop table user;
--- drop table escalation_level;
--- drop table service;
+DROP TABLE USER_IN_ESCALATION_LEVEL;
+DROP TABLE SCHEDULE_IN_ESCALATION_LEVEL;
+DROP TABLE USER_IN_TEAM;
+DROP TABLE USER_MANAGES_TEAM;
+DROP TABLE LAYER;
+DROP TABLE SCHEDULE;
+DROP TABLE TEAM;
+DROP TABLE USER;
+DROP TABLE ESCALATION_LEVEL;
+DROP TABLE SERVICE;
 
 CREATE TABLE USER (
 	Username		VARCHAR(25)		NOT NULL,
@@ -57,7 +57,7 @@ CREATE TABLE LAYER (
 );
 
 CREATE TABLE SERVICE (
-	ID				INT				NOT NULL,
+	ID				INT				NOT NULL AUTO_INCREMENT,
     Name			VARCHAR(50)		NOT NULL,
     PRIMARY KEY (ID)
 );
@@ -87,6 +87,13 @@ CREATE TABLE SCHEDULE_IN_ESCALATION_LEVEL (
 	PRIMARY KEY (TeamID,Name,ServiceID,Level),
     FOREIGN KEY (TeamID,Name) REFERENCES SCHEDULE(TeamID,Name),
     FOREIGN KEY (ServiceID,Level) REFERENCES ESCALATION_LEVEL(ServiceID,Level)
+);
+
+CREATE TABLE PING (
+	ID				INT				NOT NULL AUTO_INCREMENT,
+    ServiceID		INT				NOT NULL,
+    PRIMARY KEY (ID),
+    FOREIGN KEY (ServiceID) REFERENCES SERVICE(ID)
 );
 
 
