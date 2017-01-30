@@ -11,18 +11,6 @@ var database = require('./database/database.js');
 
 var slack = require('./slack/slack.js');
 
-app.get('/api/slackexample', function(req, res) {
-  console.log('received request to ping slack');
-  
-  slack.postMessage('/services/T25EFUYP7/B3X4YAHUL/JLLTip8VjuNdkauvMRkMim9a', 'Example Slack Message');
-
-  res.send("Slack message sent successfully.");
-});
-
-
-
-
-
 //middleware
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -40,32 +28,19 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //api calls
 
-// app.get('/api/services', function (req, res) {
-//   res.setHeader('Content-Type', 'text/plain');
-//   database.executeQuery('SELECT * FROM SERVICE', function(error, results, fields) {
-//     if (error) {
-//       console.log(error);
-//       res.statusCode = 500;
-//       res.end("error");
-//     } else {
-//       res.statusCode = 200;
-//       var serviceNames = results.map(function(row) {
-//         return row['Name'];
-//       });
-//       res.end(JSON.stringify(serviceNames));
-//     }
-//   });
-// });
 
+app.get('/api/slackexample', function(req, res) {
+  console.log('received request to ping slack');
+  
+  slack.postMessage('/services/T25EFUYP7/B3X4YAHUL/JLLTip8VjuNdkauvMRkMim9a', 'Example Slack Message');
+
+  res.send("Slack message sent successfully.");
+});
 
 app.post('/api/slack', (req, res) => {
-  console.log(req);
-  console.log(req.body)
   slack.postMessage('/services/T25EFUYP7/B3X4YAHUL/JLLTip8VjuNdkauvMRkMim9a', req.body.description);
   res.end('successfully posted to slack')
 })
-
-
 
 
 app.get('/api/services', (req, res) => {
