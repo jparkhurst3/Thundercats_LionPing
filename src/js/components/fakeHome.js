@@ -4,6 +4,9 @@ import { connect } from "react-redux"
 import { fetchSchedule, fetchPings } from '../actions/serviceActions'
 import axios from 'axios'
 
+var slackBot = require('../../../slack/slack.js');
+
+
 class HomeCards extends React.Component {
 	constructor(props) {
 		super(props);
@@ -45,8 +48,11 @@ class NewPingCard extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			services: null
+			services: null,
+			description: ""
 		}
+		this.sendPing = this.sendPing.bind(this);
+		this.handleChange = this.handleChange.bind(this)
 	}
 
 	componentDidMount() {
@@ -59,6 +65,16 @@ class NewPingCard extends React.Component {
 			})
 	}
 
+	sendPing() {
+		slackBot.postMessage('/services/T25EFUYP7/B3X4YAHUL/JLLTip8VjuNdkauvMRkMim9a', this.state.description);
+	}
+
+	handleChange(event) {
+		this.setState({
+			description: event.target.value
+		});
+	}
+
 	render() {
 		const mappedOptions = this.state.services ? this.state.services.map(service => <option>{service}</option>) : <option disabled>Loading</option>
 		return (
@@ -69,7 +85,7 @@ class NewPingCard extends React.Component {
 		    <div class="card-block">
 		      <form>
 		      	<div class="form-group">
-				    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Describe Issue" />
+				    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Describe Issue" value={this.state.description} onChange={this.handleChange}/>
 				  </div>
 				  <div class="form-group">
 				    <select class="form-control" id="exampleSelect1">
@@ -77,7 +93,7 @@ class NewPingCard extends React.Component {
 				      {mappedOptions}
 				    </select>
 				  </div>
-				  <button type="submit" class="btn">Create Ping</button>
+				  <button type="submit" class="btn" onClick={this.sendPing}>Create Ping</button>
 		      </form>
 		    </div>
 		  </div>
