@@ -22,9 +22,17 @@ sidebar links
   color: white;
 }
 
+.modalLink a {
+  color: white;
+}
+
 .sidebar a:hover, .sidebar a:focus {
   color: gold;
   text-decoration: none
+}
+
+a:hover {
+  color: gold;
 }
 
 .nav a {
@@ -37,11 +45,6 @@ nav a {
 
 .activeLink {
   color: gold;
-}
-
-a:hover {
-  color: gray;
-  text-decoration: none
 }
 
 a:hover {

@@ -1,5 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router'
+import CreateServiceModal from './CreateServiceModal'
 
 export default class SideBar extends React.Component {
 	render() {
@@ -9,9 +10,9 @@ export default class SideBar extends React.Component {
 					<li className="nav-item">
 	            		<Link className="nav-link" activeClassName="activeLink" to={'/'}><h2 style={{'fontFamily': 'Droid Serif', "color": "gold"}}>LION PING</h2></Link>
 	            	</li>
-					<SideBarElement links={['Received', 'Sent', 'New']} name='Pings' />
-					<SideBarElement links={['My Services', 'Find Service', 'Create Service']} name='Services' />
-					<SideBarElement links={['My Teams', 'Find Team', 'Create Team']} name='Teams' />
+					<SideBarElement links={['Received', 'Sent', 'New']} modals={[]} name='Pings' />
+					<SideBarElement links={['My Services', 'Find Service']} modals={['Create Service']} name='Services' />
+					<SideBarElement links={['My Teams', 'Find Team', 'Create Team']} modals={[]} name='Teams' />
 					<li className="nav-item">
 	            		<Link className="nav-link" activeClassName="activeLink" to={'/Help'}><h5>Help</h5></Link>
 	            	</li>
@@ -28,11 +29,18 @@ class SideBarElement extends React.Component {
 	}
 	
 	render() {
-		const mappedLinks = this.props.links.map((link) => 
+		const mappedLinks = this.props.links.map((linkName) => 
 			<li class="nav-item">
-              <Link class="nav-link" activeClassName="activeLink" to={link.replace(/\s+/g, '')}>{link}</Link>
+              <Link class="nav-link" activeClassName="activeLink" to={linkName.replace(/\s+/g, '')}>{linkName}</Link>
             </li>
         )
+		
+        const mappedModals = this.props.modals.map((modalName) => 
+			<li class="nav-item">
+              <CreateServiceModal />
+            </li>
+        )
+        
         const id = '#' + this.props.name;
 
 		return (
@@ -45,8 +53,10 @@ class SideBarElement extends React.Component {
 				<div class="collapse" id={this.props.name}>
 					<ul>
 			            {mappedLinks}
+			            {mappedModals}
 					</ul>
 				</div>
+				
 			</div>
 		)
 	}

@@ -12,7 +12,6 @@ export default class CreateTeamPage extends React.Component {
 	}
 
 	componentWillMount() {
-		const _this = this;
 		axios.get("http://localhost:8080/api/users")
 			.then((result) => {
 				this.setState({teamMembers: result.data});
