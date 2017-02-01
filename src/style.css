@@ -22,21 +22,26 @@ sidebar links
   color: white;
 }
 
-.sidebar .modalLink h6:hover {
-  color: gold;
-}
+a:focus {
+  outline: none;
+    text-decoration: none
 
-.modalLink a:hover {
-  color: gold;
 }
 
 .sidebar a:hover, .sidebar a:focus {
   color: gold;
   text-decoration: none
+  outline: none;
+}
+
+.sidebar h5 {
+  text-decoration: none
 }
 
 a:hover {
   color: gold;
+    text-decoration: none
+
 }
 
 .nav a {
@@ -53,14 +58,24 @@ nav a {
 
 a:hover {
   color: gold;
+    text-decoration: none
+
 }
 
 a:focus {
   color: gold;
+    text-decoration: none
+
 }
 
 a:active {
   color: gold;
+    text-decoration: none
+
+}
+
+a {
+  text-decoration: none
 }
 
 tr:selected {

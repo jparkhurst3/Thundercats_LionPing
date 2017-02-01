@@ -13,12 +13,11 @@ export default class PingsTable extends React.Component {
 	componentDidMount() {
 		// fetchSchedule("Database")
 		console.log("compoent will mount")
-		const _this = this;
 		axios.get("http://localhost:8080/api/pings")
-			.then(function(result) {
+			.then((result) => {
 				console.log("got services result")
-				_this.setState({pings: result.data})
-			}).catch(function(err) {
+				this.setState({pings: result.data})
+			}).catch((err) => {
 				console.log(err)
 			})
 	}

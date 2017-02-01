@@ -30,34 +30,80 @@ export default class CreateServiceModal extends React.Component {
 			<ReactModal 
 				isOpen={this.state.showModal}
 				contentLabel="Minimal Modal Example" 
+				onRequestClose={this.handleToggleModal}
+        		shouldCloseOnOverlayClick={true}
+
 				style={{
 					overlay: {
-						color: 'white'
+						background: 'rgba(255, 255, 255, .9)'
 					},
 					content: {
-						position: 'relative',
-						height: '400px',
+						position: 'absolute',
+						height: '300px',
 						width: '500px',
-						left: '25%',
-						top: '25%',
+						left: '50%',
+						top: '50%',
+						transform: 'translate(-50%, -50%)',
 						right: 'auto',
 						bottom: 'auto',
 						zIndex: '1',
-						backgroundColor: 'white'
+						padding: 'none',
+						border: 'none'
 					}
 				}} >
-				<div className="container">
-					<form>
-						<div class="form-group">
-							<h1 style={{color: 'black'}}>Create Service</h1>
-							<input type="text" class="form-control" id="serviceName" placeholder="Service Name" />
-							<input type="text" class="form-control" id="serviceDescription" placeholder="Short Description (optional)" />
-							<button type="submit" class="btn">Create Service</button>
-						</div>
-					</form>
-				</div>
+				<CreateServiceCard />
 			</ReactModal>
 			</li>
 	);
   }
 }
+
+class CreateServiceCard extends React.Component {
+	constructor(props) {
+		super(props)
+		this.state = {
+			serviceName: '',
+			serviceDescription: ''
+		}
+	}
+
+	componentDidMount() {
+		// axios
+	}
+
+
+
+	createService = () => {
+		console.log("Create Service");
+
+		// axios
+	}
+
+	handleChange = (event) => {
+		event.preventDefault()
+		this.setState({
+			[event.target.name]: event.target.value 
+		});
+	}
+
+	render() {
+		return (
+		<div class="card">
+		  	<div class="card-header">Create Service</div>
+		    <div class="card-block">
+		      <form>
+		      	<div class="form-group">
+				    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Service Name" value={this.state.serviceName} onChange={this.handleChange}/>
+				    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Description (Optional)" value={this.state.serviceDescription} onChange={this.handleChange}/>
+				</div>
+				<button type="submit" class="btn" onClick={this.createService}>Create Service</button>
+		      </form>
+		    </div>
+		  </div>
+		  )
+	}
+}
+
+
+
+
