@@ -39,6 +39,15 @@ var create = function(req, res) {
   })
 }
 
+/**
+  TODO
+
+  getEscalationPolicyByID
+  getPingsByServiceId
+  updateEscalationPolicy - updates the entire policy - not the layer
+
+*/
+
 module.exports = {
   getNames : getNames,
   create : create

@@ -36,9 +36,7 @@ class SideBarElement extends React.Component {
         )
 		
         const mappedModals = this.props.modals.map((modalName) => 
-			<li class="nav-item">
-              <CreateServiceModal />
-            </li>
+            <CreateServiceModal />
         )
         
         const id = '#' + this.props.name;

@@ -17,17 +17,20 @@ export default class CreateServiceModal extends React.Component {
   handleCloseModal = () => {
 	this.setState({ showModal: false });
   }
+   // style={{color: 'white', cursor: 'pointer'}}
+   // <Link class="nav-link" activeClassName="activeLink" to={"/"}>Create Service</Link>
+
+
   
   render () {
 	return (
-			<div>
-		    <a className="nav-link modalLink" style={{color: 'white'}} onClick={this.handleToggleModal}>Create Service</a>
+			<li className="nav-item">
+   		    <a className="nav-link" activeClassName="activeLink" style={{color: 'white', cursor: 'pointer'}} onClick={this.handleToggleModal}>Create Service</a>
 			<ReactModal 
 				isOpen={this.state.showModal}
 				contentLabel="Minimal Modal Example" 
 				style={{
 					overlay: {
-						// backgroundColor: 'white'
 						color: 'white'
 					},
 					content: {
@@ -36,6 +39,8 @@ export default class CreateServiceModal extends React.Component {
 						width: '500px',
 						left: '25%',
 						top: '25%',
+						right: 'auto',
+						bottom: 'auto',
 						zIndex: '1',
 						backgroundColor: 'white'
 					}
@@ -51,7 +56,7 @@ export default class CreateServiceModal extends React.Component {
 					</form>
 				</div>
 			</ReactModal>
-			</div>
+			</li>
 	);
   }
 }

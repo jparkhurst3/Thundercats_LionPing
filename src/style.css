@@ -26,6 +26,10 @@ sidebar links
   color: white;
 }
 
+.modalLink a:hover {
+  color: gold;
+}
+
 .sidebar a:hover, .sidebar a:focus {
   color: gold;
   text-decoration: none
