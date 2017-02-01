@@ -19,13 +19,14 @@ export default class CreateServiceModal extends React.Component {
   }
    // style={{color: 'white', cursor: 'pointer'}}
    // <Link class="nav-link" activeClassName="activeLink" to={"/"}>Create Service</Link>
+   		    // <h6 className="nav-link" activeClassName="activeLink" style={{color: 'white', cursor: 'pointer'}} onClick={this.handleToggleModal}>Create Service</h6>
 
 
   
   render () {
 	return (
 			<li className="nav-item">
-   		    <a className="nav-link" activeClassName="activeLink" style={{color: 'white', cursor: 'pointer'}} onClick={this.handleToggleModal}>Create Service</a>
+			<a class="nav-link" href="javascript:;" onClick={this.handleToggleModal}>Create Service</a>
 			<ReactModal 
 				isOpen={this.state.showModal}
 				contentLabel="Minimal Modal Example" 

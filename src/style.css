@@ -22,8 +22,8 @@ sidebar links
   color: white;
 }
 
-.modalLink a {
-  color: white;
+.sidebar .modalLink h6:hover {
+  color: gold;
 }
 
 .modalLink a:hover {
