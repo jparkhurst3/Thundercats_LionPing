@@ -43,11 +43,19 @@ app.post('/api/slack', (req, res) => {
   res.end('successfully posted to slack')
 })
 
+
+
+
 //Import module from rest folder, put new modules for other entities in same folder in new module
 var services = require('./rest/services');
 //Link a url to a function from the created rest service layer module
 app.get('/api/services/getNames', services.getNames);
-app.post('/api/services/create', services.create);
+app.post('/api/services/createService', services.createService);
+app.get('/api/services/getEscalationPolicyByID', services.getEscalationPolicyByID);
+
+
+
+
 
 let pings = {
   1: 'Processing time degraded...', 
