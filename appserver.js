@@ -50,6 +50,7 @@ app.post('/api/slack', (req, res) => {
 var services = require('./rest/services');
 //Link a url to a function from the created rest service layer module
 app.get('/api/services/getNames', services.getNames);
+app.get('/api/services/getServices', services.getServices);
 app.post('/api/services/createService', services.createService);
 app.get('/api/services/getEscalationPolicyByID', services.getEscalationPolicyByID);
 

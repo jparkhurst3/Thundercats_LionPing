@@ -21,6 +21,25 @@ var getNames = function(req, res) {
 };
 
 /**
+* Service for getting names and IDs of all services
+* Params: None
+* Returns: Names of services
+*/
+var getServices = function(req, res) {
+  res.setHeader('Content-Type', 'text/plain');
+  database.executeQuery('SELECT * FROM SERVICE', (error, rows, fields) => {
+    if (error) {
+      console.log(error)
+      res.statusCode = 500;
+      res.end("error");
+    } else {
+      res.statusCode = 200;
+      res.send(JSON.stringify(rows));
+    }
+  })
+};
+
+/**
 * Service for creating a new service
 * Params: Name
 * Returns: ID of newly created service
@@ -50,12 +69,19 @@ var getEscalationPolicyByID = function(req, res) {
 	res.setHeader('Content-Type', 'text/plain');
 	var getUsersInEscalation = "SELECT s.ID, s.Name, l.Level, l.Delay, u.Username, USER.FirstName, USER.LastName FROM SERVICE s " +
 		" JOIN ESCALATION_LEVEL l ON (s.ID = l.ServiceID) " +
-	  " JOIN USER_IN_ESCALATION_LEVEL u ON (l.ServiceID = u.ServiceID AND l.Level = u.Level)" +
+	  " JOIN USER_IN_ESCALATION_LEVEL u ON (l.ServiceID = u.ServiceID AND l.Level = u.Level) " +
     " JOIN USER ON (USER.Username = u.Username) " +
 	  " WHERE (s.ID = ?)";
+
+  // var getSchedulesInEscalation = "SELECT s.ID, s.Name, l.Level, l.Delay, u.Username, USER.FirstName, USER.LastName FROM SERVICE s " +
+  //   " JOIN ESCALATION_LEVEL l ON (s.ID = l.ServiceID) " +
+  //   " JOIN SCHEDULE_IN_ESCALATION_LEVEL sched ON (sched.ServiceID = u.ServiceID AND sched.Level = l.Level) " +
+  //   " WHERE (s.ID = ?)";
+
+
+  // var userLoaded = false;
   
 	database.executeQuery(getUsersInEscalation, req.query.ID, (error, rows, fields) => {
-
     if (error) {
       console.log(error)
       res.statusCode = 500;
@@ -105,6 +131,7 @@ var getEscalationPolicyByID = function(req, res) {
 
 module.exports = {
   getNames : getNames,
+  getServices : getServices,
   createService : createService,
   getEscalationPolicyByID : getEscalationPolicyByID
 }
