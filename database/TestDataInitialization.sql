@@ -36,4 +36,8 @@ INSERT INTO USER_IN_ESCALATION_LEVEL VALUES ('cclegg', 3, 1);
 INSERT INTO USER_IN_ESCALATION_LEVEL VALUES ('hkim', 3, 1);
 INSERT INTO SCHEDULE_IN_ESCALATION_LEVEL VALUES (3,'Default',3,1);
 
+INSERT INTO PING (ServiceID, Name, Description, Status) VALUES (1,'Database is broken?', 'Database stopped functioning, I think the new tables from the most recent commit haven\'t been created and the server threw an error. Please resolve', 'Acknowledged');
+INSERT INTO PING (ServiceID, Name, Description, Status) VALUES (1,'Customer data deleted', 'Client accidentally deleted all their data, requesting help with restoring backup version ASAP', 'Resolved');
+INSERT INTO PING (ServiceID, Name, Description, Status) VALUES (2,'Security exploit discovered in application', 'Sensitive client info for multiple users is being sent to the front in upon login, serious security breach, must be resolved', 'Resolved');
+INSERT INTO PING (ServiceID, Name, Description, Status) VALUES (3,'Client Server Failure', 'The server for Client A is experiencig consistent outages and issues for a few hours, causing problems for client.', 'Resolved');
 

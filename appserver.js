@@ -53,12 +53,14 @@ app.get('/api/services/getNames', services.getNames);
 app.get('/api/services/getServices', services.getServices);
 app.post('/api/services/createService', services.createService);
 app.get('/api/services/getEscalationPolicyByID', services.getEscalationPolicyByID);
+app.post('/api/services/updateEscalationPolicy', services.updateEscalationPolicy);
+
+var pings = require('./rest/pings');
+app.get('/api/pings/getPingsByServiceID', pings.getPingsByServiceID);
 
 
 
-
-
-let pings = {
+let example_pings = {
   1: 'Processing time degraded...', 
   2: 'Power outage on...', 
   3: 'Y2K took down...'
@@ -66,7 +68,7 @@ let pings = {
 Object.values = obj => Object.keys(obj).map(key => obj[key]);
 
 app.get('/api/pings', function(req, res) {
-  res.send(Object.values(pings));
+  res.send(Object.values(example_pings));
 });
 
 app.get('/api/schedule', function(req, res) {

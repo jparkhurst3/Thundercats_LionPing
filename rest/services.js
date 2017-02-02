@@ -64,9 +64,8 @@ var createService = function(req, res) {
 * Returns Escalation Policy
 */
 var getEscalationPolicyByID = function(req, res) {
-  console.log(req.query.id)
 	res.setHeader('Content-Type', 'text/plain');
-	var getUsersInEscalation = "SELECT s.ID, s.Name, l.Level, l.Delay, u.Username, USER.FirstName, USER.LastName FROM SERVICE s " +
+	var getUsersInEscalation = "SELECT s.ID, s.Name, l.Level, l.Delay, USER.Username, USER.FirstName, USER.LastName FROM SERVICE s " +
 		" JOIN ESCALATION_LEVEL l ON (s.ID = l.ServiceID) " +
 	  " JOIN USER_IN_ESCALATION_LEVEL u ON (l.ServiceID = u.ServiceID AND l.Level = u.Level) " +
     " JOIN USER ON (USER.Username = u.Username) " +
@@ -156,18 +155,73 @@ var getEscalationPolicyByID = function(req, res) {
   }); 
 	
 } 
-/**
-  TODO
-  
-  getEscalationPolicyByID
-  getPingsByServiceId
-  updateEscalationPolicy - updates the entire policy - not the layer
 
+/**
+* Service for creating a new service
+* Params: Name
+* Returns: ID of newly created service
 */
+var updateEscalationPolicy = function(req, res) {
+  res.setHeader('Content-Type', 'text/plain');
+
+  var transaction = database.createTransaction();
+
+  new Promise(function(resolve,reject) {
+    database.executeQueryInTransaction('DELETE FROM ESCALATION_LEVEL WHERE (ServiceID = ?)', transaction, req.body.ID, (error,rows,fields) => {
+      if (error) reject(error);
+      else resolve();
+    });
+  }).then(() => {
+    var insertAllLevels = req.body.Layers.map(function(layer) {
+      return new Promise((resolve,reject) => {
+        database.executeQueryInTransaction('INSERT INTO ESCALATION_LEVEL SET ServiceID = ?, Level = ?, Delay = ?', transaction, [req.body.ID,layer.Level,layer.Delay], (error,rows,fields) => {
+          if (error) reject(error);
+          else resolve();
+        });
+      });
+    });
+    return Promise.all(insertAllLevels);
+  }).then(() => {
+    var insertAllUserInEscalation = req.body.Layers.reduce(function(partial, layer) {
+      return partial.concat(layer.Users.map(function(user) {
+        return new Promise((resolve,reject) => {
+          database.executeQueryInTransaction('INSERT INTO USER_IN_ESCALATION_LEVEL SET Username = ?, ServiceID = ?, Level = ?', transaction, [user.Username,req.body.ID,layer.Level], (error,rows,fields) => {
+            if (error) reject(error);
+            else resolve();
+          });
+        });
+      }));
+    }, []);
+    return Promise.all(insertAllUserInEscalation);
+  }).then(() => {   
+    var insertAllSchedulesInEscalation = req.body.Layers.reduce(function(partial, layer) {
+      return partial.concat(layer.Schedules.map(function(schedule) {
+        return new Promise((resolve,reject) => {
+          database.executeQueryInTransaction('INSERT INTO SCHEDULE_IN_ESCALATION_LEVEL SET TeamID = ?, Name = ?, ServiceID = ?, Level = ?', transaction, [schedule.TeamID,schedule.ScheduleName,req.body.ID,layer.Level], (error,rows,fields) => {
+            if (error) reject(error);
+            else resolve();
+          });
+        });
+      }));
+    }, []);
+    return Promise.all(insertAllSchedulesInEscalation);
+  }).then(() => {
+    transaction.commit();
+    res.statusCode = 200;
+    res.send("Successfully updated escalation policy");
+  }).catch((error) => {
+    transaction.rollback();
+    console.log(error);
+    res.statusCode = 500;
+    res.send("Error updating escalation policy");
+  });
+
+}
 
 module.exports = {
   getNames : getNames,
   getServices : getServices,
   createService : createService,
-  getEscalationPolicyByID : getEscalationPolicyByID
+  getEscalationPolicyByID : getEscalationPolicyByID,
+  updateEscalationPolicy : updateEscalationPolicy
 }
