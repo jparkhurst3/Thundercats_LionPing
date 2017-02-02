@@ -61,18 +61,7 @@ var pings = require('./rest/pings');
 app.get('/api/pings/getPingsByServiceID', pings.getPingsByServiceID);
 
 
-
-let example_pings = {
-  1: 'Processing time degraded...', 
-  2: 'Power outage on...', 
-  3: 'Y2K took down...'
-}
-Object.values = obj => Object.keys(obj).map(key => obj[key]);
-
-app.get('/api/pings', function(req, res) {
-  res.send(Object.values(example_pings));
-});
-
+//All fake calls for frontend testing
 app.get('/api/schedule', function(req, res) {
   res.send([
       { date: '26 January 2017', name: 'Sam', time: '8:00am-8:00pm' },
@@ -81,28 +70,6 @@ app.get('/api/schedule', function(req, res) {
       { date: '27 January 2017', name: 'Zach', time: '8:00pm-8:00am' },
       { date: '28 January 2017', name: 'HoKeun', time: '8:00am-8:00pm' },
     ])
-})
-
-app.get('/api/services/:service/pings', function(req, res) {
-  console.log('inside pings api')
-  const data = [
-    {
-      createdAt: '26 January 2017',
-      description: 'Servers down',
-      status: 'open'
-    },
-    {
-      createdAt: '23 January 2017',
-      description: 'UI not working',
-      status: 'open'
-    },
-    {
-      createdAt: '22 January 2017',
-      description: 'Something broke',
-      status: 'closed'
-    }
-  ]
-  res.send(data)
 })
 
 
@@ -128,19 +95,6 @@ app.get('/api/users/:id', function(req, res) {
   }
   res.send(users[req.params.id])
 });
-
-
-app.post('/api/pings', function(req, res) {
-  console.log('posting to pings');
-  //add to database
-  const id = req.body.id;
-  const ping = req.body.ping;
-  console.log('id: ' + id);
-  console.log('ping: ' + ping)
-  pings[id] = ping;
-  res.send('successfully posted ping')
-});
-
 
 
 //last one for page refresh

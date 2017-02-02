@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactModal from 'react-modal'
 import {Link} from 'react-router'
+import axios from 'axios'
 
 export default class CreateServiceModal extends React.Component {
   constructor() {
@@ -73,10 +74,22 @@ class CreateServiceCard extends React.Component {
 
 
 
-	createService = () => {
+	createService = (event) => {
+		event.preventDefault()
 		console.log("Create Service");
-
-		// axios
+		const apiCall = 'http://localhost:8080/api/services/createService'
+		const data = {
+			Name: this.state.serviceName
+		}
+		axios.post(apiCall, data)
+			.then(res => {
+				console.log("Sucessfully created new service");
+				console.log(res);
+			})
+			.catch(err => {
+				console.log('ERRROOOORRRRRR');
+				console.log(err);
+			})
 	}
 
 	handleChange = (event) => {
