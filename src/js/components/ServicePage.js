@@ -9,7 +9,7 @@ export default class ServicePage extends React.Component {
 			<div className="container">
 				<h1>{this.props.params.service} Service</h1>
 				<PingTable service={this.props.params.service} />
-				<EscalationTable service={this.props.params.serivce} />
+				<EscalationTable service={this.props.params.service} />
 			</div>
 		)
 	}
@@ -26,7 +26,6 @@ class PingTable extends React.Component {
 	componentDidMount() {
 		//database call for all pings for this service
 		const apiCall = `http://localhost:8080/api/services/${this.props.service}/pings`
-		console.log(apiCall);
 		axios.get(apiCall)
 			.then((result) => {
 				this.setState({ pings: result.data })
@@ -83,17 +82,13 @@ class EscalationTable extends React.Component {
 		// const apiCall = 'http://localhost:8080/api/services/getEscalationPolicyByID?ID=' + '1';
 		// [{"ID":1,"Name":"Database"},{"ID":2,"Name":"UI"},{"ID":3,"Name":"Server"}]
 		const apiCall = 'http://localhost:8080/api/services/getServices'
+		console.log(this.props.service)
 		axios.get(apiCall)
 			.then((res) => {
-				const id = res.data.find(service => service.name === this.props.service).ID;
-				//new axios call using id
+				const id = res.data.find(service => service.Name === this.props.service).ID
 				const apiCall2 = 'http://localhost:8080/api/services/getEscalationPolicyByID?ID=' + id;
 				axios.get(apiCall2)
 					.then(res => {
-						console.log(res.data);
-						console.log(res.data);
-						console.log('layers::::')
-						console.log(res.data.Layers)
 						this.setState({
 							layers: res.data.Layers.sort((a,b) => a.Level - b.Level)
 						})
@@ -109,7 +104,6 @@ class EscalationTable extends React.Component {
 
 	render() {
 		const mappedLayers = this.state.layers ? this.state.layers.map(layer => {
-			console.log(layer)
 			const level = layer.Level;
 			const delay = layer.Delay;
 			const users = layer.Users;
@@ -150,7 +144,6 @@ class EscalationTable extends React.Component {
 
 class EscalationLayer extends React.Component {
 	render() {
-		console.log(this.props.users)
 		const mappedUsers = this.props.users.map(user => 
 			<li><Link to={`/users/${user.Username}`}>{user.Username}</Link></li>
 		)
