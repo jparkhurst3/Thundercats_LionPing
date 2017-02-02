@@ -58,8 +58,6 @@ var createService = function(req, res) {
   })
 }
 
-
-
 /**
 * Get escalation policy linked to a specific service
 * Params: Service ID
@@ -73,52 +71,89 @@ var getEscalationPolicyByID = function(req, res) {
     " JOIN USER ON (USER.Username = u.Username) " +
 	  " WHERE (s.ID = ?)";
 
-  // var getSchedulesInEscalation = "SELECT s.ID, s.Name, l.Level, l.Delay, u.Username, USER.FirstName, USER.LastName FROM SERVICE s " +
-  //   " JOIN ESCALATION_LEVEL l ON (s.ID = l.ServiceID) " +
-  //   " JOIN SCHEDULE_IN_ESCALATION_LEVEL sched ON (sched.ServiceID = u.ServiceID AND sched.Level = l.Level) " +
-  //   " WHERE (s.ID = ?)";
+  var getSchedulesInEscalation = "SELECT s.ID, s.Name, l.Level, l.Delay, t.Name as TeamName, t.ID as TeamID, sched.Name as ScheduleName FROM SERVICE s " +
+    " JOIN ESCALATION_LEVEL l ON (s.ID = l.ServiceID) " +
+    " JOIN SCHEDULE_IN_ESCALATION_LEVEL s_in ON (s_in.ServiceID = l.ServiceID AND s_in.Level = l.Level) " +
+    " JOIN SCHEDULE sched ON (sched.TeamID = s_in.TeamID AND sched.Name = s_in.Name) " +
+    " JOIN TEAM t on (t.ID = sched.TeamID) " +
+    " WHERE (s.ID = ?)";
 
+  var policy = {
+    ID : req.query.ID,
+    Layers : []
+  }
 
-  // var userLoaded = false;
-  
-	database.executeQuery(getUsersInEscalation, req.query.ID, (error, rows, fields) => {
-    if (error) {
-      console.log(error)
-      res.statusCode = 500;
-      res.end("error");
-    } else {
-      res.statusCode = 200;
+  var usersLoaded = new Promise(function(resolve, reject) {
+    database.executeQuery(getUsersInEscalation, req.query.ID, (error, rows, fields) => {
+      if (error) {
+        reject(error);
+      } else {
+        rows.forEach(function(row) {
+          var layer = policy.Layers.find(function(value) {
+            return (value.Level == row.Level);
+          });
 
-      var policy = {
-      	ID : req.query.ID,
-      	Layers : []
-      }
-      rows.forEach(function(row) {
+          if (layer === undefined) {
+            layer = {
+              Level : row.Level,
+              Delay : row.Delay,
+              Users : [],
+              Schedules : []
+            }
+            policy.Layers.push(layer);
+          }
 
-      	var layer = policy.Layers.find(function(value) {
-      		return (value.Level == row.Level);
-      	});
-
-      	if (layer === undefined) {
-      		layer = {
-      			Level : row.Level,
-      			Delay : row.Delay,
-      			Users : []
-      		}
-      		policy.Layers.push(layer);
-      	}
-
-      	layer.Users.push({
-          Username : row.Username,
-          FirstName : row.FirstName,
-          LastName : row.LastName
+          layer.Users.push({
+            Username : row.Username,
+            FirstName : row.FirstName,
+            LastName : row.LastName
+          });      
         });
-        
-      });
+        resolve();
+      }
+    });
+  });
 
-      res.send(JSON.stringify(policy));
-    }
-  })
+  var schedulesLoaded = new Promise(function(resolve, reject) {
+    database.executeQuery(getSchedulesInEscalation, req.query.ID, (error, rows, fields) => {
+      if (error) {
+        reject(error);
+      } else {
+        rows.forEach(function(row) {
+          var layer = policy.Layers.find(function(value) {
+            return (value.Level == row.Level);
+          });
+
+          if (layer === undefined) {
+            layer = {
+              Level : row.Level,
+              Delay : row.Delay,
+              Users : [],
+              Schedules : []
+            }
+            policy.Layers.push(layer);
+          }
+
+          layer.Schedules.push({
+            TeamID : row.TeamID,
+            TeamName : row.TeamName,
+            ScheduleName : row.ScheduleName
+          });      
+        });
+        resolve();
+      }
+    });
+  });
+
+  Promise.all([usersLoaded,schedulesLoaded]).then(function(val) {
+    res.statusCode = 200;
+    res.end(JSON.stringify(policy));
+  }).catch(function(error) {
+    console.log(error);
+    res.statusCode = 500;
+    res.end("error");
+  }); 
+	
 } 
 /**
   TODO
