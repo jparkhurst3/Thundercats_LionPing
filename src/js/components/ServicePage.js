@@ -1,6 +1,7 @@
 import React from 'react';
 var moment = require('moment');
 import axios from 'axios'
+import {Link} from 'react-router'
 
 export default class ServicePage extends React.Component {
 	render() {
@@ -30,7 +31,7 @@ class PingTable extends React.Component {
 			.then((result) => {
 				this.setState({ pings: result.data })
 			})
-			.error((error) => {
+			.catch((error) => {
 				console.log(error)
 			})
 	}
@@ -70,7 +71,56 @@ class PingRow extends React.Component {
 }
 
 class EscalationTable extends React.Component {
+	constructor(props) {
+		super(props)
+		this.state = {
+			layers: null
+		}
+	}
+
+	componentDidMount() {
+		console.log('mounted')
+		// const apiCall = 'http://localhost:8080/api/services/getEscalationPolicyByID?ID=' + '1';
+		// [{"ID":1,"Name":"Database"},{"ID":2,"Name":"UI"},{"ID":3,"Name":"Server"}]
+		const apiCall = 'http://localhost:8080/api/services/getServices'
+		axios.get(apiCall)
+			.then((res) => {
+				const id = res.data.find(service => service.name === this.props.service).ID;
+				//new axios call using id
+				const apiCall2 = 'http://localhost:8080/api/services/getEscalationPolicyByID?ID=' + id;
+				axios.get(apiCall2)
+					.then(res => {
+						console.log(res.data);
+						console.log(res.data);
+						console.log('layers::::')
+						console.log(res.data.Layers)
+						this.setState({
+							layers: res.data.Layers.sort((a,b) => a.Level - b.Level)
+						})
+					})
+					.catch(err => {
+						console.log(err);
+					})
+			})
+			.catch((err) => {
+				console.log(err);
+			})
+	}
+
 	render() {
+		const mappedLayers = this.state.layers ? this.state.layers.map(layer => {
+			console.log(layer)
+			const level = layer.Level;
+			const delay = layer.Delay;
+			const users = layer.Users;
+			const schedules = layer.Schedules;
+			return (
+				<EscalationLayer level={level} delay={delay} users={users} schedules={schedules} />
+			)
+			}
+		) : <tr><td>loading</td></tr>
+
+
 		return (
 			<div>
 				<div className="row">
@@ -85,14 +135,12 @@ class EscalationTable extends React.Component {
 					<thead className="thead-inverse">
 						<tr>
 							<th>Level</th>
-							<th>Ping After</th>
-							<th>Notify</th>
+							<th>Delay</th>
+							<th>Users</th>
 						</tr>
 					</thead>
 					<tbody>
-						<EscalationRow />
-						<EscalationRow />
-						<EscalationRow />
+						{mappedLayers}
 					</tbody>
 				</table>
 			</div>
@@ -100,20 +148,37 @@ class EscalationTable extends React.Component {
 	}
 }
 
-class EscalationRow extends React.Component {
+class EscalationLayer extends React.Component {
 	render() {
+		console.log(this.props.users)
+		const mappedUsers = this.props.users.map(user => 
+			<li><Link to={`/users/${user.Username}`}>{user.Username}</Link></li>
+		)
 		return (
 			<tr>
-				<td>One</td>
-				<td>Created</td>
-				<td>Sam Ford</td>
+				<td>{this.props.level}</td>
+				<td>{this.props.delay} minutes</td>
+				<td><ul className="list-inline">{mappedUsers}</ul></td>
 			</tr>
 		)
 	}
 }
 
 
-
+// {"ID":"1",
+// "Layers":[
+// 	{"Level":2,
+// 	"Delay":10,
+// 	"Users":[
+// 		{"Username":"hkim","FirstName":"Ho Keun","LastName":"Kim"}],
+// 	"Schedules":[
+// 		{"TeamID":1,"TeamName":"Database Team","ScheduleName":"Default"}]},
+// 	{"Level":1,
+// 	"Delay":0,
+// 	"Users":[
+// 		{"Username":"cclegg","FirstName":"Chris","LastName":"Clegg"},
+// 		{"Username":"sford","FirstName":"Sam","LastName":"Ford"}],
+// 		"Schedules":[]}]}
 
 
 

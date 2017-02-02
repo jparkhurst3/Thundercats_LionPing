@@ -80,26 +80,25 @@ class CreateServiceCard extends React.Component {
 	}
 
 	handleChange = (event) => {
-		event.preventDefault()
-		this.setState({
-			[event.target.name]: event.target.value 
-		});
+	    this.setState({
+	      [event.target.name]: event.target.value
+	    });
 	}
 
 	render() {
 		return (
-		<div class="card">
-		  	<div class="card-header">Create Service</div>
-		    <div class="card-block">
-		      <form>
-		      	<div class="form-group">
-				    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Service Name" value={this.state.serviceName} onChange={this.handleChange}/>
-				    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Description (Optional)" value={this.state.serviceDescription} onChange={this.handleChange}/>
+			<div class="card">
+				<div class="card-header">Create Service</div>
+					<div class="card-block">
+				<form>
+					<div class="form-group">
+						<input type="text" name="serviceName" class="form-control" id="exampleInputEmail1" placeholder="Service Name" value={this.state.serviceName} onChange={this.handleChange}/>
+						<input type="text" name="serviceDescription" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Description (Optional)" value={this.state.serviceDescription} onChange={this.handleChange}/>
+					</div>
+						<button type="submit" class="btn" onClick={this.createService}>Create Service</button>
+					</form>
 				</div>
-				<button type="submit" class="btn" onClick={this.createService}>Create Service</button>
-		      </form>
-		    </div>
-		  </div>
+			</div>
 		  )
 	}
 }

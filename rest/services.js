@@ -64,6 +64,7 @@ var createService = function(req, res) {
 * Returns Escalation Policy
 */
 var getEscalationPolicyByID = function(req, res) {
+  console.log(req.query.id)
 	res.setHeader('Content-Type', 'text/plain');
 	var getUsersInEscalation = "SELECT s.ID, s.Name, l.Level, l.Delay, u.Username, USER.FirstName, USER.LastName FROM SERVICE s " +
 		" JOIN ESCALATION_LEVEL l ON (s.ID = l.ServiceID) " +
