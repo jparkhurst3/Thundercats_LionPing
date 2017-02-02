@@ -4,12 +4,41 @@ import axios from 'axios'
 import {Link} from 'react-router'
 
 export default class ServicePage extends React.Component {
+	constructor(props) {
+		super(props)
+		this.state = {
+			serviceID: null
+		}
+	}
+
+	componentDidMount() {
+		const apiCall = 'http://localhost:8080/api/services/getServices'
+		console.log(apiCall)
+		axios.get(apiCall)
+			.then((res) => {
+				console.log(res)
+				const id = res.data.find(service => service.Name === this.props.params.service).ID
+				// console.log(obj)
+				console.log('id:' + id)
+				this.setState({
+					serviceID: id
+				})
+			})
+			.catch((err) => {
+				console.log(err);
+			})
+	}
+
+
 	render() {
+		if (!this.state.serviceID) {
+			return <h5>loading</h5>
+		}
 		return (
 			<div className="container">
 				<h1>{this.props.params.service} Service</h1>
-				<PingTable service={this.props.params.service} />
-				<EscalationTable service={this.props.params.service} />
+				<PingTable serviceID={this.state.serviceID} />
+				<EscalationTable serviceID={this.state.serviceID} />
 			</div>
 		)
 	}
@@ -25,9 +54,11 @@ class PingTable extends React.Component {
 
 	componentDidMount() {
 		//database call for all pings for this service
-		const apiCall = `http://localhost:8080/api/services/${this.props.service}/pings`
+		const apiCall = `http://localhost:8080/api/pings/getPingsByServiceID?ID=${this.props.serviceID}`
+		console.log(apiCall);
 		axios.get(apiCall)
 			.then((result) => {
+				console.log(result.data)
 				this.setState({ pings: result.data })
 			})
 			.catch((error) => {
@@ -44,6 +75,7 @@ class PingTable extends React.Component {
 					<thead className="thead-inverse">
 						<tr>
 							<th>Created At</th>
+							<th>Name</th>
 							<th>Description</th>
 							<th>Status</th>
 						</tr>
@@ -59,11 +91,13 @@ class PingTable extends React.Component {
 
 class PingRow extends React.Component {
 	render() {
+		const time = moment(this.props.ping.CreateTime).format('MMMM Do YYYY, h:mm:ss a')
 		return (
 			<tr>
-				<td>{this.props.ping.createdAt}</td>
-				<td>{this.props.ping.description}</td>
-				<td>{this.props.ping.status}</td>
+				<td>{time}</td>
+				<td>{this.props.ping.Name}</td>
+				<td>{this.props.ping.Description}</td>
+				<td>{this.props.ping.Status}</td>
 			</tr>
 		)
 	}
@@ -78,26 +112,14 @@ class EscalationTable extends React.Component {
 	}
 
 	componentDidMount() {
-		console.log('mounted')
-		// const apiCall = 'http://localhost:8080/api/services/getEscalationPolicyByID?ID=' + '1';
-		// [{"ID":1,"Name":"Database"},{"ID":2,"Name":"UI"},{"ID":3,"Name":"Server"}]
-		const apiCall = 'http://localhost:8080/api/services/getServices'
-		console.log(this.props.service)
+		const apiCall = 'http://localhost:8080/api/services/getEscalationPolicyByID?ID=' + this.props.serviceID;
 		axios.get(apiCall)
-			.then((res) => {
-				const id = res.data.find(service => service.Name === this.props.service).ID
-				const apiCall2 = 'http://localhost:8080/api/services/getEscalationPolicyByID?ID=' + id;
-				axios.get(apiCall2)
-					.then(res => {
-						this.setState({
-							layers: res.data.Layers.sort((a,b) => a.Level - b.Level)
-						})
-					})
-					.catch(err => {
-						console.log(err);
-					})
+			.then(res => {
+				this.setState({
+					layers: res.data.Layers.sort((a,b) => a.Level - b.Level)
+				})
 			})
-			.catch((err) => {
+			.catch(err => {
 				console.log(err);
 			})
 	}
@@ -156,6 +178,33 @@ class EscalationLayer extends React.Component {
 		)
 	}
 }
+
+
+// [
+// 	{
+// 		"ID":1,
+// 		"ServiceID":1,
+// 		"Name":"Database is broken?",
+// 		"Description":"Database stopped functioning, I think the new tables from the most recent commit haven't been created and the server threw an error. Please resolve",
+// 		"Status":"Acknowledged",
+// 		"CreatedTime":"2017-02-02T18:43:07.000Z"
+// 	},
+// 	{
+// 		"ID":2,
+// 		"ServiceID":1,
+// 		"Name":"Customer data deleted",
+// 		"Description":"Client accidentally deleted all their data, requesting help with restoring backup version ASAP",
+// 		"Status":"Resolved",
+// 		"CreatedTime":"2017-02-02T18:43:07.000Z"
+// 	}
+// ]
+
+
+
+
+
+
+
 
 
 // {"ID":"1",

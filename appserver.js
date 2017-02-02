@@ -55,6 +55,8 @@ app.post('/api/services/createService', services.createService);
 app.get('/api/services/getEscalationPolicyByID', services.getEscalationPolicyByID);
 app.post('/api/services/updateEscalationPolicy', services.updateEscalationPolicy);
 
+
+//Pings
 var pings = require('./rest/pings');
 app.get('/api/pings/getPingsByServiceID', pings.getPingsByServiceID);
 
