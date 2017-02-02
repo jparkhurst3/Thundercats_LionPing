@@ -64,7 +64,8 @@ class CreateServiceCard extends React.Component {
 		super(props)
 		this.state = {
 			serviceName: '',
-			serviceDescription: ''
+			serviceDescription: '',
+			created: false
 		}
 	}
 
@@ -85,6 +86,10 @@ class CreateServiceCard extends React.Component {
 			.then(res => {
 				console.log("Sucessfully created new service");
 				console.log(res);
+				this.setState({
+					created: true
+				})
+
 			})
 			.catch(err => {
 				console.log('ERRROOOORRRRRR');
@@ -99,15 +104,26 @@ class CreateServiceCard extends React.Component {
 	}
 
 	render() {
+		if (this.state.created) {
+			//should link to that team 
+			return (
+				<div class="card">
+					<div class="card-header">Create Service</div>
+					<div class="card-block">
+						<h3>Service Successfully Created</h3>
+					</div>
+				</div>
+			)
+		}
 		return (
 			<div class="card">
 				<div class="card-header">Create Service</div>
-					<div class="card-block">
-				<form>
-					<div class="form-group">
-						<input type="text" name="serviceName" class="form-control" id="exampleInputEmail1" placeholder="Service Name" value={this.state.serviceName} onChange={this.handleChange}/>
-						<input type="text" name="serviceDescription" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Description (Optional)" value={this.state.serviceDescription} onChange={this.handleChange}/>
-					</div>
+				<div class="card-block">
+					<form>
+						<div class="form-group">
+							<input type="text" name="serviceName" class="form-control" id="exampleInputEmail1" placeholder="Service Name" value={this.state.serviceName} onChange={this.handleChange}/>
+							<input type="text" name="serviceDescription" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Description (Optional)" value={this.state.serviceDescription} onChange={this.handleChange}/>
+						</div>
 						<button type="submit" class="btn" onClick={this.createService}>Create Service</button>
 					</form>
 				</div>
