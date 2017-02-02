@@ -48,9 +48,10 @@ var createService = function(req, res) {
 */
 var getEscalationPolicyByID = function(req, res) {
 	res.setHeader('Content-Type', 'text/plain');
-	var getUsersInEscalation = "SELECT s.ID, s.Name, l.Level, l.Delay, u.Username FROM SERVICE s " +
+	var getUsersInEscalation = "SELECT s.ID, s.Name, l.Level, l.Delay, u.Username, USER.FirstName, USER.LastName FROM SERVICE s " +
 		" JOIN ESCALATION_LEVEL l ON (s.ID = l.ServiceID) " +
 	  " JOIN USER_IN_ESCALATION_LEVEL u ON (l.ServiceID = u.ServiceID AND l.Level = u.Level)" +
+    " JOIN USER ON (USER.Username = u.Username) " +
 	  " WHERE (s.ID = ?)";
   
 	database.executeQuery(getUsersInEscalation, req.query.ID, (error, rows, fields) => {
@@ -81,7 +82,12 @@ var getEscalationPolicyByID = function(req, res) {
       		policy.Layers.push(layer);
       	}
 
-      	layer.Users.push(row.Username);
+      	layer.Users.push({
+          Username : row.Username,
+          FirstName : row.FirstName,
+          LastName : row.LastName
+        });
+        
       });
 
       res.send(JSON.stringify(policy));
