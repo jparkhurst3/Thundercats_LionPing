@@ -54,6 +54,7 @@ export default class EscalationTable extends React.Component {
                             <th>Level</th>
                             <th>Delay</th>
                             <th>Users</th>
+                            <th>Teams :: Schedules</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -70,12 +71,29 @@ class EscalationLayer extends React.Component {
         const mappedUsers = this.props.users.map(user => 
             <li><Link to={`/users/${user.Username}`}>{user.Username}</Link></li>
         )
+        const mappedSchedules = this.props.schedules.map(schedule => 
+            <li><Link to={`/teams/${schedule.TeamName}`}>{schedule.TeamName} :: {schedule.ScheduleName}</Link></li>
+
+        )
+
         return (
             <tr>
                 <td>{this.props.level}</td>
                 <td>{this.props.delay} minutes</td>
                 <td><ul className="list-inline">{mappedUsers}</ul></td>
+                <td><ul className="list-inline">{mappedSchedules}</ul></td>
             </tr>
         )
     }
 }
+
+// {"ID":"1",
+// "Layers":[{"Level":2,"Delay":10,"Users":[{"Username":"hkim","FirstName":"Ho Keun","LastName":"Kim"}],"Schedules":[{"TeamID":1,"TeamName":"Database Team","ScheduleName":"Default"}]},{"Level":1,"Delay":0,"Users":[{"Username":"cclegg","FirstName":"Chris","LastName":"Clegg"},{"Username":"sford","FirstName":"Sam","LastName":"Ford"}],"Schedules":[]}]}
+
+
+
+
+
+
+
+
