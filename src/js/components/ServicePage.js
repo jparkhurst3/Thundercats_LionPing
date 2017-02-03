@@ -2,6 +2,7 @@ import React from 'react';
 var moment = require('moment');
 import axios from 'axios'
 import {Link} from 'react-router'
+import EscalationTable from './EscalationTable.js'
 
 export default class ServicePage extends React.Component {
 	constructor(props) {
@@ -38,11 +39,14 @@ export default class ServicePage extends React.Component {
 			<div className="container">
 				<h1>{this.props.params.service} Service</h1>
 				<PingTable serviceID={this.state.serviceID} />
-				<EscalationTable serviceID={this.state.serviceID} />
+                <EscalationTable serviceID={this.state.serviceID} />
 			</div>
 		)
 	}
 }
+				// <EscalationTable serviceID={this.state.serviceID} />
+                // <SortableComponent />
+
 
 class PingTable extends React.Component {
 	constructor(props) {
@@ -103,81 +107,8 @@ class PingRow extends React.Component {
 	}
 }
 
-class EscalationTable extends React.Component {
-	constructor(props) {
-		super(props)
-		this.state = {
-			layers: null
-		}
-	}
-
-	componentDidMount() {
-		const apiCall = 'http://localhost:8080/api/services/getEscalationPolicyByID?ID=' + this.props.serviceID;
-		axios.get(apiCall)
-			.then(res => {
-				this.setState({
-					layers: res.data.Layers.sort((a,b) => a.Level - b.Level)
-				})
-			})
-			.catch(err => {
-				console.log(err);
-			})
-	}
-
-	render() {
-		const mappedLayers = this.state.layers ? this.state.layers.map(layer => {
-			const level = layer.Level;
-			const delay = layer.Delay;
-			const users = layer.Users;
-			const schedules = layer.Schedules;
-			return (
-				<EscalationLayer level={level} delay={delay} users={users} schedules={schedules} />
-			)
-			}
-		) : <tr><td>loading</td></tr>
 
 
-		return (
-			<div>
-				<div className="row">
-					<div className="col-xs-3">
-						<h3>Escalation Policy</h3>
-					</div>
-					<div className="col-xs-9">
-						<button type="submit" class="btn">Edit</button>
-					</div>
-				</div>
-				<table class="table table-hover">
-					<thead className="thead-inverse">
-						<tr>
-							<th>Level</th>
-							<th>Delay</th>
-							<th>Users</th>
-						</tr>
-					</thead>
-					<tbody>
-						{mappedLayers}
-					</tbody>
-				</table>
-			</div>
-		)
-	}
-}
-
-class EscalationLayer extends React.Component {
-	render() {
-		const mappedUsers = this.props.users.map(user => 
-			<li><Link to={`/users/${user.Username}`}>{user.Username}</Link></li>
-		)
-		return (
-			<tr>
-				<td>{this.props.level}</td>
-				<td>{this.props.delay} minutes</td>
-				<td><ul className="list-inline">{mappedUsers}</ul></td>
-			</tr>
-		)
-	}
-}
 
 
 // [
@@ -198,13 +129,6 @@ class EscalationLayer extends React.Component {
 // 		"CreatedTime":"2017-02-02T18:43:07.000Z"
 // 	}
 // ]
-
-
-
-
-
-
-
 
 
 // {"ID":"1",
