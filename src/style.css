@@ -28,6 +28,11 @@ a:focus {
 
 }
 
+.changeArrow:hover {
+  color: gold;
+  cursor: pointer;
+}
+
 .sidebar a:hover, .sidebar a:focus {
   color: gold;
   text-decoration: none
