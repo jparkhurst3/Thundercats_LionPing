@@ -7,6 +7,7 @@ export default class EscalationTable extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            policyID: null,
             layers: null,
             disabled: true,
             allSchedules: null,
@@ -19,7 +20,11 @@ export default class EscalationTable extends React.Component {
         const apiCall = '/api/services/getEscalationPolicyByID?ID=' + this.props.serviceID;
         axios.get(apiCall)
             .then(res => {
+                console.log('~~~~~res.data~~~~~~')
+                console.log(res.data)
+                console.log('~~~~~~~~~~~~~~~~~~~')
                 this.setState({
+                    policyID: res.data.ID,
                     layers: res.data.Layers.sort((a,b) => a.Level - b.Level)
                 })
             })
@@ -50,12 +55,6 @@ export default class EscalationTable extends React.Component {
             })
     }
 
-    editLayers = (data) => {
-        this.setState({
-            layers: {...layers, data}
-        })
-    }
-
     addLayer = () => {
         console.log('add layer')
         const layers = this.state.layers;
@@ -71,6 +70,17 @@ export default class EscalationTable extends React.Component {
         })
     }
 
+    deleteLayer = (key) => {
+        const filteredLayers = this.state.layers.filter((layer, index) => {
+            if (key !== index) {
+                return layer
+            }
+        })
+        this.setState({
+            layers: filteredLayers
+        })
+    }
+
     handleLayerChange = (layer, index) => {
         console.log(layer)
         console.log(index)
@@ -83,17 +93,6 @@ export default class EscalationTable extends React.Component {
 
     }
 
-    deleteLayer = (key) => {
-        const filteredLayers = this.state.layers.filter((layer, index) => {
-            if (key !== index) {
-                return layer
-            }
-        })
-        this.setState({
-            layers: filteredLayers
-        })
-    }
-
     toggleEdit = (event) => {
         event.preventDefault()
         console.log('toggle')
@@ -104,7 +103,22 @@ export default class EscalationTable extends React.Component {
 
     handleSubmit = (event) => {
         event.preventDefault()
-        console.log("Submit table")
+        console.log("~~~~~~~POLICY ON SUBMIT~~~~~~~~~~")
+        //rebuild object
+        const policy = {
+            ID: this.state.policyID,
+            Layers: this.state.layers
+        }
+        console.log(policy)
+        console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+
+        axios.post('/api/services/updateEscalationPolicy', policy)
+            .then(res => {
+                console.log("posted")
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     render() {
@@ -175,10 +189,6 @@ class EscalationLayer extends React.Component {
         super(props)
         this.state = {
             layer: this.props.layer,
-            // currentUsers: mappedUsers,
-            // userOptions: mappedAllUsers,
-            // currentSchedules: mappedSchedules,
-            // scheduleOptions: mappedAllSchedules
         }
     }
 
