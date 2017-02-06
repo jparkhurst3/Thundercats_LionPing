@@ -1,9 +1,9 @@
 var database = require('../database/database.js');
 
 /**
-* Service for getting names of all services
+* Service for getting list of all users
 * Params: None
-* Returns: Names of services
+* Returns: Username, First Name, Last Name of all users
 */
 var getUsers = function(req, res) {
   res.setHeader('Content-Type', 'text/plain');
