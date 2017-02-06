@@ -60,6 +60,9 @@ app.post('/api/services/updateEscalationPolicy', services.updateEscalationPolicy
 var pings = require('./rest/pings');
 app.get('/api/pings/getPingsByServiceID', pings.getPingsByServiceID);
 
+var users = require('./rest/users');
+app.get('/api/users/getUsers', users.getUsers);
+
 
 //All fake calls for frontend testing
 app.get('/api/schedule', function(req, res) {

@@ -2,6 +2,7 @@ DROP TABLE USER_IN_ESCALATION_LEVEL;
 DROP TABLE SCHEDULE_IN_ESCALATION_LEVEL;
 DROP TABLE USER_IN_TEAM;
 DROP TABLE USER_MANAGES_TEAM;
+DROP TABLE SHIFT;
 DROP TABLE LAYER;
 DROP TABLE SCHEDULE;
 DROP TABLE TEAM;
@@ -51,10 +52,26 @@ CREATE TABLE SCHEDULE (
 
 CREATE TABLE LAYER (
 	TeamID			INT				NOT NULL,
-    Name			VARCHAR(50)		NOT NULL,
+    ScheduleName	VARCHAR(50)		NOT NULL,
 	Number			INT				NOT NULL,
-    PRIMARY KEY (TeamID,Name,Number),
-    FOREIGN KEY (TeamID,Name) references SCHEDULE(TeamID,Name) ON DELETE CASCADE
+    PRIMARY KEY (TeamID,ScheduleName,Number),
+    FOREIGN KEY (TeamID,ScheduleName) references SCHEDULE(TeamID,Name) ON DELETE CASCADE
+);
+
+ALTER TABLE LAYER AUTO_INCREMENT = 0;
+
+CREATE TABLE SHIFT (
+	TeamID			INT				NOT NULL,
+    ScheduleName	VARCHAR(50)		NOT NULL,
+	LayerNumber		INT				NOT NULL,
+    Number			INT				NOT NULL,
+    StartTime		TIME			NOT NULL,
+    EndTime			TIME			NOT NULL,
+    StartDate		DATE 			NOT NULL,
+    EndDate			DATE,
+    DaysOfWeek		BIT(7)			NOT NULL,
+    PRIMARY KEY (TeamID,ScheduleName,LayerNumber,Number),
+    FOREIGN KEY (TeamID,ScheduleName,LayerNumber) references LAYER(TeamID,ScheduleName,Number) ON DELETE CASCADE
 );
 
 CREATE TABLE SERVICE (

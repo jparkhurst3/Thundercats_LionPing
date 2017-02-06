@@ -5,21 +5,20 @@ var database = require('../database/database.js');
 * Params: None
 * Returns: Names of services
 */
-var getNames = function(req, res) {
+var getUsers = function(req, res) {
   res.setHeader('Content-Type', 'text/plain');
-  database.executeQuery('SELECT * FROM USER', (error, rows, fields) => {
+  database.executeQuery('SELECT Username,FirstName,LastName FROM USER', (error, rows, fields) => {
     if (error) {
       console.log(error)
       res.statusCode = 500;
       res.end("error");
     } else {
       res.statusCode = 200;
-      const serviceNames = rows.map((row) => row['Name']);
-      res.send(JSON.stringify(serviceNames))
+      res.send(JSON.stringify(rows));
     }
   })
 };
 
 module.exports = {
-  getNames : getNames,
+  getUsers : getUsers,
 }
