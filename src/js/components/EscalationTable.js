@@ -9,6 +9,7 @@ export default class EscalationTable extends React.Component {
         this.state = {
             policyID: null,
             layers: null,
+            oldLayers: null,
             disabled: true,
             allSchedules: null,
             allUsers: null
@@ -17,15 +18,19 @@ export default class EscalationTable extends React.Component {
 
     componentDidMount() {
         //get escalation policy for this service
+        console.log('mount')
         const apiCall = '/api/services/getEscalationPolicyByID?ID=' + this.props.serviceID;
         axios.get(apiCall)
             .then(res => {
                 console.log('~~~~~res.data~~~~~~')
                 console.log(res.data)
                 console.log('~~~~~~~~~~~~~~~~~~~')
+
+                const sortedLayers = res.data.Layers.sort((a,b) => a.Level - b.Level)
                 this.setState({
                     policyID: res.data.ID,
-                    layers: res.data.Layers.sort((a,b) => a.Level - b.Level)
+                    layers: sortedLayers,
+                    oldLayers: JSON.parse(JSON.stringify(sortedLayers))
                 })
             })
             .catch(err => {
@@ -56,7 +61,6 @@ export default class EscalationTable extends React.Component {
     }
 
     addLayer = () => {
-        console.log('add layer')
         const layers = this.state.layers;
         const newLayer = {
             "Level": 3,
@@ -82,22 +86,26 @@ export default class EscalationTable extends React.Component {
     }
 
     handleLayerChange = (layer, index) => {
-        console.log(layer)
-        console.log(index)
         this.state.layers[index] = layer;
         this.setState({
             layers: this.state.layers
         })
-        console.log('new layers')
-        console.log(this.state.layers)
-
     }
 
     toggleEdit = (event) => {
         event.preventDefault()
-        console.log('toggle')
         this.setState({
-            disabled: !this.state.disabled,
+            disabled: false
+        })
+    }
+
+    handleCancel = (event) => {
+        event.preventDefault()
+        console.log("old layers")
+        console.log(this.state.oldLayers)
+        this.setState({
+            layers: JSON.parse(JSON.stringify(this.state.oldLayers)),
+            disabled: true
         })
     }
 
@@ -119,13 +127,15 @@ export default class EscalationTable extends React.Component {
             .catch(err => {
                 console.log(err)
             })
+
+        //change old layers
+        this.setState({
+            oldLayers: JSON.parse(JSON.stringify(this.state.layers))
+        })
     }
 
     render() {
-        console.log("layers")
-        console.log(this.state.layers)
         const mappedLayers = (this.state.layers && this.state.allSchedules && this.state.allUsers) ? this.state.layers.map((layer, index) => {
-            console.log(index)
             return (
                 <EscalationLayer 
                     key={index} 
@@ -144,7 +154,7 @@ export default class EscalationTable extends React.Component {
         const buttons = this.state.disabled ? 
             <input type="button" value="Edit" class="btn" onClick={this.toggleEdit}></input> :
             <div>
-                <input type="button" value="Cancel" class="btn" onClick={this.toggleEdit}></input>
+                <input type="button" value="Cancel" class="btn" onClick={this.handleCancel}></input>
                 <input type="button" value="Submit Changes" class="btn" onClick={this.handleSubmit}></input>
             </div>
 
@@ -187,9 +197,6 @@ export default class EscalationTable extends React.Component {
 class EscalationLayer extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {
-            layer: this.props.layer,
-        }
     }
 
     containsUser = (users, needle) => {
@@ -211,21 +218,21 @@ class EscalationLayer extends React.Component {
     }
 
     handleDelayChange = (event) => {
-        const layer = this.state.layer
+        const layer = this.props.layer
         layer.Delay = event.target.value
         this.props.handleLayerChange(layer, this.props.index)
     }
 
     handleUsersChange = (users) => {
         const destructedUsers = users.map(user => user.value)
-        const layer = this.state.layer
+        const layer = this.props.layer
         layer.Users = destructedUsers;
         this.props.handleLayerChange(layer, this.props.index)
     }
 
     handleSchedulesChange = (schedules) => {
         const destructedSchedules = schedules.map(schedule => schedule.value)
-        const layer = this.state.layer
+        const layer = this.props.layer
         layer.Schedules = destructedSchedules
         this.props.handleLayerChange(layer, this.props.index)
     }
