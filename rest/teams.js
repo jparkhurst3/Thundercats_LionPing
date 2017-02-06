@@ -20,6 +20,25 @@ var getTeams = function(req, res) {
 };
 
 /**
+* Service for getting Schedules of all Teams
+* Params: None
+* Returns: TeamID, TeamName, ScheduleName for each schedule
+*/
+var getSchedules = function(req, res) {
+  res.setHeader('Content-Type', 'text/plain');
+  database.executeQuery('SELECT t.Name as TeamName, s.Name as ScheduleName, t.ID as TeamID FROM TEAM t JOIN SCHEDULE s ON (t.ID = s.TeamID)', (error, rows, fields) => {
+    if (error) {
+      console.log(error)
+      res.statusCode = 500;
+      res.end("error");
+    } else {
+      res.statusCode = 200;
+      res.send(JSON.stringify(rows));
+    }
+  })
+};
+
+/**
 * Service for creating a new team
 * Params: Name, Users
 * Returns: ID of newly created team
@@ -65,5 +84,6 @@ var createTeam = function(req, res) {
 
 module.exports = {
   getTeams : getTeams,
-  createTeam : createTeam
+  createTeam : createTeam,
+  getSchedules : getSchedules
 }

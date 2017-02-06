@@ -28,23 +28,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //api calls
 
-
-app.get('/api/slackexample', function(req, res) {
-  console.log('received request to ping slack');
-  
-  slack.postMessage('/services/T25EFUYP7/B3X4YAHUL/JLLTip8VjuNdkauvMRkMim9a', 'Example Slack Message');
-
-  res.send("Slack message sent successfully.");
-});
-
 app.post('/api/slack', (req, res) => {
   slack.postMessage('/services/T25EFUYP7/B3X4YAHUL/JLLTip8VjuNdkauvMRkMim9a', req.body.description);
   console.log(req.body.description);
   res.end('successfully posted to slack')
 })
-
-
-
 
 //Import module from rest folder, put new modules for other entities in same folder in new module
 var services = require('./rest/services');
@@ -68,6 +56,7 @@ app.get('/api/users/getUsers', users.getUsers);
 var teams = require('./rest/teams');
 app.get('/api/teams/getTeams', teams.getTeams);
 app.post('/api/teams/createTeam', teams.createTeam);
+app.get('/api/teams/getSchedules', teams.getSchedules);
 
 
 //All fake calls for frontend testing
