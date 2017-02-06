@@ -9,12 +9,14 @@ export default class EscalationTable extends React.Component {
         this.state = {
             layers: null,
             disabled: true,
-            buttonName: 'Edit'
+            allSchedules: null,
+            allUsers: null
         }
     }
 
     componentDidMount() {
-        const apiCall = 'http://localhost:8080/api/services/getEscalationPolicyByID?ID=' + this.props.serviceID;
+        //get escalation policy for this service
+        const apiCall = '/api/services/getEscalationPolicyByID?ID=' + this.props.serviceID;
         axios.get(apiCall)
             .then(res => {
                 this.setState({
@@ -26,9 +28,26 @@ export default class EscalationTable extends React.Component {
             })
 
         //axios get all users
-
+        axios.get('/api/users/getUsers')
+            .then(res => {
+                this.setState({
+                    allUsers: res.data
+                })
+            })
+            .catch(err => {
+                console.log(err)
+            })
         //axios get all teams-schedules
-
+        axios.get('/api/teams/getSchedules')
+            .then(res => {
+                this.setState({
+                    allSchedules: res.data
+                })
+                console.log(res.data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     editLayers = (data) => {
@@ -40,27 +59,31 @@ export default class EscalationTable extends React.Component {
     addLayer = () => {
         console.log('add layer')
         const layers = this.state.layers;
-        console.log(layers)
         const newLayer = {
             "Level": 3,
             "Delay": 5,
             "Users": [],
             "Schedules": []
         }
-        console.log('layer added')
         const newLayers = layers.push(newLayer)
-        console.log(layers);
-        console.log('newlayers')
-        console.log(newLayers)
         this.setState({
             layers: layers
         })
+    }
+
+    handleLayerChange = (layer, index) => {
+        console.log(layer)
+        console.log(index)
+        this.state.layers[index] = layer;
+        this.setState({
+            layers: this.state.layers
+        })
+        console.log('new layers')
         console.log(this.state.layers)
 
     }
 
     deleteLayer = (key) => {
-        console.log(this.state.layers)
         const filteredLayers = this.state.layers.filter((layer, index) => {
             if (key !== index) {
                 return layer
@@ -69,7 +92,6 @@ export default class EscalationTable extends React.Component {
         this.setState({
             layers: filteredLayers
         })
-        console.log(this.state.layers)
     }
 
     toggleEdit = (event) => {
@@ -88,10 +110,19 @@ export default class EscalationTable extends React.Component {
     render() {
         console.log("layers")
         console.log(this.state.layers)
-        const mappedLayers = this.state.layers ? this.state.layers.map((layer, index) => {
+        const mappedLayers = (this.state.layers && this.state.allSchedules && this.state.allUsers) ? this.state.layers.map((layer, index) => {
             console.log(index)
             return (
-                <EscalationLayer key={index} index={index} disabled={this.state.disabled} layers={this.state.layers} editLayers={this.editLayers} deleteLayer={this.deleteLayer} />
+                <EscalationLayer 
+                    key={index} 
+                    index={index} 
+                    disabled={this.state.disabled} 
+                    layer={layer} 
+                    handleLayerChange={this.handleLayerChange} 
+                    deleteLayer={this.deleteLayer} 
+                    allUsers={this.state.allUsers}
+                    allSchedules={this.state.allSchedules}
+                    />
             )
             }
         ) : <tr><td>loading</td></tr>
@@ -134,54 +165,81 @@ export default class EscalationTable extends React.Component {
     }
 }
 
+
+
     // {this.state.disabled ? <th></th> : <th>Move</th>}
 
 
 class EscalationLayer extends React.Component {
     constructor(props) {
         super(props)
-        const index = this.props.index
-        console.log('this.props.layers')
-        console.log('index: '+ this.props.index)
-        console.log(this.props.layers[this.props.index])
-        const teams = this.props.layers[index].Schedules.map(schedule => { return {value: schedule.TeamName, label: schedule.TeamName}}) 
-        const users = this.props.layers[index].Users.map(user => {return {value: user.Username, label: user.Username}})
         this.state = {
-            key: this.props.key,
-            layers: this.props.layers,
-            currentTeams: teams,
-            teamOptions: teams,
-            currentUsers: users,
-            userOptions: users
+            layer: this.props.layer,
+            // currentUsers: mappedUsers,
+            // userOptions: mappedAllUsers,
+            // currentSchedules: mappedSchedules,
+            // scheduleOptions: mappedAllSchedules
         }
     }
 
+    containsUser = (users, needle) => {
+        for (const user of users) {
+            if (user.Username == needle.Username) {
+                return true
+            }
+        }
+        return false
+    }
+
+    containsSchedule = (schedules, needle) => {
+        for (const schedule of schedules) {
+            if (schedule.TeamID == needle.TeamId && schedule.ScheduleName == needle.ScheduleName) {
+                return true
+            }
+        }
+        return false
+    }
+
     handleDelayChange = (event) => {
-        this.setState({
-            layers: event.target.value
-        })
+        const layer = this.state.layer
+        layer.Delay = event.target.value
+        this.props.handleLayerChange(layer, this.props.index)
     }
 
-    handleSelectedUser = (users) => {
-        // console.log('user:::')
-        // console.log(users);
-        this.setState({currentUsers: users});
+    handleUsersChange = (users) => {
+        const destructedUsers = users.map(user => user.value)
+        const layer = this.state.layer
+        layer.Users = destructedUsers;
+        this.props.handleLayerChange(layer, this.props.index)
     }
 
-    handleSelectedTeam = (teams) => {
-        this.setState({currentTeams: teams})
+    handleSchedulesChange = (schedules) => {
+        const destructedSchedules = schedules.map(schedule => schedule.value)
+        const layer = this.state.layer
+        layer.Schedules = destructedSchedules
+        this.props.handleLayerChange(layer, this.props.index)
     }
 
     render() {
-        const index = this.props.index
+        //map and filter all to build to react-select specifications
+        const mappedSchedules = this.props.layer.Schedules.map(schedule => {return {value: schedule, label: schedule.TeamName}})
+        const mappedAllSchedules = this.props.allSchedules
+            .filter((schedule) => !this.containsSchedule(this.props.layer.Schedules, schedule))
+            .map((schedule) => { return {value: schedule, label: schedule.TeamName}})
+
+        const mappedUsers = this.props.layer.Users.map(user => {return {value: user, label: user.Username}})
+        const mappedAllUsers = this.props.allUsers
+            .filter((user) => !this.containsUser(this.props.layer.Users, user))
+            .map((user) => { return {value: user, label: user.Username}})
+
         return (
             <tr>
                 <td>{this.props.index}</td>
-                <td><input class="form-control" type="number" value={this.state.layers[index].Delay} disabled={this.props.disabled} onChange={this.handleDelayChange} /></td>
-                <td><Select disabled={this.props.disabled} multi value={this.state.currentUsers} options={this.state.userOptions} onChange={this.handleSelectedUser} /></td>
-                <td><Select disabled={this.props.disabled} multi value={this.state.currentTeams} options={this.state.teamOptions} onChange={this.handleSelectedTeam} /></td>
+                <td><input class="form-control" type="number" value={this.props.layer.Delay} disabled={this.props.disabled} onChange={this.handleDelayChange} /></td>
+                <td><Select disabled={this.props.disabled} multi value={mappedUsers} options={mappedAllUsers} onChange={this.handleUsersChange} /></td>
+                <td><Select disabled={this.props.disabled} multi value={mappedSchedules} options={mappedAllSchedules} onChange={this.handleSchedulesChange} /></td>
                 {this.props.disabled ? <td></td> : <td>
-                    <p className="changeArrow" value={index} onClick={() => this.props.deleteLayer(index)} >&#10060;</p>
+                    <p className="changeArrow" value={this.props.index} onClick={() => this.props.deleteLayer(this.props.index)} >&#10060;</p>
                 </td>}
             </tr>
         )
