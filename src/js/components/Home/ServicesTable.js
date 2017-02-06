@@ -11,7 +11,7 @@ export default class ServicesTable extends React.Component {
 	}
 
 	componentDidMount() {
-		axios.get("http://localhost:8080/api/services/getNames")
+		axios.get("/api/services/getNames")
 			.then((result) => {
 				console.log("hdhdhservice")
 				this.setState({services: result.data});
