@@ -232,15 +232,15 @@ class EscalationLayer extends React.Component {
 
     render() {
         //map and filter all to build to react-select specifications
-        const mappedSchedules = this.props.layer.Schedules.map(schedule => {return {value: schedule, label: schedule.TeamName}})
+        const mappedSchedules = this.props.layer.Schedules.map(schedule => {return {value: schedule, label: schedule.TeamName + ": " + schedule.ScheduleName}})
         const mappedAllSchedules = this.props.allSchedules
             .filter((schedule) => !this.containsSchedule(this.props.layer.Schedules, schedule))
-            .map((schedule) => { return {value: schedule, label: schedule.TeamName}})
+            .map((schedule) => { return {value: schedule, label: schedule.TeamName + ": " + schedule.ScheduleName}})
 
-        const mappedUsers = this.props.layer.Users.map(user => {return {value: user, label: user.Username}})
+        const mappedUsers = this.props.layer.Users.map(user => {return {value: user, label: user.FirstName + " " + user.LastName}})
         const mappedAllUsers = this.props.allUsers
             .filter((user) => !this.containsUser(this.props.layer.Users, user))
-            .map((user) => { return {value: user, label: user.Username}})
+            .map((user) => { return {value: user, label: user.FirstName + " " + user.LastName}})
 
         return (
             <tr>
