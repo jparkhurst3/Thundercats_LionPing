@@ -20,6 +20,29 @@ var getTeams = function(req, res) {
 };
 
 /**
+* Get schedules linked to a specifc team
+* Params: Team ID
+* Returns: List of Schedules
+*/
+var getSchedulesForTeamByID = function(req, res) {
+  res.setHeader('Content-Type', 'text/plain');
+  var getUsersInEscalation = "SELECT s.Name as ScheduleName FROM TEAM t " +
+    " JOIN SCHEDULE s ON (s.TeamID = t.ID) " +
+    " WHERE (t.ID = ?)";
+
+  database.executeQuery(getUsersInEscalation, req.query.ID, (error, rows, fields) => {
+    if (error) {
+      console.log(error)
+      res.statusCode = 500;
+      res.end("error");
+    } else {
+      res.statusCode = 200;
+      res.send(JSON.stringify(rows));
+    }
+  })
+}
+
+/**
 * Service for getting Schedules of all Teams
 * Params: None
 * Returns: TeamID, TeamName, ScheduleName for each schedule
@@ -85,5 +108,6 @@ var createTeam = function(req, res) {
 module.exports = {
   getTeams : getTeams,
   createTeam : createTeam,
-  getSchedules : getSchedules
+  getSchedules : getSchedules,
+  getSchedulesForTeamByID : getSchedulesForTeamByID
 }
