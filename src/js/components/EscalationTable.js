@@ -128,9 +128,11 @@ export default class EscalationTable extends React.Component {
                 console.log(err)
             })
 
+
         //change old layers
         this.setState({
-            oldLayers: JSON.parse(JSON.stringify(this.state.layers))
+            oldLayers: JSON.parse(JSON.stringify(this.state.layers)),
+            disabled: true
         })
     }
 
@@ -175,7 +177,7 @@ export default class EscalationTable extends React.Component {
                             <th>Level</th>
                             <th>Delay (Minutes)</th>
                             <th>Users</th>
-                            <th>Teams :: Schedules</th>
+                            <th>Teams: Schedules</th>
                             {this.state.disabled ? <th></th> : <th>Delete</th>}
                         </tr>
                     </thead>
