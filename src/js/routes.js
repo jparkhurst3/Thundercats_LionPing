@@ -91,8 +91,7 @@ class Teams extends React.Component {
 }
 class Help extends React.Component {
   render() {
-	// return <h1>Help</h1>
-	return <CreateServiceModal />
+	return <h1>Help</h1>
   }
 }
 class Profile extends React.Component {

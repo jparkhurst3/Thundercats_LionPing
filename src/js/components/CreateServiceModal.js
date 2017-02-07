@@ -99,7 +99,7 @@ class CreateServiceCard extends React.Component {
 
 	handleChange = (event) => {
 	    this.setState({
-	      [event.target.name]: event.target.value
+	    	[event.target.name]: event.target.value
 	    });
 	}
 
@@ -118,6 +118,7 @@ class CreateServiceCard extends React.Component {
 		return (
 			<div class="card">
 				<div class="card-header">Create Service</div>
+				
 				<div class="card-block">
 					<form>
 						<div class="form-group">

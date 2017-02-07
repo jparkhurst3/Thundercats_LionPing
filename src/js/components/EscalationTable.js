@@ -18,8 +18,8 @@ export default class EscalationTable extends React.Component {
 
     componentDidMount() {
         //get escalation policy for this service
-        console.log('mount')
-        const apiCall = '/api/services/getEscalationPolicyByID?ID=' + this.props.serviceID;
+        console.log(this.props.service)
+        const apiCall = '/api/services/getEscalationPolicy?Name=' + this.props.service;
         axios.get(apiCall)
             .then(res => {
                 console.log('~~~~~res.data~~~~~~')

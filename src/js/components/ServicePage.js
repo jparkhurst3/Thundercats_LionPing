@@ -39,13 +39,11 @@ export default class ServicePage extends React.Component {
 			<div className="container">
 				<h1>{this.props.params.service} Service</h1>
 				<PingTable serviceID={this.state.serviceID} />
-                <EscalationTable serviceID={this.state.serviceID} />
+                <EscalationTable service={this.props.params.service} />
 			</div>
 		)
 	}
 }
-				// <EscalationTable serviceID={this.state.serviceID} />
-                // <SortableComponent />
 
 
 class PingTable extends React.Component {
@@ -106,45 +104,3 @@ class PingRow extends React.Component {
 		)
 	}
 }
-
-
-
-
-
-// [
-// 	{
-// 		"ID":1,
-// 		"ServiceID":1,
-// 		"Name":"Database is broken?",
-// 		"Description":"Database stopped functioning, I think the new tables from the most recent commit haven't been created and the server threw an error. Please resolve",
-// 		"Status":"Acknowledged",
-// 		"CreatedTime":"2017-02-02T18:43:07.000Z"
-// 	},
-// 	{
-// 		"ID":2,
-// 		"ServiceID":1,
-// 		"Name":"Customer data deleted",
-// 		"Description":"Client accidentally deleted all their data, requesting help with restoring backup version ASAP",
-// 		"Status":"Resolved",
-// 		"CreatedTime":"2017-02-02T18:43:07.000Z"
-// 	}
-// ]
-
-
-// {"ID":"1",
-// "Layers":[
-// 	{"Level":2,
-// 	"Delay":10,
-// 	"Users":[
-// 		{"Username":"hkim","FirstName":"Ho Keun","LastName":"Kim"}],
-// 	"Schedules":[
-// 		{"TeamID":1,"TeamName":"Database Team","ScheduleName":"Default"}]},
-// 	{"Level":1,
-// 	"Delay":0,
-// 	"Users":[
-// 		{"Username":"cclegg","FirstName":"Chris","LastName":"Clegg"},
-// 		{"Username":"sford","FirstName":"Sam","LastName":"Ford"}],
-// 		"Schedules":[]}]}
-
-
-

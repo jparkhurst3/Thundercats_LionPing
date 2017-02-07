@@ -11,8 +11,9 @@ export default class TeamPage extends React.Component {
 
 	componentDidMount() {
 		//get schedules
-		axios.get('/api/teams/getSchedulesForTeamByID?ID=' + '1')
+		axios.get('/api/teams/getSchedulesForTeam?Name=' + this.props.params.team)
 			.then(res => {
+				console.log('got schedyles')
 				console.log(res.data)
 				this.setState({
 					schedules: res.data
