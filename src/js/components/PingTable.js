@@ -50,7 +50,7 @@ export default class PingTable extends React.Component {
 
 class PingRow extends React.Component {
 	render() {
-		const time = moment(this.props.ping.CreateTime).format('MMMM Do YYYY, h:mm:ss a')
+		const time = moment(this.props.ping.CreatedTime).format('MMMM Do YYYY, h:mm:ss a')
 		return (
 			<tr>
 				<td>{time}</td>
