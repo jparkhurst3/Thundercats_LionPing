@@ -26,22 +26,20 @@ export default class NewPingCard extends React.Component {
 
 	sendPing = () => {
 		console.log("send ping");
+		// req.query.serviceID + ',' + req.query.name + ',' + req.query.description
+		const ping = {
+			serviceID: this.props.serviceID,
+			name: this.state.name,
+			description: this.state.description
+		}
 
-		// const ping = {
-		// 	id:
-		// 	date:
-		// 	name:
-		// 	description:
-		// 	status:
-		// }
-
-		// axios.post('/api/pings/', ping)
-		// 	.then(res => {
-		// 		console.log('posted')
-		// 	})
-		// 	.catch(err => {
-		// 		console.log(err)
-		// 	})
+		axios.post('/api/pings/createPingForService', ping)
+			.then(res => {
+				console.log('posted')
+			})
+			.catch(err => {
+				console.log(err)
+			})
 
 		console.log(this.state.name)
 		console.log(this.state.description)

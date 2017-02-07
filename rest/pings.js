@@ -23,7 +23,7 @@ var createPingForService = function(req, res) {
 
   // INSERT INTO PING (ServiceID, Name, Description, Status) VALUES (1,'Database is broken?', 'Database stopped', 'Acknowledged');
   var values = '('+ req.query.serviceID + ',' + req.query.name + ',' + req.query.description + ',Open)'
-  var query = 'INSERT INTO PING (ServiceID, Name, Description, Status) VALUES ' + values
+  var query = 'INSERT INTO PING JOIN SERVICE ON (PING.ServiceID = SERVICE.ID) (ServiceID, Name, Description, Status) VALUES ' + values
   database.executeQuery(query, (error, rows, fields) => {
     if (error) {
       console.log(error);
@@ -39,5 +39,6 @@ var createPingForService = function(req, res) {
 
 
 module.exports = {
-	getPingsForService : getPingsForService
+	getPingsForService : getPingsForService,
+  createPingForService: createPingForService
 }
