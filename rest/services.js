@@ -60,6 +60,115 @@ var createService = function(req, res) {
 
 /**
 * Get escalation policy linked to a specific service
+* Params: Service ID or Name
+* Returns Escalation Policy
+*/
+var getEscalationPolicy = function(req, res) {
+  res.setHeader('Content-Type', 'text/plain');
+
+  var whereClause = (req.query.ID) ? " WHERE (s.ID = ?)" : " WHERE (s.Name = ?)";
+  var queryParam = (req.query.ID) ? (req.query.ID) : (req.query.Name);
+
+  var getUsersInEscalation = "SELECT s.ID, s.Name, l.Level, l.Delay, USER.Username, USER.FirstName, USER.LastName FROM SERVICE s " +
+    " JOIN ESCALATION_LEVEL l ON (s.ID = l.ServiceID) " +
+    " JOIN USER_IN_ESCALATION_LEVEL u ON (l.ServiceID = u.ServiceID AND l.Level = u.Level) " +
+    " JOIN USER ON (USER.Username = u.Username) " + whereClause;
+
+  var getSchedulesInEscalation = "SELECT s.ID, s.Name, l.Level, l.Delay, t.Name as TeamName, t.ID as TeamID, sched.Name as ScheduleName FROM SERVICE s " +
+    " JOIN ESCALATION_LEVEL l ON (s.ID = l.ServiceID) " +
+    " JOIN SCHEDULE_IN_ESCALATION_LEVEL s_in ON (s_in.ServiceID = l.ServiceID AND s_in.Level = l.Level) " +
+    " JOIN SCHEDULE sched ON (sched.TeamID = s_in.TeamID AND sched.Name = s_in.Name) " +
+    " JOIN TEAM t on (t.ID = sched.TeamID) " + whereClause;
+
+  
+
+  var policy = {
+    Layers : []
+  }
+
+  var usersLoaded = new Promise(function(resolve, reject) {
+    database.executeQuery(getUsersInEscalation, queryParam, (error, rows, fields) => {
+      if (error) {
+        reject(error);
+      } else {
+        rows.forEach(function(row) {
+          var layer = policy.Layers.find(function(value) {
+            return (value.Level == row.Level);
+          });
+
+          if (layer === undefined) {
+            layer = {
+              Level : row.Level,
+              Delay : row.Delay,
+              Users : [],
+              Schedules : []
+            }
+            policy.Layers.push(layer);
+          }
+
+          layer.Users.push({
+            Username : row.Username,
+            FirstName : row.FirstName,
+            LastName : row.LastName
+          });      
+        });
+        if (rows.length > 0) {
+          policy.ID = rows[0].ID;
+          policy.Name = rows[0].Name;
+        }
+        resolve();
+      }
+    });
+  });
+
+  var schedulesLoaded = new Promise(function(resolve, reject) {
+    database.executeQuery(getSchedulesInEscalation, queryParam, (error, rows, fields) => {
+      if (error) {
+        reject(error);
+      } else {
+        rows.forEach(function(row) {
+          var layer = policy.Layers.find(function(value) {
+            return (value.Level == row.Level);
+          });
+
+          if (layer === undefined) {
+            layer = {
+              Level : row.Level,
+              Delay : row.Delay,
+              Users : [],
+              Schedules : []
+            }
+            policy.Layers.push(layer);
+          }
+
+          layer.Schedules.push({
+            TeamID : row.TeamID,
+            TeamName : row.TeamName,
+            ScheduleName : row.ScheduleName
+          });      
+        });
+        if (rows.length > 0) {
+          policy.ID = rows[0].ID;
+          policy.Name = rows[0].Name;
+        }
+        resolve();
+      }
+    });
+  });
+
+  Promise.all([usersLoaded,schedulesLoaded]).then(function(val) {
+    res.statusCode = 200;
+    res.end(JSON.stringify(policy));
+  }).catch(function(error) {
+    console.log(error);
+    res.statusCode = 500;
+    res.end("error");
+  }); 
+  
+} 
+
+/**
+* Get escalation policy linked to a specific service
 * Params: Service ID
 * Returns Escalation Policy
 */
@@ -79,7 +188,6 @@ var getEscalationPolicyByID = function(req, res) {
     " WHERE (s.ID = ?)";
 
   var policy = {
-    ID : req.query.ID,
     Layers : []
   }
 
@@ -109,6 +217,10 @@ var getEscalationPolicyByID = function(req, res) {
             LastName : row.LastName
           });      
         });
+        if (rows.length > 0) {
+          policy.ID = rows[0].ID;
+          policy.Name = rows[0].Name;
+        }
         resolve();
       }
     });
@@ -140,6 +252,10 @@ var getEscalationPolicyByID = function(req, res) {
             ScheduleName : row.ScheduleName
           });      
         });
+        if (rows.length > 0) {
+          policy.ID = rows[0].ID;
+          policy.Name = rows[0].Name;
+        }
         resolve();
       }
     });
@@ -223,5 +339,6 @@ module.exports = {
   getServices : getServices,
   createService : createService,
   getEscalationPolicyByID : getEscalationPolicyByID,
+  getEscalationPolicy : getEscalationPolicy,
   updateEscalationPolicy : updateEscalationPolicy
 }

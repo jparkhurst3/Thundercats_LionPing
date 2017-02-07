@@ -41,6 +41,7 @@ app.get('/api/services/getNames', services.getNames);
 app.get('/api/services/getServices', services.getServices);
 app.post('/api/services/createService', services.createService);
 app.get('/api/services/getEscalationPolicyByID', services.getEscalationPolicyByID);
+app.get('/api/services/getEscalationPolicy', services.getEscalationPolicy)
 app.post('/api/services/updateEscalationPolicy', services.updateEscalationPolicy);
 
 
@@ -58,6 +59,7 @@ app.get('/api/teams/getTeams', teams.getTeams);
 app.post('/api/teams/createTeam', teams.createTeam);
 app.get('/api/teams/getSchedules', teams.getSchedules);
 app.get('/api/teams/getSchedulesForTeamByID', teams.getSchedulesForTeamByID);
+app.get('/api/teams/getSchedulesForTeam', teams.getSchedulesForTeam);
 
 
 //All fake calls for frontend testing
