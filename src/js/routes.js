@@ -7,6 +7,7 @@ import TeamPage from './components/TeamPage.js'
 import ServicePage from './components/ServicePage.js'
 import CreateTeamPage from './components/CreateTeam.js'
 import ServicesList from './components/ServicesList.js'
+import TeamsList from './components/TeamsList.js'
 import CreateServiceModal from './components/CreateServiceModal'
 
 
@@ -24,7 +25,8 @@ class Routes extends React.Component {
 			<Route path='/myservices' component={ServicesList} />
 			<Route path='/myservices/:service' component={ServicePage} />
 
-			<Route path='/myteams' component={TeamPage} />
+			<Route path='/myteams' component={TeamsList} />
+			<Route path='/myteams/:team' component={TeamPage} />
 			<Route path='/createteam' component={CreateTeamPage} />
 
 			<Route path='*' component={NotFound} />

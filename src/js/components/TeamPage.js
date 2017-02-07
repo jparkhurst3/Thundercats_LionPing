@@ -1,11 +1,33 @@
 import React from 'react';
+import axios from 'axios'
 
 export default class TeamPage extends React.Component {
+	constructor(props) {
+		super(props)
+		this.state = {
+			schedules: null
+		}
+	}
+
+	componentDidMount() {
+		//get schedules
+		axios.get('/api/teams/getSchedulesForTeamByID?ID=' + '1')
+			.then(res => {
+				console.log(res.data)
+				this.setState({
+					schedules: res.data
+				})
+			})
+			.catch(err => {
+				console.log(err)
+			})
+	}
+
 	render() {
 		return (
 			<div>
-				<h1>Thundercats</h1>
-				<Schedule />
+				<h1>{this.props.params.team}</h1>
+				{this.state.schedules ? <Schedule schedules={this.state.schedules} /> : <div></div>}
 			</div>
 		)
 	}
@@ -13,7 +35,7 @@ export default class TeamPage extends React.Component {
 
 class Schedule extends React.Component {
 	render() {
-		const tabs = ['Primary', 'Holiday', 'Secondary', 'Sick']
+		const tabs = this.props.schedules.map(schedule => schedule.ScheduleName)
 		const mappedTabs = tabs.map((tab) =>
 			<ScheduleTab name={tab} />
 		)
