@@ -39,7 +39,7 @@ export default class ServicePage extends React.Component {
 			<div className="container">
 				<h1>{this.props.params.service} Service</h1>
 				<PingTable serviceID={this.state.serviceID} />
-                <EscalationTable service={this.props.params.service} />
+                <EscalationTable service={this.props.params.service} serviceID={this.state.serviceID} />
 			</div>
 		)
 	}

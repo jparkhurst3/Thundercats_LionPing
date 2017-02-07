@@ -6,7 +6,9 @@ export default class NewPingCard extends React.Component {
 		super(props)
 		this.state = {
 			services: null,
-			description: ""
+			description: "",
+			name: "",
+			service: ""
 		}
 	}
 
@@ -25,6 +27,27 @@ export default class NewPingCard extends React.Component {
 	sendPing = () => {
 		console.log("send ping");
 
+		// const ping = {
+		// 	id:
+		// 	date:
+		// 	name:
+		// 	description:
+		// 	status:
+		// }
+
+		// axios.post('/api/pings/', ping)
+		// 	.then(res => {
+		// 		console.log('posted')
+		// 	})
+		// 	.catch(err => {
+		// 		console.log(err)
+		// 	})
+
+		console.log(this.state.name)
+		console.log(this.state.description)
+		console.log(this.state.service)
+
+
 		axios.post('/api/slack/', {description: this.state.description})
 			.then((response) => {
 				console.log("posted to slack")
@@ -36,8 +59,10 @@ export default class NewPingCard extends React.Component {
 
 	handleChange = (event) => {
 		event.preventDefault()
+		console.log(event.target.name)
+		console.log(event.target.value)
 		this.setState({
-			description: event.target.value
+			[event.target.name]: event.target.value
 		});
 	}
 
@@ -51,15 +76,18 @@ export default class NewPingCard extends React.Component {
 		    <div class="card-block">
 		      <form>
 		      	<div class="form-group">
-				    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Describe Issue" value={this.state.description} onChange={this.handleChange}/>
-				  </div>
-				  <div class="form-group">
-				    <select class="form-control" id="exampleSelect1">
-				      <option value="" selected disabled>Select Service</option>
-				      {mappedOptions}
+		      		<input type="text" name="name" class="form-control" placeholder="Name" value={this.state.name} onChange={this.handleChange}/>
+				</div>
+				<div class="form-group">
+		      		<input type="text" name="description" class="form-control" placeholder="Description" value={this.state.description} onChange={this.handleChange}/>
+				</div>
+				<div class="form-group">
+				    <select class="form-control" value={this.state.service} onChange={this.handleChange} name="service" id="exampleSelect1">
+				    	<option value="" selected disabled>Select Service</option>
+				      	{mappedOptions}
 				    </select>
-				  </div>
-				  <button type="submit" class="btn" onClick={this.sendPing}>Create Ping</button>
+				</div>
+				<input value="Create Ping" class="btn" onClick={this.sendPing}></input>
 		      </form>
 		    </div>
 		  </div>
