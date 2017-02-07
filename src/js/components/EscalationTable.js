@@ -28,7 +28,7 @@ export default class EscalationTable extends React.Component {
 
                 const sortedLayers = res.data.Layers.sort((a,b) => a.Level - b.Level)
                 this.setState({
-                    policyID: this.props.serviceID, 
+                    policyID: res.data.ID, 
                     layers: sortedLayers,
                     oldLayers: JSON.parse(JSON.stringify(sortedLayers))
                 })

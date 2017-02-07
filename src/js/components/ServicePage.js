@@ -12,34 +12,12 @@ export default class ServicePage extends React.Component {
 		}
 	}
 
-	componentDidMount() {
-		const apiCall = 'http://localhost:8080/api/services/getServices'
-		console.log(apiCall)
-		axios.get(apiCall)
-			.then((res) => {
-				console.log(res)
-				const id = res.data.find(service => service.Name === this.props.params.service).ID
-				// console.log(obj)
-				console.log('id:' + id)
-				this.setState({
-					serviceID: id
-				})
-			})
-			.catch((err) => {
-				console.log(err);
-			})
-	}
-
-
 	render() {
-		if (!this.state.serviceID) {
-			return <h5>loading</h5>
-		}
 		return (
 			<div className="container">
 				<h1>{this.props.params.service} Service</h1>
-				<PingTable serviceID={this.state.serviceID} />
-                <EscalationTable service={this.props.params.service} serviceID={this.state.serviceID} />
+				<PingTable service={this.props.params.service} />
+                <EscalationTable service={this.props.params.service} />
 			</div>
 		)
 	}
@@ -56,7 +34,7 @@ class PingTable extends React.Component {
 
 	componentDidMount() {
 		//database call for all pings for this service
-		const apiCall = `http://localhost:8080/api/pings/getPingsByServiceID?ID=${this.props.serviceID}`
+		const apiCall = `/api/pings/getPingsForService?Name=${this.props.service}`
 		console.log(apiCall);
 		axios.get(apiCall)
 			.then((result) => {
