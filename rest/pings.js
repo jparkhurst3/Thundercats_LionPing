@@ -21,12 +21,16 @@ var getPingsForService = function(req, res) {
 var createPingForService = function(req, res) {
   res.setHeader('Content-Type', 'text/plain');
 
-  database.executeQuery('INSERT p.ID, p.Name, p.Description, p.Status, p.CreateTime INTO PING p JOIN SERVICE s on (p.ServiceID = s.ID) WHERE s.Name = ?', req.query.Name. (error, rows, fields) => {
+  // INSERT INTO PING (ServiceID, Name, Description, Status) VALUES (1,'Database is broken?', 'Database stopped', 'Acknowledged');
+  var values = '('+ req.query.serviceID + ',' + req.query.name + ',' + req.query.description + ',Open)'
+  var query = 'INSERT INTO PING (ServiceID, Name, Description, Status) VALUES ' + values
+  database.executeQuery(query, (error, rows, fields) => {
     if (error) {
       console.log(error);
       res.statusCode = 500;
       res.end("error");
     } else {
+      console.log('posted')
       res.statusCode = 200;
       res.send(JSON.stringify(rows))
     }
