@@ -18,27 +18,24 @@ var getPingsForService = function(req, res) {
   });
 }
 
-var createPingForService = function(req, res) {
+var createPing = function(req, res) {
   res.setHeader('Content-Type', 'text/plain');
 
-  // INSERT INTO PING (ServiceID, Name, Description, Status) VALUES (1,'Database is broken?', 'Database stopped', 'Acknowledged');
-  var values = '('+ req.query.serviceID + ',' + req.query.name + ',' + req.query.description + ',Open)'
-  var query = 'INSERT INTO PING JOIN SERVICE ON (PING.ServiceID = SERVICE.ID) (ServiceID, Name, Description, Status) VALUES ' + values
-  database.executeQuery(query, (error, rows, fields) => {
+  database.executeQuery('INSERT INTO PING SET ServiceID = ?, Name = ?, Description = ?, Status = "Open"', [req.body.ServiceID, req.body.Name, req.body.Description], (error, rows, fields) => {
     if (error) {
       console.log(error);
       res.statusCode = 500;
       res.end("error");
     } else {
-      console.log('posted')
       res.statusCode = 200;
-      res.send(JSON.stringify(rows))
+      res.send(JSON.stringify(rows.insertId))
     }
   })
 }
 
 
+
 module.exports = {
 	getPingsForService : getPingsForService,
-  createPingForService: createPingForService
+	createPing : createPing
 }

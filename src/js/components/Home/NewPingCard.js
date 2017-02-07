@@ -13,7 +13,7 @@ export default class NewPingCard extends React.Component {
 	}
 
 	componentDidMount() {
-		axios.get("/api/services/getNames")
+		axios.get("/api/services/getServices")
 			.then((result) => {
 				this.setState({services: result.data});
 			})
@@ -28,12 +28,12 @@ export default class NewPingCard extends React.Component {
 		console.log("send ping");
 		// req.query.serviceID + ',' + req.query.name + ',' + req.query.description
 		const ping = {
-			serviceID: this.props.serviceID,
-			name: this.state.name,
-			description: this.state.description
+			ServiceID: this.state.service,
+			Name: this.state.name,
+			Description: this.state.description
 		}
 
-		axios.post('/api/pings/createPingForService', ping)
+		axios.post('/api/pings/createPing', ping)
 			.then(res => {
 				console.log('posted')
 			})
@@ -65,7 +65,7 @@ export default class NewPingCard extends React.Component {
 	}
 
 	render() {
-		const mappedOptions = this.state.services ? this.state.services.map(service => <option>{service}</option>) : <option disabled>Loading</option>
+		const mappedOptions = this.state.services ? this.state.services.map(service => <option value={service.ID}>{service.Name}</option>) : <option disabled>Loading</option>
 		return (
 		<div class="card">
 		  	<div class="card-header">
