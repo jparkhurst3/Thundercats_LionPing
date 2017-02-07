@@ -30,15 +30,24 @@ class HomeCards extends React.Component {
 class HomeTables extends React.Component {
 	constructor(props) {
 	    super(props);
+	    this.state = {
+	    	service: null
+	    }
+	}
+
+	handleServiceClick = (service) => {
+		this.setState({
+			service: service
+		})
 	}
 
 	render() {
 		return (
 			<div className="container">
 				<div className="row">
-					<ServicesTable />
-					<ScheduleTable />
-					<PingsTable />
+					<ServicesTable onServiceClick={this.handleServiceClick} currentService={this.state.service} />
+					<ScheduleTable service={this.state.service} />
+					<PingsTable service={this.state.service} />
 				</div>
 			</div>
 		)

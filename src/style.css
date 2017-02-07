@@ -22,6 +22,10 @@ sidebar links
   color: white;
 }
 
+.active-row {
+  background-color: lightgray;
+}
+
 a:focus {
   outline: none;
     text-decoration: none

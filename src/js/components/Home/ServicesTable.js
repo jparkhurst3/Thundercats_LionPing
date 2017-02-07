@@ -13,17 +13,17 @@ export default class ServicesTable extends React.Component {
 	componentDidMount() {
 		axios.get("/api/services/getNames")
 			.then((result) => {
-				console.log("hdhdhservice")
+				console.log(result.data)
 				this.setState({services: result.data});
 			})
 			.catch((error) => {
-				console.log(err);
+				console.log(error);
 			})
 	}
 
 	render() {
 		const mappedServiceRows = this.state.services ? this.state.services.map(service => 
-			<tr><td>{service}</td></tr>
+			<tr className={this.props.currentService == service ? "active-row" : ""} onClick={() => this.props.onServiceClick(service)}><td>{service}</td></tr>
 		) : <tr><td>loading</td></tr>
 		return (
 			<div className="col-xs-4">
