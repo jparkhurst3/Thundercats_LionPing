@@ -13,7 +13,7 @@ export default class NewPingCard extends React.Component {
 	}
 
 	componentDidMount() {
-		axios.get("http://localhost:8080/api/services/getNames")
+		axios.get("/api/services/getNames")
 			.then((result) => {
 				this.setState({services: result.data});
 			})

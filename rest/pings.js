@@ -18,6 +18,22 @@ var getPingsForService = function(req, res) {
   });
 }
 
+var createPingForService = function(req, res) {
+  res.setHeader('Content-Type', 'text/plain');
+
+  database.executeQuery('INSERT p.ID, p.Name, p.Description, p.Status, p.CreateTime INTO PING p JOIN SERVICE s on (p.ServiceID = s.ID) WHERE s.Name = ?', req.query.Name. (error, rows, fields) => {
+    if (error) {
+      console.log(error);
+      res.statusCode = 500;
+      res.end("error");
+    } else {
+      res.statusCode = 200;
+      res.send(JSON.stringify(rows))
+    }
+  })
+}
+
+
 module.exports = {
 	getPingsForService : getPingsForService
 }
