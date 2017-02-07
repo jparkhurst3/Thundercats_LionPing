@@ -40,7 +40,8 @@
     "dev": "./node_modules/.bin/webpack-dev-server --content-base src --inline --hot",
     "test": "echo \"Error: no test specified\" && exit 1",
     "mac": "./build.sh && node appserver.js",
-    "wind": "build.sh && node appserver.js"
+    "wind": "build.sh && node appserver.js",
+    "start": "node appserver.js"
   },
   "author": "Sam Ford",
   "license": "ISC"

@@ -104,7 +104,9 @@ app.get('*', function(req, res) {
   res.sendFile(path.resolve(__dirname, 'build', 'index.html'))
 });
 
-const server = app.listen(8080, function () {
+var port = (process.env.PORT || 8080);
+
+const server = app.listen(port, function () {
   const host = server.address().address
   const port = server.address().port
   console.log(server.address())
