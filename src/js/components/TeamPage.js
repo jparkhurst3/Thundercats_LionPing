@@ -75,9 +75,3 @@ class ScheduleData extends React.Component {
 		)
 	}
 }
-
-
-
-
-
-
