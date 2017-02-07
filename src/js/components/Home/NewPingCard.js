@@ -41,11 +41,6 @@ export default class NewPingCard extends React.Component {
 				console.log(err)
 			})
 
-		console.log(this.state.name)
-		console.log(this.state.description)
-		console.log(this.state.service)
-
-
 		axios.post('/api/slack/', {description: this.state.description})
 			.then((response) => {
 				console.log("posted to slack")
@@ -53,6 +48,11 @@ export default class NewPingCard extends React.Component {
 			.then((error) => {
 				console.log(error)
 			})
+		this.setState({
+			name: "",
+			description: "",
+			service: ""
+		})
 	}
 
 	handleChange = (event) => {
