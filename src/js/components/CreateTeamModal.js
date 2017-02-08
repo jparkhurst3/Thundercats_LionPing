@@ -101,22 +101,22 @@ class CreateTeamCard extends React.Component {
 	render() {
 		if (this.state.created) {
 			return (
-				<div class = "card">
-					<div class = "card-header">Create Team</div>
-					<div class = "card-block">
+				<div class="card">
+					<div class="card-header">Create Team</div>
+					<div class="card-block">
 						<h3>Team Successfully Created</h3>
 					</div>
 				</div>
 			)
 		}
 		return (
-			<div class = "card">
-				<div class = "card-header">Create Team</div>
-				<div class = "card-block">
+			<div class="card">
+				<div class="card-header"><h3>Create Team</h3></div>
+				<div class="card-block">
 					<form>
 						<div class = "form-group">
-							<input type="text" name="teamName" class="form-control" id="exampleInputEmail1" placeholder="Team Name" value={this.state.teamName} onChange={this.handleChange}/>
-							<input type="text" name="teamDescription" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Description (Optional)" value={this.state.teamDescription} onChange={this.handleChange}/>
+							<input type="text" name="teamName" class="form-control" placeholder="Team Name" value={this.state.teamName} onChange={this.handleChange}/>
+							<input type="text" name="teamDescription" class="form-control" aria-describedby="emailHelp" placeholder="Description (Optional)" value={this.state.teamDescription} onChange={this.handleChange}/>
 						</div>
 						<button type="submit" class="btn" onClick={this.createTeam}>Create Team</button>
 					</form>
