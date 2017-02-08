@@ -11,6 +11,21 @@ export default class PingTable extends React.Component {
 		}
 	}
 
+	handlePageClick = (item) => {
+		console.log(item)
+		//load differrent chunk or stuff
+		const mappedPingRows = this.state.pings
+			.filter((ping, index) => {
+				// return index < item < index + 2
+				return index <= item && item <= index + 2
+			})
+			.map((ping) => <PingRow ping={ping} />)
+
+		this.setState({
+			mappedPingRows: mappedPingRows
+		})
+	}
+
 	componentDidMount() {
 		//database call for all pings for this service
 		const apiCall = `/api/pings/getPingsForService?Name=${this.props.service}`
@@ -19,14 +34,23 @@ export default class PingTable extends React.Component {
 			.then((result) => {
 				console.log(result.data)
 				this.setState({ pings: result.data })
+				const mappedPingRows = this.state.pings
+					.filter((pings, index) => {
+						return index <= 1
+					})
+					.map((ping) => <PingRow ping={ping} />)				
+						this.setState({
+							mappedPingRows: mappedPingRows
+						})
 			})
 			.catch((error) => {
 				console.log(error)
 			})
+		
+
 	}
 
 	render() {
-		const mappedPingRows = this.state.pings ? this.state.pings.map((ping) => <PingRow ping={ping} />) : <tr><td>loading</td></tr>
 		return (
 			<div>
 				<h3>Pings</h3>
@@ -40,10 +64,28 @@ export default class PingTable extends React.Component {
 						</tr>
 					</thead>
 					<tbody>
-						{mappedPingRows}
+						{this.state.mappedPingRows}
 					</tbody>
 				</table>
+				<PingPagination handlePageClick={this.handlePageClick} />
 			</div>
+		)
+	}
+}
+
+class PingPagination extends React.Component {
+	render() {
+		//get number from og query
+		const items = [0,1,2,3,4,5,6]
+		const mappedItems = items.map(item => {
+			return <li class="page-item" onClick={() => this.props.handlePageClick(item)}><span class="page-link">{item}</span></li>
+		})
+		return (
+			<nav aria-label="Page navigation example">
+			  <ul class="pagination">
+			  	{mappedItems}
+			  </ul>
+			</nav>
 		)
 	}
 }
