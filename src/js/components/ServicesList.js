@@ -23,7 +23,9 @@ export default class ServicesList extends Component {
 	}
 
 	render() {
-		const mappedServiceLinks = this.state.services ? this.state.services.map((service) => <li className="list-group item"><Link to={`/myservices/${service}`}>{service}</Link></li>) : <li>loading</li>
+		const mappedServiceLinks = this.state.services ? 
+			this.state.services.map((service) => <li className="list-group item"><Link to={`/myservices/${service}`}>{service}</Link></li>) 
+			: <li>loading</li>
 		return (
 			<div className="container">
 				<h1>My Services</h1>

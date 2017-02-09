@@ -7,9 +7,7 @@ import TeamPage from './components/TeamPage.js'
 import ServicePage from './components/ServicePage.js'
 import ServicesList from './components/ServicesList.js'
 import TeamsList from './components/TeamsList.js'
-import CreateServiceModal from './components/CreateServiceModal'
-import CreeateTeamModal from './components/CreateTeamModal'
-
+import Profile from './components/Profile'
 
 class Routes extends React.Component {
   render() {
@@ -91,11 +89,6 @@ class Teams extends React.Component {
 class Help extends React.Component {
   render() {
 	return <h1>Help</h1>
-  }
-}
-class Profile extends React.Component {
-  render() {
-	return <h1>Profile</h1>
   }
 }
 
