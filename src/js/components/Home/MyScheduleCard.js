@@ -9,7 +9,7 @@ export default class MyScheduleCard extends React.Component {
 		return (
 			<div class="card">
 				<div class="card-header">
-					My Schedule
+					<h3>Next On-Call</h3>
 				</div>
 				<div class="card-block">
 					<p class="card-text"><h3>August 24</h3><p>8:00am - 5:00pm</p></p>

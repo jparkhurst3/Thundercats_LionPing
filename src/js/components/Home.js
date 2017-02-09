@@ -9,6 +9,7 @@ import ServicesTable from './Home/ServicesTable'
 import ScheduleTable from './Home/ScheduleTable'
 import PingsTable from './Home/PingsTable'
 
+
 class HomeCards extends React.Component {
   constructor(props) {
     super(props);
@@ -16,7 +17,7 @@ class HomeCards extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="container">
         <div class="card-deck ">
           <NotificationCard />
           <NewPingCard />

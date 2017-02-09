@@ -15,6 +15,8 @@ export default class ServicesTable extends React.Component {
 			.then((result) => {
 				console.log(result.data)
 				this.setState({services: result.data});
+				console.log(result.data[0])
+				this.props.onServiceClick(result.data[0])
 			})
 			.catch((error) => {
 				console.log(error);

@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios'
+import {Link} from 'react-router'
 
 
 export default class PingsTable extends React.Component {
@@ -7,6 +8,7 @@ export default class PingsTable extends React.Component {
 		super(props)
 		this.state = {
 			pings: null,
+			service: this.props.service
 		}
 	}
 
@@ -27,6 +29,9 @@ export default class PingsTable extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.service !== this.props.service) {
 			console.log("new service!")
+			this.setState({
+				service: nextProps.service
+			})
 			axios.get("/api/pings/getPingsForService?Name="+nextProps.service)
 				.then((result) => {
 					console.log("got pings for service")
@@ -52,6 +57,7 @@ export default class PingsTable extends React.Component {
 				  	{mappedPingRows}
 				  </tbody>
 				</table>
+				<Link class="btn" to={`/myservices/${this.props.service}`} >Go to Service Page</Link>
 			</div>
 		)
 	}

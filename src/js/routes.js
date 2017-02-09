@@ -38,12 +38,12 @@ class Container extends React.Component {
   render() {
 	return (
 	  <div className="container-fluid">
-		<NavBar />
 		<div className="row">
 		  <div className="col-xs-2">
 			<SideBar />
 		  </div>
 		  <div className="col-xs-10">
+		  	<NavBar/>
 			{this.props.children}
 		  </div>
 		</div>
@@ -55,16 +55,22 @@ class Container extends React.Component {
 class NavBar extends React.Component{
   render() {
     return (
-      <div className="header clearfix">
-            <ul className="nav nav-pills float-xs-right" style={{fontSize: '20px'}}>
-              <li className="nav-item">
-              	<Link className="nav-link" to="/profile">Sam Ford</Link>
-              </li>
-            </ul>
+      <div className="container row" style={{paddingBottom: '20px', paddingTop: '20px'}}>
+      	<div class="col-xs-4">
+      		<input type="text" class="form-control" placeholder="Search"></input>
+      	</div>
+      	<div class="col-xs-8" style={{textAlign: "right"}}>
+			<Link className="nav-link" to="/profile"><h4>Sam Ford</h4></Link>
+      	</div>
+            
       </div>
     )
   }
 };
+// <ul className="nav nav-pills float-xs-right" style={{fontSize: '20px'}}>
+              // <li className="nav-item">
+              // </li>
+            // </ul>
 
 class NotFound extends React.Component {
   render() {
