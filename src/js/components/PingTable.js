@@ -13,11 +13,11 @@ export default class PingTable extends React.Component {
 
 	handlePageClick = (item) => {
 		console.log(item)
+		const numToShow = 3;
 		//load differrent chunk or stuff
 		const mappedPingRows = this.state.pings
 			.filter((ping, index) => {
-				// return index < item < index + 2
-				return index <= item && item <= index + 2
+				return index < numToShow * item && index > item
 			})
 			.map((ping) => <PingRow ping={ping} />)
 
