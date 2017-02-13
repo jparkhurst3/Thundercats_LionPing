@@ -58,8 +58,10 @@ class SelectService extends React.Component {
 
 	handleSelected = (value) => {
 		console.log("selected")
+		console.log(value)
 		browserHistory.push(`myservices/${value.label}`);
 		window.location.reload()
+
 		this.setState({
 			value
 		})
