@@ -17,6 +17,14 @@ export default class ServicePage extends React.Component {
 	}
 
 	render() {
+		if (!this.props.params.service) {
+			console.log("service is null")
+			return (
+				<div class="container">
+					<SelectService />
+				</div>
+			)
+		}
 		return (
 			<div className="container">
 				<SelectService service={this.props.params.service} />
@@ -105,7 +113,7 @@ class SelectService extends React.Component {
 			<div class="row" style={{verticalAlign: 'text-bottom'}}>
 				<h1 class="col-xs-6" style={{verticalAlign: 'text-bottom'}}>{this.props.service} Service</h1>
 				<h4 class="col-xs-2" style={{textAlign: 'right', paddingRight: '0px', verticalAlign: 'text-bottom'}}>Select Service:</h4>
-				<Select class="col-xs-4" style={{paddingLeft: '0px', verticalAlign: 'text-bottom'}} value={this.state.value} options={mappedAllServices} onChange={this.handleSelected} />
+				<Select class="col-xs-4" style={{paddingLeft: '0px', verticalAlign: 'text-bottom'}} clearable={false} value={this.state.value} options={mappedAllServices} onChange={this.handleSelected} />
 			</div>
 		)
 	}
