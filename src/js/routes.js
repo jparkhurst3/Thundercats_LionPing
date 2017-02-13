@@ -55,14 +55,13 @@ class Container extends React.Component {
 class NavBar extends React.Component{
   render() {
     return (
-      <div className="container row" style={{paddingBottom: '20px', paddingTop: '20px'}}>
+      <div className="container row" style={{paddingBottom: '20px', paddingTop: '20px', paddingRight:'0px', marginRight: '0px'}}>
       	<div class="col-xs-4">
       		<input type="text" class="form-control" placeholder="Search"></input>
       	</div>
       	<div class="col-xs-8" style={{textAlign: "right"}}>
-			<Link className="nav-link" to="/profile"><h4>Sam Ford</h4></Link>
+			<h4><Link style={{display:"inline-block"}} to="/profile">Sam Ford</Link></h4>
       	</div>
-            
       </div>
     )
   }

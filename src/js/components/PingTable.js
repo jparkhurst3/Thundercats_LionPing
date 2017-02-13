@@ -7,22 +7,25 @@ export default class PingTable extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			pings: null
+			pings: null,
+			activePage: 0
 		}
 	}
 
-	handlePageClick = (item) => {
-		console.log(item)
+	handlePageClick = (page) => {
+		console.log(page)
 		const numToShow = 3;
 		//load differrent chunk or stuff
+
 		const mappedPingRows = this.state.pings
 			.filter((ping, index) => {
-				return index < numToShow * item && index > item
+				return index >= numToShow*page && index < numToShow*(page+1)
 			})
 			.map((ping) => <PingRow ping={ping} />)
 
 		this.setState({
-			mappedPingRows: mappedPingRows
+			mappedPingRows: mappedPingRows,
+			activePage: page
 		})
 	}
 
@@ -36,7 +39,8 @@ export default class PingTable extends React.Component {
 				this.setState({ pings: result.data })
 				const mappedPingRows = this.state.pings
 					.filter((pings, index) => {
-						return index <= 1
+						//on page 0 return 3 elements
+						return index < 3;
 					})
 					.map((ping) => <PingRow ping={ping} />)				
 						this.setState({
@@ -67,7 +71,7 @@ export default class PingTable extends React.Component {
 						{this.state.mappedPingRows}
 					</tbody>
 				</table>
-				<PingPagination handlePageClick={this.handlePageClick} />
+				<PingPagination activePage={this.state.activePage} handlePageClick={this.handlePageClick} />
 			</div>
 		)
 	}
@@ -78,7 +82,7 @@ class PingPagination extends React.Component {
 		//get number from og query
 		const items = [0,1,2,3,4,5,6]
 		const mappedItems = items.map(item => {
-			return <li class="page-item" onClick={() => this.props.handlePageClick(item)}><span class="page-link">{item}</span></li>
+			return <li class={this.props.activePage == item ? "page-item active" : "page-item"} onClick={() => this.props.handlePageClick(item)}><span class="page-link">{item}</span></li>
 		})
 		return (
 			<nav aria-label="Page navigation example">

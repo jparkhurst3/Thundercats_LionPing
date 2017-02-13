@@ -108,16 +108,19 @@ tr:selected {
   top: 0px;
   bottom: 0vh;
   left: 0;
-  z-index: 1000;
   padding: 20px;
-  overflow-x: hidden;
-  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+  /* overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
   border-right: 1px solid #eee;
 }
 
+.nav-link {
+  display: inline-block;
+}
+
+
 .footer {
   position: absolute;
-  top:80vh;
+  top:92vh;
   bottom: 0vh;
   width: 100%;
   /* Set the fixed height of the footer here */

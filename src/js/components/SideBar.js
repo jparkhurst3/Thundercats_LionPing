@@ -18,17 +18,16 @@ export default class SideBar extends React.Component {
                         <Link className="nav-link" activeClassName="activeLink" to={'/Help'}><h5>Help</h5></Link>
                     </li>
                 </ul>
-                <div class="footer" style={{margin: "0", padding: "0"}}>
+                <footer class="footer">
                     <div class="container">
-                        <small style={{color: 'white'}}>FAQ | Getting Started</small>
-                        <small style={{color: 'white'}}>©2017 Thundercats, LLC</small>
+                        <h6 style={{color: 'white'}}><small>FAQ | Getting Started</small></h6>
+                        <h6 style={{color: 'white'}}><small>©2017 Thundercats, LLC</small></h6>
                     </div>
-                </div>
+                </footer>
             </div>
         )
     }
 };
-// <p class="text-muted" style={{margin: "0", padding: "0"}}>
 
 class SideBarElement extends React.Component {
     constructor(props) {

@@ -57,7 +57,7 @@ export default class PingsTable extends React.Component {
 				  	{mappedPingRows}
 				  </tbody>
 				</table>
-				<Link class="btn" to={`/myservices/${this.props.service}`} >Go to Service Page</Link>
+				<Link style={{color: 'black'}} class="btn" to={`/myservices/${this.props.service}`} >Go to Service Page</Link>
 			</div>
 		)
 	}
