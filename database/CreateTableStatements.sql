@@ -2,8 +2,10 @@ DROP TABLE USER_IN_ESCALATION_LEVEL;
 DROP TABLE SCHEDULE_IN_ESCALATION_LEVEL;
 DROP TABLE USER_IN_TEAM;
 DROP TABLE USER_MANAGES_TEAM;
-DROP TABLE SHIFT;
-DROP TABLE LAYER;
+DROP TABLE OVERRIDE_SHIFT;
+DROP TABLE MANUAL_SHIFT;
+DROP TABLE USER_IN_ROTATION_SHIFT;
+DROP TABLE ROTATION_SHIFT;
 DROP TABLE SCHEDULE;
 DROP TABLE TEAM;
 DROP TABLE USER;
@@ -50,28 +52,57 @@ CREATE TABLE SCHEDULE (
     FOREIGN KEY (TeamID) references TEAM(ID) ON DELETE CASCADE
 );
 
-CREATE TABLE LAYER (
-	TeamID			INT				NOT NULL,
+CREATE TABLE OVERRIDE_SHIFT (
+    ID				INT				NOT NULL AUTO_INCREMENT,
+    TeamID			INT				NOT NULL,
     ScheduleName	VARCHAR(50)		NOT NULL,
-	Number			INT				NOT NULL,
-    PRIMARY KEY (TeamID,ScheduleName,Number),
+    StartTime		TIME			NOT NULL,
+    Date			DATE			NOT NULL,
+    Length			INT				NOT NULL,
+    Username		VARCHAR(25) 	NOT NULL,
+    PRIMARY KEY (ID),
+    FOREIGN KEY (TeamID,ScheduleName) references SCHEDULE(TeamID,Name) ON DELETE CASCADE,
+    FOREIGN KEY (Username) references USER(Username) ON DELETE CASCADE
+);
+
+CREATE TABLE MANUAL_SHIFT (
+    ID				INT				NOT NULL AUTO_INCREMENT,
+    TeamID			INT				NOT NULL,
+    ScheduleName	VARCHAR(50)		NOT NULL,
+    StartTime		TIME			NOT NULL,
+    Date			DATE			NOT NULL,
+    Length			INT				NOT NULL,
+    Username		VARCHAR(25) 	NOT NULL,
+    Repeated		BOOLEAN			NOT NULL,
+    RepeatEvery		INT,
+    DaysOfWeek		BIT(7),
+    PRIMARY KEY (ID),
+    FOREIGN KEY (TeamID,ScheduleName) references SCHEDULE(TeamID,Name) ON DELETE CASCADE,
+    FOREIGN KEY (Username) references USER(Username) ON DELETE CASCADE
+);
+
+CREATE TABLE ROTATION_SHIFT (
+    ID				INT				NOT NULL AUTO_INCREMENT,
+    TeamID			INT				NOT NULL,
+    ScheduleName	VARCHAR(50)		NOT NULL,
+    StartTime		TIME			NOT NULL,
+    Date			DATE			NOT NULL,
+    Length			INT				NOT NULL,
+    Repeated		BOOLEAN			NOT NULL,
+    RepeatEvery		INT,
+    DaysOfWeek		BIT(7),
+    PRIMARY KEY (ID),
     FOREIGN KEY (TeamID,ScheduleName) references SCHEDULE(TeamID,Name) ON DELETE CASCADE
 );
 
-ALTER TABLE LAYER AUTO_INCREMENT = 0;
-
-CREATE TABLE SHIFT (
-	TeamID			INT				NOT NULL,
-    ScheduleName	VARCHAR(50)		NOT NULL,
-	LayerNumber		INT				NOT NULL,
-    Number			INT				NOT NULL,
-    StartTime		TIME			NOT NULL,
-    EndTime			TIME			NOT NULL,
-    StartDate		DATE 			NOT NULL,
-    EndDate			DATE,
-    DaysOfWeek		BIT(7)			NOT NULL,
-    PRIMARY KEY (TeamID,ScheduleName,LayerNumber,Number),
-    FOREIGN KEY (TeamID,ScheduleName,LayerNumber) references LAYER(TeamID,ScheduleName,Number) ON DELETE CASCADE
+CREATE TABLE USER_IN_ROTATION_SHIFT (
+	Username		VARCHAR(25) 	NOT NULL,
+    ShiftID			INT				NOT NULL,
+    Position		INT				NOT NULL,
+    PRIMARY KEY (Username,ShiftID),
+    FOREIGN KEY (Username) references USER(Username) ON DELETE CASCADE,
+    FOREIGN KEY (ShiftID) references ROTATION_SHIFT(ID) ON DELETE CASCADE,
+    UNIQUE(Username,ShiftID,Position)
 );
 
 CREATE TABLE SERVICE (

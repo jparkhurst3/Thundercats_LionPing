@@ -42,31 +42,31 @@ var getSchedulesForTeamByID = function(req, res) {
   })
 }
 
-/**
-* Get schedules linked to a specifc team
-* Params: Team ID
-* Returns: List of Schedules
-*/
-var getSchedulesForTeam = function(req, res) {
-  res.setHeader('Content-Type', 'text/plain');
+// /**
+// * Get schedules linked to a specifc team
+// * Params: Team ID
+// * Returns: List of Schedules
+// */
+// var getSchedulesForTeam = function(req, res) {
+//   res.setHeader('Content-Type', 'text/plain');
 
-  var whereClause = (req.query.ID) ? " WHERE (t.ID = ?)" : " WHERE (t.Name = ?)";
-  var queryParam = (req.query.ID) ? (req.query.ID) : (req.query.Name);
+//   var whereClause = (req.query.ID) ? " WHERE (t.ID = ?)" : " WHERE (t.Name = ?)";
+//   var queryParam = (req.query.ID) ? (req.query.ID) : (req.query.Name);
 
-  var getUsersInEscalation = "SELECT s.Name as ScheduleName FROM TEAM t " +
-    " JOIN SCHEDULE s ON (s.TeamID = t.ID) " + whereClause;
+//   var getUsersInEscalation = "SELECT s.Name as ScheduleName FROM TEAM t " +
+//     " JOIN SCHEDULE s ON (s.TeamID = t.ID) " + whereClause;
 
-  database.executeQuery(getUsersInEscalation, queryParam, (error, rows, fields) => {
-    if (error) {
-      console.log(error)
-      res.statusCode = 500;
-      res.end("error");
-    } else {
-      res.statusCode = 200;
-      res.send(JSON.stringify(rows));
-    }
-  })
-}
+//   database.executeQuery(getUsersInEscalation, queryParam, (error, rows, fields) => {
+//     if (error) {
+//       console.log(error)
+//       res.statusCode = 500;
+//       res.end("error");
+//     } else {
+//       res.statusCode = 200;
+//       res.send(JSON.stringify(rows));
+//     }
+//   })
+// }
 
 /**
 * Service for getting Schedules of all Teams
@@ -130,6 +130,133 @@ var createTeam = function(req, res) {
     res.send("Error creating team");
   });
 }
+
+/**
+* Get Schedules linked to a specific Team
+* Params: Service ID or Name
+* Returns Escalation Policy
+*/
+var getSchedulesForTeam = function(req, res) {
+  res.setHeader('Content-Type', 'text/plain');
+
+  var whereClause = (req.query.ID) ? " WHERE (t.ID = ?)" : " WHERE (t.Name = ?)";
+  var queryParam = (req.query.ID) ? (req.query.ID) : (req.query.Name);
+
+  var getSchedules = "SELECT t.Name as TeamName, t.ID as TeamID, s.Name as ScheduleName FROM TEAM t " +
+    " LEFT OUTER JOIN SCHEDULE s ON (s.TeamID = t.ID) " + whereClause;
+
+  var getOverrideShifts = "SELECT ID, StartTime, Date, Length, Username FROM OVERRIDE_SHIFT " +
+    " WHERE (TeamID = ?) AND (ScheduleName = ?)";
+
+  var getManualShifts = "SELECT ID, StartTime, Date, Length, Username, Repeated, RepeatEvery, DaysOfWeek FROM MANUAL_SHIFT " +
+    " WHERE (TeamID = ?) AND (ScheduleName = ?)";
+
+  var getRotationShifts = "SELECT ID, StartTime, Date, Length, Repeated, RepeatEvery, DaysOfWeek FROM ROTATION_SHIFT " +
+    " WHERE (TeamID = ?) AND (ScheduleName = ?)";
+
+  var getUsersInRotationShift = "SELECT Username, Position FROM USER_IN_ROTATION_SHIFT WHERE (ShiftID = ?) ";
+
+  var teamSchedules = {
+    Schedules : []
+  }
+
+  var convertDaysByteToObj = function(daysByte) {
+    return {
+      Monday: (daysByte & 0x1) != 0,
+      Tuesday: (daysByte & 0x2) != 0,
+      Wednesday: (daysByte & 0x4) != 0,
+      Thursday: (daysByte & 0x8) != 0,
+      Friday: (daysByte & 0x10) != 0,
+      Saturday: (daysByte & 0x20) != 0,
+      Sunday: (daysByte & 0x40) != 0,
+    };
+  }
+
+  new Promise(function(resolve, reject) {
+    database.executeQuery(getSchedules,queryParam,(error, rows, fields) => {
+      if (error) {
+        reject(error);
+      } else {
+        teamSchedules.TeamName = rows[0].TeamName;
+        teamSchedules.TeamID = rows[0].TeamID;
+        teamSchedules.Schedules = rows.map((scheduleRow) => {
+          return {
+            ScheduleName:scheduleRow.ScheduleName,
+            OverrideShifts:[],
+            ManualShifts:[],
+            RotationShifts:[]
+          };
+        });
+        resolve();
+      }
+    });
+  }).then(function() {
+    var overrideShiftsLoaded = Promise.all(teamSchedules.Schedules.map(function(schedule) {
+      return new Promise(function(resolve,reject) {
+        database.executeQuery(getOverrideShifts,[teamSchedules.TeamID,schedule.ScheduleName],(error, rows, fields) => {
+          if (error) {
+            reject(error);
+          } else {
+            schedule.OverrideShifts = rows;
+            resolve(rows);
+          }
+        });
+      });
+    }));
+    var manualShiftsLoaded = Promise.all(teamSchedules.Schedules.map(function(schedule) {
+      return new Promise(function(resolve,reject) {
+        database.executeQuery(getManualShifts,[teamSchedules.TeamID,schedule.ScheduleName],(error, rows, fields) => {
+          if (error) {
+            reject(error);
+          } else {
+            rows.forEach(function(manualShift) {
+              manualShift.DaysOfWeek = convertDaysByteToObj(manualShift.DaysOfWeek[0]);
+            });
+            schedule.ManualShifts = rows;
+            resolve(rows);
+          }
+        });
+      });
+    }));
+    var rotationShiftsLoaded = Promise.all(teamSchedules.Schedules.map(function(schedule) {
+      return new Promise(function(resolve,reject) {
+        database.executeQuery(getRotationShifts,[teamSchedules.TeamID,schedule.ScheduleName],(error, rows, fields) => {
+          if (error) {
+            reject(error);
+          } else {
+            rows.forEach(function(rotationShift) {
+              rotationShift.DaysOfWeek = convertDaysByteToObj(rotationShift.DaysOfWeek[0]);
+            });
+            schedule.RotationShifts = rows;
+            resolve(rows);
+          }
+        });
+      }).then(function(rotationShifts) {
+        var shiftUsersLoaded = rotationShifts.map(function(rotationShift) {
+          return new Promise(function(resolve, reject) {
+            database.executeQuery(getUsersInRotationShift,rotationShift.ID,(error, rows, fields) => {
+              if (error) {
+                reject(error);
+              } else {
+                rotationShift.Users = rows;
+                resolve();
+              }
+            });
+          });
+        });
+        return Promise.all(shiftUsersLoaded);
+      });
+    }));
+    return Promise.all([overrideShiftsLoaded,manualShiftsLoaded,rotationShiftsLoaded]);
+  }).then(() => {
+    res.statusCode = 200;
+    res.send(JSON.stringify(teamSchedules));
+  }).catch((error) => {
+    console.log(error);
+    res.statusCode = 500;
+    res.send("Error getting schedules for team.");
+  });
+} 
 
 module.exports = {
   getTeams : getTeams,

@@ -16,7 +16,7 @@ export default class TeamPage extends React.Component {
 				console.log('got schedyles')
 				console.log(res.data)
 				this.setState({
-					schedules: res.data
+					schedules: res.data.Schedules
 				})
 			})
 			.catch(err => {
