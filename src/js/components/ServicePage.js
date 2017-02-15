@@ -7,6 +7,7 @@ import PingTable from './PingTable.js'
 import Select from 'react-select-plus'
 import { browserHistory } from 'react-router';
 import { withRouter } from 'react-router'
+import CreateServiceModal from './CreateServiceModal'
 
 export default class ServicePage extends React.Component {
 	constructor(props) {
@@ -67,58 +68,31 @@ class SelectService extends React.Component {
 		})
 	}
 
+	valueRenderer = (option) => {
+		return <strong>{option.label}</strong>
+	}
+
 	renderLink = (service) => <Link to="myservices/${value.label}`" ></Link>
 
 	render() {
 		// const mappedMyServices = this.state.services ? this.state.services.map((service) => {
 		// 	return {value: service, label: service} : [{value: this.props.service, label: this.props.service}]
 
-		const mappedAllServices = this.state.services ? 
-		[{
+		const mappedAllServices = this.state.services ? [{
 			label: 'My Services', 
-			options: this.state.services.map(service => {
-				return {value: service, label: service}
-			})
-		}]
-
-		 : [{value: this.props.service, label: this.props.service}]
-
-		// const mappedAllServices = [{label: 'My Services', option:}]
-
-		var ops = [
-		{
-			label: 'Primary Colors',
-			options: [
-				{
-					label: 'Yellow',
-					value: 'yellow'
-				}
-			]
-		}, {
-			label: 'Secondary Colors',
-			options: 
-			[
-				{
-					label: 'Orange',
-					value: 'orange'
-				},
-				{
-					label: 'Green',
-					value: 'green'
-				}
-			]
-		}];
-
-
+			options: this.state.services.map(service => { return {value: service, label: service} })
+		}] : [{value: this.props.service, label: this.props.service}]
 
 		return (
 			<div class="row" style={{verticalAlign: 'text-bottom'}}>
-				<h1 class="col-xs-6" style={{verticalAlign: 'text-bottom'}}>{this.props.service} Service</h1>
-				<h4 class="col-xs-2" style={{textAlign: 'right', paddingRight: '0px', verticalAlign: 'text-bottom'}}>Select Service:</h4>
-				<Select class="col-xs-4" style={{paddingLeft: '0px', verticalAlign: 'text-bottom'}} clearable={false} value={this.state.value} options={mappedAllServices} onChange={this.handleSelected} />
+				<Select class="col-xs-4" style={{paddingLeft: '0px', verticalAlign: 'text-bottom', zIndex: "1000"}} valueRenderer={this.valueRenderer} clearable={false} value={this.state.value} placeholder="Select Service" options={mappedAllServices} onChange={this.handleSelected} />
+				<input type="button" class="btn btn-secondary col-xs-4" data-container="body" value="Service Description" data-toggle="popover" data-placement="bottom" data-content="popover text"></input>
+				<div class="col-xs-2"></div>
+				<CreateServiceModal style={{float: "right"}} class="col-xs-2" />
 			</div>
 		)
 	}
+				// <h1 class="col-xs-6" style={{verticalAlign: 'text-bottom'}}>{this.props.service} Service</h1>
 
 
 }

@@ -3,6 +3,63 @@ import ReactModal from 'react-modal'
 import {Link} from 'react-router'
 import axios from 'axios'
 
+// export default class CreateServiceModal extends React.Component {
+//   constructor() {
+// 	super();
+// 	this.state = {
+// 	  showModal: false
+// 	}
+//   }
+  
+//   handleToggleModal = () => {
+// 	this.setState({ showModal: !this.state.showModal });
+//   }
+  
+//   handleCloseModal = () => {
+// 	this.setState({ showModal: false });
+//   }
+//    // style={{color: 'white', cursor: 'pointer'}}
+//    // <Link class="nav-link" activeClassName="activeLink" to={"/"}>Create Service</Link>
+//    		    // <h6 className="nav-link" activeClassName="activeLink" style={{color: 'white', cursor: 'pointer'}} onClick={this.handleToggleModal}>Create Service</h6>
+
+
+  
+//   render () {
+// 	return (
+// 			<li className="nav-item">
+// 			<a class="nav-link" href="javascript:;" onClick={this.handleToggleModal}>Create Service</a>
+// 			<ReactModal 
+// 				isOpen={this.state.showModal}
+// 				contentLabel="Minimal Modal Example" 
+// 				onRequestClose={this.handleToggleModal}
+//         		shouldCloseOnOverlayClick={true}
+
+// 				style={{
+// 					overlay: {
+// 						background: 'rgba(255, 255, 255, .9)'
+// 					},
+// 					content: {
+// 						position: 'absolute',
+// 						height: '300px',
+// 						width: '500px',
+// 						left: '50%',
+// 						top: '50%',
+// 						transform: 'translate(-50%, -50%)',
+// 						right: 'auto',
+// 						bottom: 'auto',
+// 						zIndex: '1',
+// 						padding: 'none',
+// 						border: 'none'
+// 					}
+// 				}} >
+// 				<CreateServiceCard />
+// 			</ReactModal>
+// 			</li>
+// 	);
+//   }
+// }
+
+
 export default class CreateServiceModal extends React.Component {
   constructor() {
 	super();
@@ -26,14 +83,13 @@ export default class CreateServiceModal extends React.Component {
   
   render () {
 	return (
-			<li className="nav-item">
-			<a class="nav-link" href="javascript:;" onClick={this.handleToggleModal}>Create Service</a>
+		<div class="align-right" style={{float: "right"}}>
+			<span style={{textAlign: "right"}}><a class="btn" href="javascript:;" onClick={this.handleToggleModal}>Create Service</a></span>
 			<ReactModal 
 				isOpen={this.state.showModal}
 				contentLabel="Minimal Modal Example" 
 				onRequestClose={this.handleToggleModal}
         		shouldCloseOnOverlayClick={true}
-
 				style={{
 					overlay: {
 						background: 'rgba(255, 255, 255, .9)'
@@ -54,7 +110,7 @@ export default class CreateServiceModal extends React.Component {
 				}} >
 				<CreateServiceCard />
 			</ReactModal>
-			</li>
+		</div>
 	);
   }
 }
@@ -117,8 +173,7 @@ class CreateServiceCard extends React.Component {
 		}
 		return (
 			<div class="card">
-				<div class="card-header">Create Service</div>
-				
+				<div class="card-header"><h3>Create Service</h3></div>
 				<div class="card-block">
 					<form>
 						<div class="form-group">

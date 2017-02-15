@@ -82,10 +82,10 @@ class PingPagination extends React.Component {
 		//get number from og query
 		const items = [0,1,2,3,4,5,6]
 		const mappedItems = items.map(item => {
-			return <li class={this.props.activePage == item ? "page-item active" : "page-item"} onClick={() => this.props.handlePageClick(item)}><span class="page-link">{item}</span></li>
+			return <li style={{zIndex: 0}} class={this.props.activePage == item ? "page-item active" : "page-item"} onClick={() => this.props.handlePageClick(item)}><span class="page-link">{item}</span></li>
 		})
 		return (
-			<nav aria-label="Page navigation example">
+			<nav>
 			  <ul class="pagination">
 			  	{mappedItems}
 			  </ul>
