@@ -2,126 +2,144 @@ import React from 'react';
 import ReactModal from 'react-modal'
 import {Link} from 'react-router'
 import axios from 'axios'
+import Select from 'react-select';
 
 export default class CreateTeamModal extends React.Component {
-	constructor() {
-		super();
-		this.state = {
-			showModal: false
-		}
-	}
+    constructor() {
+        super();
+        this.state = {
+            showModal: false
+        }
+    }
 
-	handleToggleModal = () => {
-		this.setState({ showModal: !this.state.showModal });
-	}
+    handleToggleModal = () => {
+        this.setState({ showModal: !this.state.showModal });
+    }
 
-	handleCloseModal = () => {
-		this.setState({ showModal: false });
-	}
+    handleCloseModal = () => {
+        this.setState({ showModal: false });
+    }
 
-	render () {
-		return (
-			<li className = "nav-item">
-			<a class = "nav-link" href = "javascript:;" onClick = { this.handleToggleModal } > Create Team</a>
-			<ReactModal
-				isOpen = { this.state.showModal }
-				contentLabel = "Minimal Modal Example"
-				onRequestClose = { this.handleToggleModal }
-				shouldCloseOnOverlayClick = { true }
+    render () {
+        return (
+            <li className = "nav-item">
+            <a class = "nav-link" href = "javascript:;" onClick = { this.handleToggleModal } > Create Team</a>
+            <ReactModal
+                isOpen = { this.state.showModal }
+                contentLabel = "Minimal Modal Example"
+                onRequestClose = { this.handleToggleModal }
+                shouldCloseOnOverlayClick = { true }
 
-				style = {{
-					overlay: {
-						background: 'rgba(255, 255, 255, 0.9)'
-					},
-					content: {
-						position: 'absolute',
-						height: '300px',
-						width: '500px',
-						left: '50%',
-						top: '50%',
-						transform: 'translate(-50%, -50%)',
-						right: 'auto',
-						bottom: 'auto',
-						zIndex: '1',
-						padding: 'none',
-						border: 'none'
-					}
-				}} >
-				<CreateTeamCard />
-			</ReactModal>
-			</li>
-		);
-	}
+                style = {{
+                    overlay: {
+                        background: 'rgba(255, 255, 255, 0.9)'
+                    },
+                    content: {
+                        position: 'absolute',
+                        height: '300px',
+                        width: '500px',
+                        left: '50%',
+                        top: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        right: 'auto',
+                        bottom: 'auto',
+                        zIndex: '1',
+                        padding: 'none',
+                        border: 'none'
+                    }
+                }} >
+                <CreateTeamCard />
+            </ReactModal>
+            </li>
+        );
+    }
 }
 
 class CreateTeamCard extends React.Component {
-	constructor(props) {
-		super(props)
-		this.state = {
-			teamName: '',
-			teamDescription: '',
-			// teamMembers: null,
-			// value: []
-			teamUsers: null,
-			created: false
-		}
-	}
+    constructor(props) {
+        super(props)
+        this.state = {
+            teamName: '',
+            teamDescription: '',
+            created: false,
+            allUsers: [], // all users from the databse
+            teamMembers: [] // users on the created team
+        }
+    }
 
-	componentDidMount() {
-		// axios
-	}
+    componentDidMount() {
+        axios.get('/api/users/getUsers')
+            .then(res => {
+                this.setState({
+                    allUsers: res.data // get users from database
+                })
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
 
-	createTeam = (event) => {
-		event.preventDefault()
-		console.log("Create Team");
-		const apiCall = 'http://localhost:8080/api/teams/createTeam'
-		const data = {
-			Name: this.state.teamName
-		}
-		axios.post(apiCall, data)
-			.then(res => {
-				console.log("Successfully created new team");
-				console.log(res);
-				this.setState({
-					created: true
-				})
-			})
-			.catch(err => {
-				console.log('oops my bad guys');
-				console.log(err)
-			})
-	}
+    // TODO: not working for some reason
+    createTeam = (event) => {
+        event.preventDefault()
+        console.log("Create Team");
+        const teamData = {
+            Name: this.state.teamName,
+            Users: this.state.teamMembers // create the team with params Name, Users
+        }
+        axios.post('/api/teams/createTeam', teamData)
+            .then(res => {
+                console.log("Successfully created new team"); // success
+                console.log(res);
+                this.setState({
+                    created: true
+                })
+            })
+            .catch(err => {
+                console.log('Team not created'); // SHIT!
+                console.log(err)
+            })
+    }
 
-	handleChange = (event) => {
-		this.setState({
-			[event.target.name]: event.target.value
-		});
-	}
+    handleChange = (event) => {
+        this.setState({
+            [event.target.name]: event.target.value
+        });
+    }
 
-	render() {
-		if (this.state.created) {
-			return (
-				<div class="card">
-					<div class="card-header">Create Team</div>
-					<div class="card-block">
-						<h3>Team Successfully Created</h3>
-					</div>
-				</div>
-			)
-		}
-		return (
-			<div class="card">
-				<div class="card-header"><h3>Create Team</h3></div>
-				<div class="card-block">
-					<form>
-						<div class = "form-group">
-							<input type="text" name="teamName" class="form-control" placeholder="Team Name" value={this.state.teamName} onChange={this.handleChange}/>
-							<input type="text" name="teamDescription" class="form-control" aria-describedby="emailHelp" placeholder="Description (Optional)" value={this.state.teamDescription} onChange={this.handleChange}/>
-						</div>
-						<button type="submit" class="btn" onClick={this.createTeam}>Create Team</button>
-					</form>
-				</div>
-			</div>
-		)
-	}
+    handleSelected(teamMembers) {
+        this.setState({teamMembers});
+    }
+
+    render() {
+        if (this.state.created) {
+            return (
+                <div class="card">
+                    <div class="card-header">Create Team</div>
+                    <div class="card-block">
+                        <h3>Team Successfully Created</h3>
+                    </div>
+                </div>
+            )
+        }
+
+        const mappedUsers = this.state.allUsers.map(user => {return {value: user, label: user.FirstName + " " + user.LastName}}) // map users names'
+
+        // display everything
+        return (
+            <div class="card">
+                <div class="card-header"><h3>Create Team</h3></div>
+                <div class="card-block">
+                    <form>
+                        <div class = "form-group">
+                            <input type="text" name="teamName" class="form-control" placeholder="Team Name" value={this.state.teamName} onChange={this.handleChange}/>
+                            <input type="text" name="teamDescription" class="form-control" aria-describedby="emailHelp" placeholder="Description (Optional)" value={this.state.teamDescription} onChange={this.handleChange}/>
+                            <Select multi value={this.state.teamMembers} options={mappedUsers} onChange={this.handleSelected.bind(this)} />
+                        </div>
+                        <button type="submit" class="btn" onClick={this.createTeam}>Create Team</button>
+                    </form>
+                </div>
+            </div>
+        )
+    }
 }
