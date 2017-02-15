@@ -22,8 +22,8 @@ export default class CreateTeamModal extends React.Component {
 
     render () {
         return (
-            <li className = "nav-item">
-            <a class = "nav-link" href = "javascript:;" onClick = { this.handleToggleModal } > Create Team</a>
+        <div class="align-right" style={{float: "right"}}>
+            <span style={{textAlign: "right"}}><a class="btn" href="javascript:;" onClick={this.handleToggleModal}>Create Team</a></span>
             <ReactModal
                 isOpen = { this.state.showModal }
                 contentLabel = "Minimal Modal Example"
@@ -50,7 +50,7 @@ export default class CreateTeamModal extends React.Component {
                 }} >
                 <CreateTeamCard />
             </ReactModal>
-            </li>
+            </div>
         );
     }
 }

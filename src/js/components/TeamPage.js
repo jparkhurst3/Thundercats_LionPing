@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios'
-import CreateServiceModal from './CreateServiceModal'
+import CreateTeamModal from './CreateTeamModal'
 import Select from 'react-select-plus'
 import {Link, browserHistory, withRouter} from 'react-router'
 
@@ -134,10 +134,10 @@ class SelectTeam extends React.Component {
 		console.log(mappedAllTeams)
 		return (
 			<div class="row" style={{verticalAlign: 'text-bottom'}}>
-				<Select class="col-xs-4" style={{paddingLeft: '0px', verticalAlign: 'text-bottom', zIndex: "1"}} valueRenderer={this.valueRenderer} clearable={false} value={this.state.value} placeholder="Select Team" options={mappedAllTeams} onChange={this.handleSelected} />
+				<Select class="col-xs-4" style={{paddingLeft: '0px', verticalAlign: 'text-bottom'}} valueRenderer={this.valueRenderer} clearable={false} value={this.state.value} placeholder="Select Team" options={mappedAllTeams} onChange={this.handleSelected} />
 				<input type="button" class="btn btn-secondary col-xs-4" data-container="body" value="Team Description" data-toggle="popover" data-placement="bottom" data-content="popover text"></input>
 				<div class="col-xs-2"></div>
-				<CreateServiceModal style={{float: "right"}} class="col-xs-2" />
+				<CreateTeamModal style={{float: "right"}} class="col-xs-2" />
 			</div>
 		)
 	}
