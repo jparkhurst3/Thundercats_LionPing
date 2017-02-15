@@ -85,7 +85,7 @@ class CreateTeamCard extends React.Component {
         console.log("Create Team");
         const teamData = {
             Name: this.state.teamName,
-            Users: this.state.teamMembers // create the team with params Name, Users
+            Users: this.state.teamMembers.map(user => {return user.value.Username})
         }
         axios.post('/api/teams/createTeam', teamData)
             .then(res => {
