@@ -23,7 +23,7 @@ class Routes extends React.Component {
 			<Route path='/myservices' component={ServicePage} />
 			<Route path='/myservices/:service' component={ServicePage} />
 
-			<Route path='/myteams' component={TeamsList} />
+			<Route path='/myteams' component={TeamPage} />
 			<Route path='/myteams/:team' component={TeamPage} />
 
 			<Route path='*' component={NotFound} />

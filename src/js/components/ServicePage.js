@@ -10,13 +10,6 @@ import { withRouter } from 'react-router'
 import CreateServiceModal from './CreateServiceModal'
 
 export default class ServicePage extends React.Component {
-	constructor(props) {
-		super(props)
-		this.state = {
-			serviceID: null
-		}
-	}
-
 	render() {
 		if (!this.props.params.service) {
 			console.log("service is null")
@@ -85,7 +78,7 @@ class SelectService extends React.Component {
 
 		return (
 			<div class="row" style={{verticalAlign: 'text-bottom'}}>
-				<Select class="col-xs-4" style={{paddingLeft: '0px', verticalAlign: 'text-bottom', zIndex: "1000"}} valueRenderer={this.valueRenderer} clearable={false} value={this.state.value} placeholder="Select Service" options={mappedAllServices} onChange={this.handleSelected} />
+				<Select class="col-xs-4" style={{paddingLeft: '0px', verticalAlign: 'text-bottom', zIndex: "1"}} valueRenderer={this.valueRenderer} clearable={false} value={this.state.value} placeholder="Select Service" options={mappedAllServices} onChange={this.handleSelected} />
 				<input type="button" class="btn btn-secondary col-xs-4" data-container="body" value="Service Description" data-toggle="popover" data-placement="bottom" data-content="popover text"></input>
 				<div class="col-xs-2"></div>
 				<CreateServiceModal style={{float: "right"}} class="col-xs-2" />
