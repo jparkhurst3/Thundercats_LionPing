@@ -3,6 +3,7 @@ import axios from 'axios'
 import CreateTeamModal from './CreateTeamModal'
 import Select from 'react-select-plus'
 import {Link, browserHistory, withRouter} from 'react-router'
+import SearchInput, {createFilter} from 'react-search-input'
 
 export default class TeamPage extends React.Component {
 	render() {
@@ -27,8 +28,11 @@ class SchedulePane extends React.Component {
 		super()
 		this.state = {
 			schedules: null,
+                        searchTerm: '',
+                        searchTags: ['']
 		}
 	}
+
 	componentDidMount() {
 		//get schedules
 		axios.get('/api/teams/getSchedulesForTeam?Name=' + this.props.team)
@@ -62,6 +66,7 @@ class SchedulePane extends React.Component {
 
 		return (
 			<div>
+
 				<ul class="nav nav-tabs" role="tablist">
 					{mappedTabs}
 				</ul>
@@ -184,7 +189,8 @@ class SelectTeam extends React.Component {
 		super(props);
 		this.state = {
 			teams: null,
-			value: props.team
+			value: props.team,
+                        searchTerm: ''
 		}
 		console.log("value set")
 		console.log(this.state.value)
@@ -195,12 +201,21 @@ class SelectTeam extends React.Component {
 			.then((result) => {
 				console.log('got teams')
 				console.log(result.data)
+                                console.log(result.data[0])
 				this.setState({teams: result.data});
 			})
 			.catch((err) => {
 				console.log(err);
 			})
 	}
+
+    searchUpdated = (term) => {
+        this.setState({searchTerm: term})
+    }
+    search = () => {
+        return
+    }
+
 
 	handleSelected = (value) => {
 		console.log("selected")
@@ -222,10 +237,15 @@ class SelectTeam extends React.Component {
 			label: 'My Teams', 
 			options: this.state.teams.map(team => { return {value: team.Name, label: team.Name} })
 		}] : [{value: this.props.team, label: this.props.team}]
-
+                const KEYS_TO_FILTER=['Name', 'ID']
+                const filteredTeams = this.state.teams ? this.state.teams.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTER)) : ''
+                console.log(filteredTeams)
 		console.log(mappedAllTeams)
 		return (
-			<div class="row" style={{verticalAlign: 'text-bottom'}}>
+			<div class="row" style={{verticalAlign: 'text-bottom'}}>                          
+                                <SearchInput class="col-xs-4" className="search-input" onChange={this.searchUpdated} />
+                                <input class="col-xs-2" type="button" value="search" onClick={this.search}> </input>
+				<div class="col-xs-4"></div>
 				<Select class="col-xs-4" style={{paddingLeft: '0px', height: "50px"}} valueRenderer={this.valueRenderer} clearable={false} value={this.state.value} placeholder="Select Team" options={mappedAllTeams} onChange={this.handleSelected} />
 				<input type="button" class="btn btn-secondary col-xs-4" data-container="body" value="Team Description" data-toggle="popover" data-placement="bottom" data-content="popover text"></input>
 				<div class="col-xs-2"></div>
