@@ -16,17 +16,17 @@ export default class TeamPage extends React.Component {
 		return (
 			<div class="container">
 				<SelectTeam team={this.props.params.team} />
-				<Schedule team={this.props.params.team} />
+				<SchedulePane team={this.props.params.team} />
 			</div>
 		)
 	}
 }
 
-class Schedule extends React.Component {
+class SchedulePane extends React.Component {
 	constructor() {
 		super()
 		this.state = {
-			schedules: null
+			schedules: null,
 		}
 	}
 	componentDidMount() {
@@ -43,16 +43,21 @@ class Schedule extends React.Component {
 				console.log(err)
 			})
 	}
+
+	handleScheduleChange = (schedule) => {
+		console.log("handle Schedule change")
+	}
+
 	render() {
 		if (!this.state.schedules) {
 			return <div></div>
 		}
-		const tabs = this.state.schedules.map(schedule => schedule.ScheduleName)
-		const mappedTabs = tabs.map((tab) =>
-			<ScheduleTab name={tab} />
+
+		const mappedTabs = this.state.schedules.map((schedule) =>
+			<ScheduleTab name={schedule.ScheduleName} handleScheduleChange={this.handleScheduleChange} />
 		)
-		const mappedData = tabs.map((tab) => 
-			<ScheduleData name={tab} />
+		const mappedData = this.state.schedules.map((schedule) => 
+			<ScheduleData name={schedule.ScheduleName} schedule={schedule} handleScheduleChange={this.handleScheduleChange} />
 		)
 
 		return (
@@ -69,23 +74,110 @@ class Schedule extends React.Component {
 }
 
 class ScheduleTab extends React.Component {
+	constructor() {
+		super()
+		this.state ={
+			schedules: null
+		}
+	}
+
 	render() {
 		const id = '#' + this.props.name;
 		return (
 			<li className="nav-item">
-				<a className="nav-link" data-toggle="tab" href={id} role="tab">{this.props.name}</a>
+				<a className="nav-link" data-toggle="tab" href={id} role="tab">
+					{this.props.name}
+				</a>
 			</li>
 		)
 	}
 }
 
+const ex = {
+	"Schedules":[
+		{
+			"ScheduleName":"Default",
+			"OverrideShifts":[
+				{
+					"ID":1,
+					"StartTime":"17:51:42",
+					"Date":"2017-02-15T05:00:00.000Z",
+					"Length":10,
+					"Username":"cclegg"
+				},{
+					"ID":2,
+					"StartTime":"17:55:06",
+					"Date":"2017-02-15T05:00:00.000Z",
+					"Length":10,
+					"Username":"cclegg"
+				}
+			],
+			"ManualShifts":[
+				{
+					"ID":1,
+					"StartTime":"18:00:28",
+					"Date":"2017-02-15T05:00:00.000Z",
+					"Length":10,
+					"Username":"cclegg",
+					"Repeated":1,
+					"RepeatEvery":2,
+					"DaysOfWeek":{
+						"Monday":true,
+						"Tuesday":true,
+						"Wednesday":true,
+						"Thursday":true,
+						"Friday":true,
+						"Saturday":true,
+						"Sunday":true
+					}
+				}
+			],
+			"RotationShifts":[
+				{
+					"ID":1,
+					"StartTime":"18:14:34",
+					"Date":"2017-02-15T05:00:00.000Z",
+					"Length":10,
+					"Repeated":1,
+					"RepeatEvery":2,
+					"DaysOfWeek":{"Monday":true,"Tuesday":true,"Wednesday":false,"Thursday":true,"Friday":false,"Saturday":false,"Sunday":true},
+					"Users":[
+						{
+							"Username":"cclegg",
+							"Position":1
+						},{
+							"Username":"zhancock",
+							"Position":2
+						}]
+					}]
+				}
+			],
+		"TeamName":"Database Team",
+		"TeamID":1
+	}
+
+
+
+
+
 class ScheduleData extends React.Component {
 	render() {
 		return (
-			<div className="tab-pane" id={this.props.name} role="tabpanel">{this.props.name}</div>
+			<div className="tab-pane" id={this.props.name} role="tabpanel">
+				<ul class="list-group">
+					<li class="list-group-item"><strong>OverrideShifts:</strong> {JSON.stringify(this.props.schedule.OverrideShifts)}</li>
+					<li class="list-group-item"><strong>ManualShifts:</strong>{JSON.stringify(this.props.schedule.ManualShifts)}</li>
+					<li class="list-group-item"><strong>RotationShifts:</strong> {JSON.stringify(this.props.schedule.RotationShifts)}</li>
+				</ul>
+			</div>
 		)
 	}
 }
+
+
+
+
+
 
 class SelectTeam extends React.Component {
 	constructor(props) {
@@ -122,7 +214,7 @@ class SelectTeam extends React.Component {
 	}
 
 	valueRenderer = (option) => {
-		return <strong>{option.label}</strong>
+		return <h3 style={{ paddingTop: '8px'}}><strong>{option.label}</strong></h3>
 	}
 
 	render() {
@@ -134,7 +226,7 @@ class SelectTeam extends React.Component {
 		console.log(mappedAllTeams)
 		return (
 			<div class="row" style={{verticalAlign: 'text-bottom'}}>
-				<Select class="col-xs-4" style={{paddingLeft: '0px', verticalAlign: 'text-bottom'}} valueRenderer={this.valueRenderer} clearable={false} value={this.state.value} placeholder="Select Team" options={mappedAllTeams} onChange={this.handleSelected} />
+				<Select class="col-xs-4" style={{paddingLeft: '0px', height: "50px"}} valueRenderer={this.valueRenderer} clearable={false} value={this.state.value} placeholder="Select Team" options={mappedAllTeams} onChange={this.handleSelected} />
 				<input type="button" class="btn btn-secondary col-xs-4" data-container="body" value="Team Description" data-toggle="popover" data-placement="bottom" data-content="popover text"></input>
 				<div class="col-xs-2"></div>
 				<CreateTeamModal style={{float: "right"}} class="col-xs-2" />

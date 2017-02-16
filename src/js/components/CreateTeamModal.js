@@ -23,7 +23,7 @@ export default class CreateTeamModal extends React.Component {
     render () {
         return (
         <div class="align-right" style={{float: "right"}}>
-            <span style={{textAlign: "right"}}><a class="btn" href="javascript:;" onClick={this.handleToggleModal}>Create Team</a></span>
+            <span style={{float: "right"}}><a class="btn" href="javascript:;" onClick={this.handleToggleModal}>Create Team</a></span>
             <ReactModal
                 isOpen = { this.state.showModal }
                 contentLabel = "Minimal Modal Example"

@@ -12,7 +12,6 @@ import CreateServiceModal from './CreateServiceModal'
 export default class ServicePage extends React.Component {
 	render() {
 		if (!this.props.params.service) {
-			console.log("service is null")
 			return (
 				<div class="container">
 					<SelectService />
@@ -21,6 +20,7 @@ export default class ServicePage extends React.Component {
 		}
 		return (
 			<div className="container">
+				<h1>Services</h1>
 				<SelectService service={this.props.params.service} />
 				<PingTable service={this.props.params.service} />
                 <EscalationTable service={this.props.params.service} />
@@ -62,7 +62,7 @@ class SelectService extends React.Component {
 	}
 
 	valueRenderer = (option) => {
-		return <strong>{option.label}</strong>
+		return <h3 style={{ paddingTop: '8px'}}><strong>{option.label}</strong></h3>
 	}
 
 	renderLink = (service) => <Link to="myservices/${value.label}`" ></Link>
@@ -78,7 +78,7 @@ class SelectService extends React.Component {
 
 		return (
 			<div class="row" style={{verticalAlign: 'text-bottom'}}>
-				<Select class="col-xs-4" style={{paddingLeft: '0px', verticalAlign: 'text-bottom'}} valueRenderer={this.valueRenderer} clearable={false} value={this.state.value} placeholder="Select Service" options={mappedAllServices} onChange={this.handleSelected} />
+				<Select class="col-xs-4" style={{paddingLeft: '0px', height: '50px'}} valueRenderer={this.valueRenderer} clearable={false} value={this.state.value} placeholder="Select Service" options={mappedAllServices} onChange={this.handleSelected} />
 				<input type="button" class="btn btn-secondary col-xs-4" data-container="body" value="Service Description" data-toggle="popover" data-placement="bottom" data-content="popover text"></input>
 				<div class="col-xs-2"></div>
 				<CreateServiceModal style={{float: "right"}} class="col-xs-2" />
