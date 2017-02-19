@@ -5,6 +5,10 @@ import Select from 'react-select-plus'
 import {Link, browserHistory, withRouter} from 'react-router'
 import SearchInput, {createFilter} from 'react-search-input'
 
+import Timeline from 'react-calendar-timeline'
+import moment from 'moment'
+
+
 export default class TeamPage extends React.Component {
 	render() {
 		if (!this.props.params.team) {
@@ -66,7 +70,6 @@ class SchedulePane extends React.Component {
 
 		return (
 			<div>
-
 				<ul class="nav nav-tabs" role="tablist">
 					{mappedTabs}
 				</ul>
@@ -167,20 +170,65 @@ const ex = {
 
 class ScheduleData extends React.Component {
 	render() {
+		const groups = [
+		  {id: 1, title: 'Rotation Shifts'},
+		  {id: 2, title: 'Manual Shifts'},
+		  {id: 3, title: 'Override Shifts'},
+		]
+		 
+		const items = [
+		  {id: 1, group: 1, title: 'Sam', start_time: moment(), end_time: moment().add(5, 'hour')},
+		  {id: 2, group: 1, title: 'Jo', start_time: moment().add(5, 'hour'), end_time: moment().add(10, 'hour')},
+		  {id: 3, group: 1, title: 'Sam', start_time: moment().add(10, 'hour'), end_time: moment().add(15, 'hour')},
+		  {id: 4, group: 1, title: 'Jo', start_time: moment().add(15, 'hour'), end_time: moment().add(20, 'hour')},
+		  {id: 5, group: 1, title: 'Sam', start_time: moment().add(20, 'hour'), end_time: moment().add(25, 'hour')},
+		  {id: 6, group: 2, title: 'Chris', start_time: moment().add(-0.5, 'hour'), end_time: moment().add(4, 'hour')},
+		]
+
 		return (
 			<div className="tab-pane" id={this.props.name} role="tabpanel">
-				<ul class="list-group">
-					<li class="list-group-item"><strong>OverrideShifts:</strong> {JSON.stringify(this.props.schedule.OverrideShifts)}</li>
-					<li class="list-group-item"><strong>ManualShifts:</strong>{JSON.stringify(this.props.schedule.ManualShifts)}</li>
-					<li class="list-group-item"><strong>RotationShifts:</strong> {JSON.stringify(this.props.schedule.RotationShifts)}</li>
-				</ul>
+					<Timeline groups={groups}
+					items={items}
+					defaultTimeStart={moment().add(-12, 'hour')}
+					defaultTimeEnd={moment().add(12, 'hour')}
+					lineHeight={100}
+					/>
 			</div>
 		)
 	}
 }
 
+class RotationShifts extends React.Component {
+	render() {
+		// {JSON.stringify(this.props.shifts)}
+		return (
+			<tr>
+				<td>Rotation</td>
+			</tr>
+		)
+	}
+}
 
-
+class ManualShifts extends React.Component {
+	render() {
+		// {JSON.stringify(this.props.shifts)}
+		return (
+			<tr>
+				<td>Manual</td>
+			</tr>
+		)
+	}
+}
+class OverrideShifts extends React.Component {
+	render() {
+		// {JSON.stringify(this.props.shifts)}
+		return (
+			<tr>
+				<td>Override</td>
+			</tr>
+		)
+	}
+}
 
 
 
@@ -229,7 +277,7 @@ class SelectTeam extends React.Component {
 	}
 
 	valueRenderer = (option) => {
-		return <h3 style={{ paddingTop: '8px'}}><strong>{option.label}</strong></h3>
+		return <h3 style={{ paddingTop: '8px' }}><strong>{option.label}</strong></h3>
 	}
 
 	render() {
@@ -243,9 +291,8 @@ class SelectTeam extends React.Component {
 		console.log(mappedAllTeams)
 		return (
 			<div class="row" style={{verticalAlign: 'text-bottom'}}>                          
-                                <SearchInput class="col-xs-4" className="search-input" onChange={this.searchUpdated} />
-                                <input class="col-xs-2" type="button" value="search" onClick={this.search}> </input>
-				<div class="col-xs-4"></div>
+
+
 				<Select class="col-xs-4" style={{paddingLeft: '0px', height: "50px"}} valueRenderer={this.valueRenderer} clearable={false} value={this.state.value} placeholder="Select Team" options={mappedAllTeams} onChange={this.handleSelected} />
 				<input type="button" class="btn btn-secondary col-xs-4" data-container="body" value="Team Description" data-toggle="popover" data-placement="bottom" data-content="popover text"></input>
 				<div class="col-xs-2"></div>
@@ -254,5 +301,8 @@ class SelectTeam extends React.Component {
 		)
 	}
 }
+				// <div class="col-xs-4"></div>
+                // <SearchInput class="col-xs-4" className="search-input" onChange={this.searchUpdated} />
+                // <input class="col-xs-2" type="button" value="search" onClick={this.search}> </input>
 
 

@@ -16,7 +16,17 @@
 }*/
 
 
+.react-calendar-timeline .rct-items .rct-item.analysis {
+  background: gold;
+}
 
+.rct-sidebar-header {
+  background: gold !important; 
+}
+
+.rct-label-group {
+  background: gold !important; 
+}
 
 /*
 sidebar links
