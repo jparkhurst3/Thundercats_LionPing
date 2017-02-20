@@ -61,8 +61,8 @@ class SchedulePane extends React.Component {
 			return <div style={{paddingTop: '20px'}}></div>
 		}
 
-		const mappedTabs = this.state.schedules.map((schedule) =>
-			<ScheduleTab name={schedule.ScheduleName} handleScheduleChange={this.handleScheduleChange} />
+		const mappedTabs = this.state.schedules.map((schedule, key) =>
+			<ScheduleTab active={key == 1} name={schedule.ScheduleName} handleScheduleChange={this.handleScheduleChange} />
 		)
 		const mappedData = this.state.schedules.map((schedule) => 
 			<ScheduleData name={schedule.ScheduleName} schedule={schedule} handleScheduleChange={this.handleScheduleChange} />
@@ -92,7 +92,7 @@ class ScheduleTab extends React.Component {
 	render() {
 		const id = '#' + this.props.name;
 		return (
-			<li className="nav-item">
+			<li className={this.props.active ? "nav-item active" : "nav-item"}>
 				<a className="nav-link" data-toggle="tab" href={id} role="tab">
 					{this.props.name}
 				</a>
@@ -146,7 +146,7 @@ const ex = {
 					"StartTime":"18:14:34",
 					"Date":"2017-02-15T05:00:00.000Z",
 					"Length":10,
-					"Repeated":1,
+					"Repeated":1, //this is a boolean
 					"RepeatEvery":2,
 					"DaysOfWeek":{"Monday":true,"Tuesday":true,"Wednesday":false,"Thursday":true,"Friday":false,"Saturday":false,"Sunday":true},
 					"Users":[
@@ -169,6 +169,10 @@ const ex = {
 
 
 class ScheduleData extends React.Component {
+	constructor(props) {
+		super(props)
+	}
+
 	//takes in a shift from the database and converts it to the correct format
 	formatOverrideShift = (shift) => {
 
@@ -178,8 +182,8 @@ class ScheduleData extends React.Component {
 	render() {
 		console.log(this.props.schedule)
 		const overrideShifts = this.props.schedule.OverrideShifts;
-		console.log("overrideShifts")
-		console.log(overrideShifts)
+		// console.log("overrideShifts")
+		// console.log(overrideShifts)
 
 
 		const exa = {
@@ -195,8 +199,8 @@ class ScheduleData extends React.Component {
 				id: shift.ID, group: 3, title: shift.Username, start_time: moment(shift.StartTime), end_time: moment(shift.StartTime).add(shift.Length, 'hour')
 			}
 		})
-		console.log("mappedOverrideShifts")
-		console.log(mappedOverrideShifts)
+		// console.log("mappedOverrideShifts")
+		// console.log(mappedOverrideShifts)
 
 		const groups = [
 		  {id: 1, title: 'Rotation'},
@@ -213,11 +217,14 @@ class ScheduleData extends React.Component {
 		  {id: 5, group: 1, title: 'Sam', start_time: moment().add(20, 'hour'), end_time: moment().add(25, 'hour')},
 		  {id: 6, group: 2, title: 'Chris', start_time: moment().add(-0.5, 'hour'), end_time: moment().add(4, 'hour')},
 		]
+		console.log("shifts")
+		console.log(shifts)
 
 
 		return (
 			<div className="tab-pane" id={this.props.name} role="tabpanel">
 					<Timeline groups={groups}
+					style={{position: 'relative', height: '100%'}}
 					items={shifts}
 					defaultTimeStart={moment().add(-12, 'hour')}
 					defaultTimeEnd={moment().add(12, 'hour')}
