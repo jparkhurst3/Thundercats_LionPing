@@ -145,16 +145,16 @@ var getSchedulesForTeam = function(req, res) {
   var getSchedules = "SELECT t.Name as TeamName, t.ID as TeamID, s.Name as ScheduleName FROM TEAM t " +
     " LEFT OUTER JOIN SCHEDULE s ON (s.TeamID = t.ID) " + whereClause;
 
-  var getOverrideShifts = "SELECT ID, Timestamp, Duration, Username FROM OVERRIDE_SHIFT " +
-    " WHERE (TeamID = ?) AND (ScheduleName = ?)";
+  var getOverrideShifts = "SELECT s.ID, s.Timestamp, s.Duration, s.Username, u.FirstName, u.LastName FROM OVERRIDE_SHIFT s JOIN USER u ON (s.Username = u.Username) " +
+    " WHERE (s.TeamID = ?) AND (s.ScheduleName = ?)";
 
-  var getManualShifts = "SELECT ID, Timestamp, Duration, Username, Repeated, RepeatType FROM MANUAL_SHIFT " +
+  var getManualShifts = "SELECT s.ID, s.Timestamp, s.Duration, s.Username, u.FirstName, u.LastName, s.Repeated, s.RepeatType FROM MANUAL_SHIFT s JOIN USER u ON (s.Username = u.Username) " +
     " WHERE (TeamID = ?) AND (ScheduleName = ?)";
 
   var getRotationShifts = "SELECT ID, Timestamp, Duration, Repeated, RepeatType FROM ROTATION_SHIFT " +
     " WHERE (TeamID = ?) AND (ScheduleName = ?)";
 
-  var getUsersInRotationShift = "SELECT Username, Position FROM USER_IN_ROTATION_SHIFT WHERE (ShiftID = ?) ";
+  var getUsersInRotationShift = "SELECT u.Username, u.FirstName, u.LastName, s.Position FROM USER_IN_ROTATION_SHIFT s JOIN USER u ON (s.Username = u.Username) WHERE (ShiftID = ?) ";
 
   var teamSchedules = {
     Schedules : []
@@ -262,10 +262,32 @@ var getSchedulesForTeam = function(req, res) {
   });
 } 
 
+/**
+* Service for creating a new override shift
+* Params: shift object
+* Returns: ID of newly created shift
+*/
+var createOverrideShift = function(req, res) {
+  res.setHeader('Content-Type', 'text/plain');
+  var shift = req.body;
+  var insertParams = [shift.TeamID, shift.ScheduleName, shift.Timestamp, shift.Duration, shift.Username];
+  database.executeQuery('INSERT INTO OVERRIDE_SHIFT SET TeamID = ?, ScheduleName = ?, Timestamp = ?, Duration = ?, Username = ?', insertParams, (error, rows, fields) => {
+    if (error) {
+      console.log(error)
+      res.statusCode = 500;
+      res.end("error");
+    } else {
+      res.statusCode = 200;
+      res.send(String(rows.insertId));
+    }
+  });
+}
+
 module.exports = {
   getTeams : getTeams,
   createTeam : createTeam,
   getSchedules : getSchedules,
   getSchedulesForTeamByID : getSchedulesForTeamByID,
-  getSchedulesForTeam : getSchedulesForTeam
+  getSchedulesForTeam : getSchedulesForTeam,
+  createOverrideShift : createOverrideShift
 }

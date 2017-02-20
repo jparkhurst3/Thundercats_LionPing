@@ -61,6 +61,7 @@ app.post('/api/teams/createTeam', teams.createTeam);
 app.get('/api/teams/getSchedules', teams.getSchedules);
 app.get('/api/teams/getSchedulesForTeamByID', teams.getSchedulesForTeamByID);
 app.get('/api/teams/getSchedulesForTeam', teams.getSchedulesForTeam);
+app.post('/api/teams/createOverrideShift', teams.createOverrideShift);
 
 
 //All fake calls for frontend testing
