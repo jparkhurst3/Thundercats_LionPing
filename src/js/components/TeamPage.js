@@ -41,8 +41,8 @@ class SchedulePane extends React.Component {
 		//get schedules
 		axios.get('/api/teams/getSchedulesForTeam?Name=' + this.props.team)
 			.then(res => {
-				console.log('got schedules')
-				console.log(res.data)
+				// console.log('got schedules')
+				// console.log(res.data)
 				this.setState({
 					schedules: res.data.Schedules
 				})
@@ -110,7 +110,16 @@ const ex = {
 					"ID":1,
 					"Timestamp":"2017-02-20T22:02:01.000Z",
 					"Duration":60,
-					"Username":"cclegg"
+					"Username":"cclegg",
+					"FirstName":"Chris",
+					"LastName":"Clegg"
+				},{
+					"ID":3,
+					"Timestamp":"2017-02-20T23:02:01.000Z",
+					"Duration":90,
+					"Username":"zhancock",
+					"FirstName":"Zack",
+					"LastName":"Hancock"
 				}
 			],
 			"ManualShifts":[
@@ -119,6 +128,17 @@ const ex = {
 					"Timestamp":"2017-02-20T22:02:01.000Z",
 					"Duration":180,
 					"Username":"cclegg",
+					"FirstName":"Chris",
+					"LastName":"Clegg",
+					"Repeated":true,
+					"RepeatType":"daily"
+				},{
+					"ID":3,
+					"Timestamp":"2017-02-20T23:02:01.000Z",
+					"Duration":90,
+					"Username":"zhancock",
+					"FirstName":"Zack",
+					"LastName":"Hancock",
 					"Repeated":true,
 					"RepeatType":"daily"
 				}
@@ -133,24 +153,40 @@ const ex = {
 					"Users":[
 						{
 							"Username":"cclegg",
+							"FirstName":"Chris",
+							"LastName":"Clegg",
 							"Position":1
 						},{
 							"Username":"zhancock",
+							"FirstName":"Zack",
+							"LastName":"Hancock",
 							"Position":2
+						}
+					]
+				},{
+					"ID":3,
+					"Timestamp":"2017-02-20T23:02:01.000Z",
+					"Duration":90,
+					"Repeated":true,
+					"RepeatType":"daily",
+					"Users":[
+						{
+							"Username":"sford",
+							"FirstName":"Sam",
+							"LastName":"Ford",
+							"Position":2
+						},{
+							"Username":"zhancock",
+							"FirstName":"Zack",
+							"LastName":"Hancock",
+							"Position":1
 						}
 					]
 				}
 			]
 		},{
 			"ScheduleName":"Test",
-			"OverrideShifts":[],
-			"ManualShifts":[],
-			"RotationShifts":[]
-		}
-	],
-	"TeamName":"Database Team",
-	"TeamID":1
-}
+			"OverrideShifts":[],"ManualShifts":[],"RotationShifts":[]}],"TeamName":"Database Team","TeamID":1}
 
 
 
@@ -162,43 +198,59 @@ class ScheduleData extends React.Component {
 	}
 
 	//takes in a shift from the database and converts it to the correct format
-
 	formatManualShift = (shift) => {
+		const num = shift.Repeated ? 5 : 1
 		let adder = ""
 		if (shift.RepeatType == "daily") {
 			adder = "days"
+		} else if (shift.RepeatType == "weekly") {
+			adder = "weeks"
+		} else if (shift.RepeatType == "monthly") {
+			adder = "months"
 		}
+		return [...Array(num)].map((_, key) => {
+			return {
+				id: Math.random() * 5000 + 5000,
+				group: 2, 
+				title: shift.Username, 
+				start_time: moment(shift.Timestamp).add(key, adder), 
+				end_time: moment(shift.Timestamp).add(key, adder).add(shift.Duration, 'minutes')
+			}
+		})
+	}
 
-
-		if (shift.Repeated) {
-			return [...Array(5)].map((num, key) => {
-				console.log("num: " + key)
-				console.log("adder: " + adder)
-				const start = moment(shift.Timestamp).add(key, adder)
-				console.log("start")
-				console.log(start)
-				return {
-					id: key+10,
-					group: 2, 
-					title: shift.Username, 
-					start_time: moment(shift.Timestamp).add(key, adder), 
-					end_time: moment(shift.Timestamp).add(key, adder).add(shift.Duration, 'minutes')
-				}
-			})
+	formatRotationShift = (shift) => {
+		const num = shift.Repeated ? 5 : 1
+		let adder = ""
+		if (shift.RepeatType == "daily") {
+			adder = "days"
+		} else if (shift.RepeatType == "weekly") {
+			adder = "weeks"
+		} else if (shift.RepeatType == "monthly") {
+			adder = "months"
 		}
+		return [...Array(num)].map((_, key) => {
+			return {
+				id: Math.random() * 5000 + 5000,
+				group: 1, 
+				title: shift.Users[key % shift.Users.length].Username, //rotates through users
+				start_time: moment(shift.Timestamp).add(key, adder), 
+				end_time: moment(shift.Timestamp).add(key, adder).add(shift.Duration, 'minutes')
+			}
+		})
 	}
 
 
 	render() {
-		console.log(this.props.schedule)
+		// console.log(this.props.schedule)
 		const overrideShifts = this.props.schedule.OverrideShifts;
 		const manualShifts = this.props.schedule.ManualShifts;
 		const rotationShifts = this.props.schedule.RotationShifts;
 
 		const mappedOverrideShifts = overrideShifts.map((shift, key) => {
 			return {
-				id: shift.ID,
-				group: 3, 
+				id: Math.random() * 5000 + 5000,
+				group: 3,
 				title: shift.Username, 
 				start_time: moment(shift.Timestamp), 
 				end_time: moment(shift.Timestamp).add(shift.Duration, 'minutes')
@@ -209,13 +261,24 @@ class ScheduleData extends React.Component {
 			return this.formatManualShift(shift)
 		})
 
-		console.log("mappedManualShifts")
-		console.log(mappedManualShifts)
-		let shifts = []
-		if (this.props.name == "Default") {
-			shifts = [...mappedOverrideShifts, ...mappedManualShifts[0]]
+		const mappedRotationShifts = rotationShifts.map((shift, key) => {
+			return this.formatRotationShift(shift)
+		})
+
+		// console.log("mappedManualShifts")
+		// console.log(mappedManualShifts)
+
+		let shifts = [...mappedOverrideShifts]
+		// let shifts = []
+		for (const shift of mappedManualShifts) {
+			shifts.push(...shift)
 		}
-		console.log("shifts")
+		for (const shift of mappedRotationShifts) {
+			shifts.push(...shift)
+		}
+
+
+		console.log("shifts: " + this.props.name)
 		console.log(shifts)
 
 		const groups = [
@@ -233,7 +296,8 @@ class ScheduleData extends React.Component {
 					defaultTimeStart={moment().add(-12, 'hour')}
 					defaultTimeEnd={moment().add(12, 'hour')}
 					lineHeight={100}
-					canMove={false}
+					canMove={true}
+					canZoom={true}
 					/>
 			</div>
 		)
