@@ -58,7 +58,7 @@ class SchedulePane extends React.Component {
 
 	render() {
 		if (!this.state.schedules) {
-			return <div></div>
+			return <div style={{paddingTop: '20px'}}></div>
 		}
 
 		const mappedTabs = this.state.schedules.map((schedule) =>
@@ -69,7 +69,7 @@ class SchedulePane extends React.Component {
 		)
 
 		return (
-			<div>
+			<div style={{paddingTop: '20px'}}>
 				<ul class="nav nav-tabs" role="tablist">
 					{mappedTabs}
 				</ul>
@@ -169,14 +169,43 @@ const ex = {
 
 
 class ScheduleData extends React.Component {
+	//takes in a shift from the database and converts it to the correct format
+	formatOverrideShift = (shift) => {
+
+	}
+
+
 	render() {
+		console.log(this.props.schedule)
+		const overrideShifts = this.props.schedule.OverrideShifts;
+		console.log("overrideShifts")
+		console.log(overrideShifts)
+
+
+		const exa = {
+			"ID":2,
+			"StartTime":"17:55:06",
+			"Date":"2017-02-15T05:00:00.000Z",
+			"Length":10,
+			"Username":"cclegg"
+		}
+
+		const mappedOverrideShifts = overrideShifts.map((shift, key) => {
+			return {
+				id: shift.ID, group: 3, title: shift.Username, start_time: moment(shift.StartTime), end_time: moment(shift.StartTime).add(shift.Length, 'hour')
+			}
+		})
+		console.log("mappedOverrideShifts")
+		console.log(mappedOverrideShifts)
+
 		const groups = [
-		  {id: 1, title: 'Rotation Shifts'},
-		  {id: 2, title: 'Manual Shifts'},
-		  {id: 3, title: 'Override Shifts'},
+		  {id: 1, title: 'Rotation'},
+		  {id: 2, title: 'Manual'},
+		  {id: 3, title: 'Override'},
+		  {id: 4, title: 'Computed'},
 		]
-		 
-		const items = [
+
+		const shifts = [
 		  {id: 1, group: 1, title: 'Sam', start_time: moment(), end_time: moment().add(5, 'hour')},
 		  {id: 2, group: 1, title: 'Jo', start_time: moment().add(5, 'hour'), end_time: moment().add(10, 'hour')},
 		  {id: 3, group: 1, title: 'Sam', start_time: moment().add(10, 'hour'), end_time: moment().add(15, 'hour')},
@@ -185,13 +214,15 @@ class ScheduleData extends React.Component {
 		  {id: 6, group: 2, title: 'Chris', start_time: moment().add(-0.5, 'hour'), end_time: moment().add(4, 'hour')},
 		]
 
+
 		return (
 			<div className="tab-pane" id={this.props.name} role="tabpanel">
 					<Timeline groups={groups}
-					items={items}
+					items={shifts}
 					defaultTimeStart={moment().add(-12, 'hour')}
 					defaultTimeEnd={moment().add(12, 'hour')}
 					lineHeight={100}
+					canMove={false}
 					/>
 			</div>
 		)
@@ -293,7 +324,7 @@ class SelectTeam extends React.Component {
 			<div class="row" style={{verticalAlign: 'text-bottom'}}>                          
 
 
-				<Select class="col-xs-4" style={{paddingLeft: '0px', height: "50px"}} valueRenderer={this.valueRenderer} clearable={false} value={this.state.value} placeholder="Select Team" options={mappedAllTeams} onChange={this.handleSelected} />
+				<Select class="col-xs-4" style={{paddingLeft: '0px', height: "50px"}} valueRenderer={this.valueRenderer} clearable={false} value={this.state.value} placeholder={<h3 style={{ paddingTop: '8px' }}><strong>Select Team</strong></h3>} options={mappedAllTeams} onChange={this.handleSelected} />
 				<input type="button" class="btn btn-secondary col-xs-4" data-container="body" value="Team Description" data-toggle="popover" data-placement="bottom" data-content="popover text"></input>
 				<div class="col-xs-2"></div>
 				<CreateTeamModal style={{float: "right"}} class="col-xs-2" />
