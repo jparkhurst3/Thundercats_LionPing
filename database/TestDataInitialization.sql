@@ -13,6 +13,7 @@ INSERT INTO TEAM (Name) VALUES ('UI Team');
 INSERT INTO TEAM (Name) VALUES ('Server Team');
 
 INSERT INTO SCHEDULE VALUES (1, 'Default');
+INSERT INTO SCHEDULE VALUES (1, 'Test');
 INSERT INTO SCHEDULE VALUES (2, 'Default');
 INSERT INTO SCHEDULE VALUES (3, 'Default');
 
@@ -41,11 +42,8 @@ INSERT INTO PING (ServiceID, Name, Description, Status) VALUES (1,'Customer data
 INSERT INTO PING (ServiceID, Name, Description, Status) VALUES (2,'Security exploit discovered in application', 'Sensitive client info for multiple users is being sent to the front in upon login, serious security breach, must be resolved', 'Resolved');
 INSERT INTO PING (ServiceID, Name, Description, Status) VALUES (3,'Client Server Failure', 'The server for Client A is experiencig consistent outages and issues for a few hours, causing problems for client.', 'Resolved');
 
-INSERT INTO OVERRIDE_SHIFT (TeamID,ScheduleName,StartTime,Date,Length,Username) VALUES (1,'Default',NOW(),NOW(),10,'cclegg');
-INSERT INTO MANUAL_SHIFT (TeamID,ScheduleName,StartTime,Date,Length,Username,Repeated,RepeatEvery,DaysOfWeek) VALUES (1,'Default',NOW(),NOW(),10,'cclegg',true,2,b'1001011');
-INSERT INTO ROTATION_SHIFT (TeamID,ScheduleName,StartTime,Date,Length,Repeated,RepeatEvery,DaysOfWeek) VALUES (1,'Default',NOW(),NOW(),10,true,2,b'1001011');
+INSERT INTO OVERRIDE_SHIFT (TeamID,ScheduleName,Timestamp,Duration,Username) VALUES (1,'Default',NOW(),60,'cclegg');
+INSERT INTO MANUAL_SHIFT (TeamID,ScheduleName,Timestamp,Duration,Username,Repeated,RepeatType) VALUES (1,'Default',NOW(),180,'cclegg',true,0);
+INSERT INTO ROTATION_SHIFT (TeamID,ScheduleName,Timestamp,Duration,Repeated,RepeatType) VALUES (1,'Default',NOW(),120,true,1);
 INSERT INTO USER_IN_ROTATION_SHIFT (ShiftID,Username,Position) VALUES (1,'cclegg',1);
 INSERT INTO USER_IN_ROTATION_SHIFT (ShiftID,Username,Position) VALUES (1,'zhancock',2);
-
-select * from OVERRIDE_SHIFT;
-select * from MANUAL_SHIFT;

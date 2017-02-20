@@ -145,13 +145,13 @@ var getSchedulesForTeam = function(req, res) {
   var getSchedules = "SELECT t.Name as TeamName, t.ID as TeamID, s.Name as ScheduleName FROM TEAM t " +
     " LEFT OUTER JOIN SCHEDULE s ON (s.TeamID = t.ID) " + whereClause;
 
-  var getOverrideShifts = "SELECT ID, StartTime, Date, Length, Username FROM OVERRIDE_SHIFT " +
+  var getOverrideShifts = "SELECT ID, Timestamp, Duration, Username FROM OVERRIDE_SHIFT " +
     " WHERE (TeamID = ?) AND (ScheduleName = ?)";
 
-  var getManualShifts = "SELECT ID, StartTime, Date, Length, Username, Repeated, RepeatEvery, DaysOfWeek FROM MANUAL_SHIFT " +
+  var getManualShifts = "SELECT ID, Timestamp, Duration, Username, Repeated, RepeatType FROM MANUAL_SHIFT " +
     " WHERE (TeamID = ?) AND (ScheduleName = ?)";
 
-  var getRotationShifts = "SELECT ID, StartTime, Date, Length, Repeated, RepeatEvery, DaysOfWeek FROM ROTATION_SHIFT " +
+  var getRotationShifts = "SELECT ID, Timestamp, Duration, Repeated, RepeatType FROM ROTATION_SHIFT " +
     " WHERE (TeamID = ?) AND (ScheduleName = ?)";
 
   var getUsersInRotationShift = "SELECT Username, Position FROM USER_IN_ROTATION_SHIFT WHERE (ShiftID = ?) ";
@@ -160,17 +160,19 @@ var getSchedulesForTeam = function(req, res) {
     Schedules : []
   }
 
-  var convertDaysByteToObj = function(daysByte) {
-    return {
-      Monday: (daysByte & 0x1) != 0,
-      Tuesday: (daysByte & 0x2) != 0,
-      Wednesday: (daysByte & 0x4) != 0,
-      Thursday: (daysByte & 0x8) != 0,
-      Friday: (daysByte & 0x10) != 0,
-      Saturday: (daysByte & 0x20) != 0,
-      Sunday: (daysByte & 0x40) != 0,
-    };
-  }
+  // var convertDaysByteToObj = function(daysByte) {
+  //   return {
+  //     Monday: (daysByte & 0x1) != 0,
+  //     Tuesday: (daysByte & 0x2) != 0,
+  //     Wednesday: (daysByte & 0x4) != 0,
+  //     Thursday: (daysByte & 0x8) != 0,
+  //     Friday: (daysByte & 0x10) != 0,
+  //     Saturday: (daysByte & 0x20) != 0,
+  //     Sunday: (daysByte & 0x40) != 0,
+  //   };
+  // }
+
+  var repeatTypes = ["daily", "weekly"];
 
   new Promise(function(resolve, reject) {
     database.executeQuery(getSchedules,queryParam,(error, rows, fields) => {
@@ -210,7 +212,8 @@ var getSchedulesForTeam = function(req, res) {
             reject(error);
           } else {
             rows.forEach(function(manualShift) {
-              manualShift.DaysOfWeek = convertDaysByteToObj(manualShift.DaysOfWeek[0]);
+              manualShift.Repeated = (manualShift.Repeated === 1);
+              manualShift.RepeatType = repeatTypes[manualShift.RepeatType];
             });
             schedule.ManualShifts = rows;
             resolve(rows);
@@ -225,7 +228,8 @@ var getSchedulesForTeam = function(req, res) {
             reject(error);
           } else {
             rows.forEach(function(rotationShift) {
-              rotationShift.DaysOfWeek = convertDaysByteToObj(rotationShift.DaysOfWeek[0]);
+              rotationShift.Repeated = (rotationShift.Repeated === 1);
+              rotationShift.RepeatType = repeatTypes[rotationShift.RepeatType];
             });
             schedule.RotationShifts = rows;
             resolve(rows);
