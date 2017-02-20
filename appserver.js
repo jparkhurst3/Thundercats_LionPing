@@ -62,6 +62,15 @@ app.get('/api/teams/getSchedules', teams.getSchedules);
 app.get('/api/teams/getSchedulesForTeamByID', teams.getSchedulesForTeamByID);
 app.get('/api/teams/getSchedulesForTeam', teams.getSchedulesForTeam);
 app.post('/api/teams/createOverrideShift', teams.createOverrideShift);
+app.post('/api/teams/updateOverrideShift', teams.updateOverrideShift);
+app.post('/api/teams/deleteOverrideShift', teams.deleteOverrideShift);
+app.post('/api/teams/createManualShift', teams.createManualShift);
+app.post('/api/teams/updateManualShift', teams.updateManualShift);
+app.post('/api/teams/deleteManualShift', teams.deleteManualShift);
+app.post('/api/teams/createRotationShift', teams.createRotationShift);
+app.post('/api/teams/updateRotationShift', teams.updateRotationShift);
+app.post('/api/teams/deleteRotationShift', teams.deleteRotationShift);
+
 
 
 //All fake calls for frontend testing

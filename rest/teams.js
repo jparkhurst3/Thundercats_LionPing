@@ -131,6 +131,8 @@ var createTeam = function(req, res) {
   });
 }
 
+var repeatTypes = ["daily", "weekly"];
+
 /**
 * Get Schedules linked to a specific Team
 * Params: Service ID or Name
@@ -171,8 +173,6 @@ var getSchedulesForTeam = function(req, res) {
   //     Sunday: (daysByte & 0x40) != 0,
   //   };
   // }
-
-  var repeatTypes = ["daily", "weekly"];
 
   new Promise(function(resolve, reject) {
     database.executeQuery(getSchedules,queryParam,(error, rows, fields) => {
@@ -283,11 +283,241 @@ var createOverrideShift = function(req, res) {
   });
 }
 
+/**
+* Service for updating an existing override shift
+* Params: shift object
+* Returns: None
+*/
+var updateOverrideShift = function(req, res) {
+  res.setHeader('Content-Type', 'text/plain');
+  var shift = req.body;
+  var insertParams = [shift.TeamID, shift.ScheduleName, shift.Timestamp, shift.Duration, shift.Username, shift.ID];
+  database.executeQuery('UPDATE OVERRIDE_SHIFT SET TeamID = ?, ScheduleName = ?, Timestamp = ?, Duration = ?, Username = ? WHERE ID = ?', insertParams, (error, rows, fields) => {
+    if (error) {
+      console.log(error)
+      res.statusCode = 500;
+      res.end("error");
+    } else {
+      res.statusCode = 200;
+      res.send(String(rows.insertId));
+    }
+  });
+}
+
+/**
+* Service for deleting an override shift
+* Params: shift ID
+* Returns: None
+*/
+var deleteOverrideShift = function(req, res) {
+  res.setHeader('Content-Type', 'text/plain');
+  database.executeQuery('DELETE FROM OVERRIDE_SHIFT WHERE ID = ?', req.query.ID, (error, rows, fields) => {
+    if (error) {
+      console.log(error)
+      res.statusCode = 500;
+      res.end("error");
+    } else {
+      res.statusCode = 200;
+      res.send("success");
+    }
+  });
+}
+
+/**
+* Service for creating a new manual shift
+* Params: shift object
+* Returns: ID of newly created shift
+*/
+var createManualShift = function(req, res) {
+  res.setHeader('Content-Type', 'text/plain');
+  var shift = req.body;
+  var repeatType = repeatTypes.indexOf(shift.RepeatType);
+  var insertParams = [shift.TeamID, shift.ScheduleName, shift.Timestamp, shift.Duration, shift.Username, shift.Repeated, repeatType];
+  database.executeQuery('INSERT INTO MANUAL_SHIFT SET TeamID = ?, ScheduleName = ?, Timestamp = ?, Duration = ?, Username = ?, Repeated = ?, RepeatType = ?', insertParams, (error, rows, fields) => {
+    if (error) {
+      console.log(error)
+      res.statusCode = 500;
+      res.end("error");
+    } else {
+      res.statusCode = 200;
+      res.send(String(rows.insertId));
+    }
+  });
+}
+
+/**
+* Service for updating an existing manual shift
+* Params: shift object
+* Returns: None
+*/
+var updateManualShift = function(req, res) {
+  res.setHeader('Content-Type', 'text/plain');
+  var shift = req.body;
+  var repeatType = repeatTypes.indexOf(shift.RepeatType);
+  var insertParams = [shift.TeamID, shift.ScheduleName, shift.Timestamp, shift.Duration, shift.Username, shift.Repeated, repeatType, shift.ID];
+  database.executeQuery('UPDATE MANUAL_SHIFT SET TeamID = ?, ScheduleName = ?, Timestamp = ?, Duration = ?, Username = ?, Repeated = ?, RepeatType = ? WHERE ID = ?', insertParams, (error, rows, fields) => {
+    if (error) {
+      console.log(error)
+      res.statusCode = 500;
+      res.end("error");
+    } else {
+      res.statusCode = 200;
+      res.send(String(rows.insertId));
+    }
+  });
+}
+
+/**
+* Service for deleting an manual shift
+* Params: shift ID
+* Returns: None
+*/
+var deleteManualShift = function(req, res) {
+  res.setHeader('Content-Type', 'text/plain');
+  database.executeQuery('DELETE FROM MANUAL_SHIFT WHERE ID = ?', req.query.ID, (error, rows, fields) => {
+    if (error) {
+      console.log(error)
+      res.statusCode = 500;
+      res.end("error");
+    } else {
+      res.statusCode = 200;
+      res.send("success");
+    }
+  });
+}
+
+/**
+* Service for creating a new rotation shift
+* Params: shift object
+* Returns: ID of newly created shift
+*/
+var createRotationShift = function(req, res) {
+  res.setHeader('Content-Type', 'text/plain');
+  var shift = req.body;
+  var repeatType = repeatTypes.indexOf(shift.RepeatType);
+  var insertParams = [shift.TeamID, shift.ScheduleName, shift.Timestamp, shift.Duration, shift.Repeated, repeatType];
+  var shiftID;
+  var transaction = database.createTransaction();
+  new Promise(function(resolve,reject) {
+    database.executeQueryInTransaction('INSERT INTO ROTATION_SHIFT SET TeamID = ?, ScheduleName = ?, Timestamp = ?, Duration = ?, Repeated = ?, RepeatType = ?', transaction, insertParams, (error, rows, fields) => {
+      if (error) {
+        reject(error);
+      } else {
+        shiftID = rows.insertId;
+        resolve();
+      }
+    });
+  }).then(function() {
+    var allUsersAdded = shift.Users.map(function(user) {
+      return new Promise(function(resolve,reject) {
+        database.executeQueryInTransaction('INSERT INTO USER_IN_ROTATION_SHIFT SET Username = ?, ShiftID = ?, Position = ?', transaction, [user.Username,shiftID,user.Position], (error, rows, fields) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve();
+          }
+        });
+      });
+    });
+    return Promise.all(allUsersAdded);
+  }).then(function() {
+    transaction.commit();
+    res.statusCode = 200;
+    res.send(String(shiftID));
+  }).catch(function(error) {
+    transaction.rollback();
+    console.log(error);
+    res.statusCode = 500;
+    res.end("error");
+  });
+}
+
+/**
+* Service for updating an existing rotation shift
+* Params: shift object
+* Returns: None
+*/
+var updateRotationShift = function(req, res) {
+  res.setHeader('Content-Type', 'text/plain');
+  var shift = req.body;
+  var repeatType = repeatTypes.indexOf(shift.RepeatType);
+  var insertParams = [shift.TeamID, shift.ScheduleName, shift.Timestamp, shift.Duration, shift.Repeated, repeatType, shift.ID];
+  var transaction = database.createTransaction();
+  new Promise(function(resolve,reject) {
+    database.executeQueryInTransaction('UPDATE ROTATION_SHIFT SET TeamID = ?, ScheduleName = ?, Timestamp = ?, Duration = ?, Repeated = ?, RepeatType = ? WHERE ID = ?', transaction, insertParams, (error, rows, fields) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve();
+      }
+    });
+  }).then(function() {
+    return new Promise(function(resolve,reject) {
+      database.executeQueryInTransaction('DELETE FROM USER_IN_ROTATION_SHIFT WHERE ShiftID = ?', transaction, shift.ID, (error, rows, fields) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }).then(function() {
+    var allUsersAdded = shift.Users.map(function(user) {
+      return new Promise(function(resolve,reject) {
+        database.executeQueryInTransaction('INSERT INTO USER_IN_ROTATION_SHIFT SET Username = ?, ShiftID = ?, Position = ?', transaction, [user.Username,shift.ID,user.Position], (error, rows, fields) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve();
+          }
+        });
+      });
+    });
+    return Promise.all(allUsersAdded);
+  }).then(function() {
+    transaction.commit();
+    res.statusCode = 200;
+    res.send("success");
+  }).catch(function(error) {
+    transaction.rollback();
+    console.log(error);
+    res.statusCode = 500;
+    res.end("error");
+  });
+}
+
+/**
+* Service for deleting a rotation shift
+* Params: shift ID
+* Returns: None
+*/
+var deleteRotationShift = function(req, res) {
+  res.setHeader('Content-Type', 'text/plain');
+  database.executeQuery('DELETE FROM ROTATION_SHIFT WHERE ID = ?', req.query.ID, (error, rows, fields) => {
+    if (error) {
+      console.log(error)
+      res.statusCode = 500;
+      res.end("error");
+    } else {
+      res.statusCode = 200;
+      res.send("success");
+    }
+  });
+}
+
 module.exports = {
   getTeams : getTeams,
   createTeam : createTeam,
   getSchedules : getSchedules,
   getSchedulesForTeamByID : getSchedulesForTeamByID,
   getSchedulesForTeam : getSchedulesForTeam,
-  createOverrideShift : createOverrideShift
+  createOverrideShift : createOverrideShift,
+  updateOverrideShift : updateOverrideShift,
+  deleteOverrideShift : deleteOverrideShift,
+  createManualShift : createManualShift,
+  updateManualShift : updateManualShift,
+  deleteManualShift : deleteManualShift,
+  createRotationShift : createRotationShift,
+  updateRotationShift : updateRotationShift,
+  deleteRotationShift : deleteRotationShift
 }
