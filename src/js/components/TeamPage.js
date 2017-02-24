@@ -4,6 +4,7 @@ import CreateTeamModal from './CreateTeamModal'
 import Select from 'react-select-plus'
 import {Link, browserHistory, withRouter} from 'react-router'
 import SearchInput, {createFilter} from 'react-search-input'
+import "babel-polyfill";
 
 import Timeline from 'react-calendar-timeline'
 import moment from 'moment'
@@ -55,21 +56,25 @@ class SchedulePane extends React.Component {
 			})
 	}
 
-	handleOverrideUpdate(parentShift, scheduleName) {
+	handleOverrideUpdate = (parentShift, scheduleName) => {
 		axios.post('/api/teams/updateOverrideShift', parentShift)
 			.then(res => {
 				console.log(res)
 				console.log("succses")
 				const schedules = this.state.schedules;
-				const overrideShifts = schedules.find(schedule => schedule.ScheduleName == scheduleName).OverrideShifts
-				console.log(overrideShifts)
-				const correctShift = overrideShifts.find(shift => shift.ID == parentShift.ID)
-				console.log(correctShift)
+				console.log('schedules')
+				console.log(this.state.schedules)
 
-				// schedules
-				// 	.find(schedule => schedule.ScheduleName == scheduleName).OverrideShifts
-				// 	.find(shift => shift.ID == parentShift.ID) = parentShift
+				const correctScheduleIndex = schedules.findIndex(schedule => schedule.ScheduleName == scheduleName)
+				console.log(correctScheduleIndex)
+				const correctShiftIndex = schedules[correctScheduleIndex].OverrideShifts.findIndex(shift => shift.ID == parentShift.ID)
+				console.log(correctShiftIndex)
 
+
+				//update schedules
+				schedules[correctScheduleIndex].OverrideShifts[correctShiftIndex] = parentShift
+				console.log("updatedSchedule")
+				console.log(schedules)
 				this.setState({
 					schedules: schedules
 				})
