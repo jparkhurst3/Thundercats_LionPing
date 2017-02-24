@@ -80,7 +80,9 @@ class SelectService extends React.Component {
 				<Select class="col-xs-4" style={{paddingLeft: '0px', height: '50px'}} valueRenderer={this.valueRenderer} clearable={false} value={this.state.value} placeholder={<h3 style={{ paddingTop: '8px' }}><strong>Select Service</strong></h3>} options={mappedAllServices} onChange={this.handleSelected} />
 				<input type="button" class="btn btn-secondary col-xs-4" data-container="body" value="Service Description" data-toggle="popover" data-placement="bottom" data-content="popover text"></input>
 				<div class="col-xs-2"></div>
-				<CreateServiceModal style={{float: "right"}} class="col-xs-2" />
+				<div class="col-xs-2" style={{textAlign: "right"}}>
+					<h6><CreateServiceModal /></h6>
+				</div>
 			</div>
 		)
 	}

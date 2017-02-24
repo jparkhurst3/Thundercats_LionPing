@@ -195,10 +195,6 @@ export default class EscalationTable extends React.Component {
 }
 
 
-
-    // {this.state.disabled ? <th></th> : <th>Move</th>}
-
-
 class EscalationLayer extends React.Component {
     constructor(props) {
         super(props)
@@ -267,35 +263,3 @@ class EscalationLayer extends React.Component {
         )
     }
 }
-
-// {this.props.disabled ? <td></td> : <td>
-//                     <p onClick={() => this.props.movePolicyUp(level)} className="changeArrow" value={level}>&#9650;</p>
-//                     <p onClick={() => this.props.movePolicyDown(level)} className="changeArrow" value={level}>&#9660;</p>
-
-//                 </td>}
-
-// onClick={() => this.props.movePolicyUp(this.props.layer)}
-
-// <td><Select multi value={this.state.teams} options={this.state.teams} onChange={this.handleSelected} /></td>
-
-// {
-//     "ID":"1",
-//     "Layers":[
-//         {
-//             "Level":2,
-//             "Delay":10,
-//             "Users":[
-//                 {"Username":"hkim","FirstName":"Ho Keun","LastName":"Kim"}
-//             ],
-//             "Schedules":[
-//                 {"TeamID":1,"TeamName":"Database Team","ScheduleName":"Default"}
-//             ]
-//         },
-
-
-
-
-
-
-
-

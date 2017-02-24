@@ -60,7 +60,7 @@ export default class SideBar extends React.Component {
                     <h6 style={{color: 'white'}}><small>
                         <Link to="/faq">FAQ</Link>
                         &#160;|&#160;
-                        <Link to="help">Getting Started</Link>
+                        <Link to="/gettingstarted">Getting Started</Link>
                     </small></h6>
                     <h6 style={{color: 'white'}}><small>©2017 Thundercats, LLC</small></h6>
                 </div>

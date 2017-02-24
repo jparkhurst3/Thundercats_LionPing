@@ -17,7 +17,9 @@ class Routes extends React.Component {
 		  <Route path='/' component={Container}>
 			<IndexRoute component={Home} />
 			<Route path="/pings" component={Pings} />
-			<Route path="/help" component={Help} />
+
+			<Route path="/faq" component={FAQ} />
+			<Route path="/gettingstarted" component={GettingStarted} />
 			<Route path='/profile' component={Profile} />
 			
 			<Route path='/myservices' component={ServicePage} />
@@ -66,37 +68,52 @@ class NavBar extends React.Component{
     )
   }
 };
-// <ul className="nav nav-pills float-xs-right" style={{fontSize: '20px'}}>
-              // <li className="nav-item">
-              // </li>
-            // </ul>
 
 class NotFound extends React.Component {
   render() {
-	return <h1>NOT FOUND</h1>
+	return (
+	  <div class="container">
+		<h1>404 Not Found</h1>
+	  </div>
+	)
   }
 }
+
 class Pings extends React.Component {
   render() {
 	return (
-	  <div>
+	  <div class="container">
 		<h1>Pings</h1>
 	  </div>
 	)
   }
 }
 
-class Teams extends React.Component {
+class FAQ extends React.Component {
   render() {
-	return <h1>Teams</h1>
-  }
-}
-class Help extends React.Component {
-  render() {
-	return <h1>Help</h1>
+	return (
+		<div class="container">
+			<h1>FAQ</h1>
+			<h2>Common Questions</h2>
+			<h3>Question 1</h3>
+			<p>Answer</p>
+			<h3>Question 2</h3>
+			<p>Answer</p>
+			<h3>Question 3</h3>
+			<p>Answer</p>
+		</div>
+	)
   }
 }
 
-
+class GettingStarted extends React.Component {
+  render() {
+	return (
+		<div class="container">
+			<h1>Getting Started</h1>
+		</div>
+	)
+  }
+}
 
 export default Routes;
