@@ -49,15 +49,17 @@ class OverrideCard extends React.Component {
 			this.state = {
 				allUsers: null,
 				user: null,
-				start: moment(props.createStart).format('YYYY-MM-DDThh:mm'),
-				end: moment(props.createStart).add(60, 'minutes').format('YYYY-MM-DDThh:mm'),
+				start: moment(props.createStart).format('YYYY-MM-DDTHH:mm'),
+				end: moment(props.createStart).add(60, 'minutes').format('YYYY-MM-DDTHH:mm'),
 			}
+			console.log('override card start time')
+			console.log(this.state.start)
 		} else if (this.props.updateItem) {
 			this.state = {
 				allUsers: null,
 				user: {value: {Username: this.props.parentShift.Username, FirstName: this.props.parentShift.FirstName, LastName: this.props.parentShift.LastName}, label: props.parentShift.FirstName + " " + props.parentShift.LastName},
-				start: moment(props.parentShift.Timestamp).format('YYYY-MM-DDThh:mm'),
-				end: moment(props.parentShift.Timestamp).add(props.parentShift.Duration, 'minutes').format('YYYY-MM-DDThh:mm'),
+				start: moment(props.parentShift.Timestamp).format('YYYY-MM-DDTHH:mm'),
+				end: moment(props.parentShift.Timestamp).add(props.parentShift.Duration, 'minutes').format('YYYY-MM-DDTHH:mm'),
 			}
 		}
 	}
