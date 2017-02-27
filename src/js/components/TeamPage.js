@@ -57,7 +57,7 @@ class SchedulePane extends React.Component {
 			})
 	}
 
-	handleOverrideUpdate = (parentShift, scheduleName) => {
+	handleOverrideUpdate = (parentShift, scheduleName, firstName, lastName) => {
 		axios.post('/api/teams/updateOverrideShift', parentShift)
 			.then(res => {
 				console.log(res)
@@ -65,6 +65,9 @@ class SchedulePane extends React.Component {
 				const schedules = this.state.schedules;
 				console.log('schedules')
 				console.log(this.state.schedules)
+
+				parentShift.FirstName = firstName
+				parentShift.LastName = lastName
 
 				const correctScheduleIndex = schedules.findIndex(schedule => schedule.ScheduleName == scheduleName)
 				console.log(correctScheduleIndex)
@@ -79,6 +82,8 @@ class SchedulePane extends React.Component {
 				this.setState({
 					schedules: schedules,
 				})
+
+				
 
 			})
 			.catch(err => {

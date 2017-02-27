@@ -78,7 +78,7 @@ class OverrideCard extends React.Component {
     	}
     	console.log("newParentShift")
     	console.log(newParentShift)
-    	this.props.handleOverrideUpdate(newParentShift, this.props.name)
+    	this.props.handleOverrideUpdate(newParentShift, this.props.name, this.state.user.value.FirstName, this.state.user.value.LastName)
     	this.props.onModalClose()
     }
 
