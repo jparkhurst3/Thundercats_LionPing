@@ -93,7 +93,7 @@ class OverrideCard extends React.Component {
 
     handleDelete = () => {
     	console.log('handle Delete')
-    	this.props.handleOverrideDelete()
+    	this.props.handleOverrideDelete(this.props.parentShift.ID)
     	this.props.onModalClose()
     }
 
@@ -148,7 +148,7 @@ class OverrideCard extends React.Component {
 							<Select class="col-xs-10" name="user" clearable={false} value={this.state.user} placeholder="Select User" options={mappedAllUsers} onChange={this.handleUserChange} />
 						</div>
 						<div class="form-group row">
-							{this.state.updateItem ? 
+							{this.props.updateItem ? 
 								<div class="col-xs-10" style={{display: 'inline'}}>
 		                			<input type="button" value="Update Shift" class="btn" onClick={this.handleUpdate}></input>
 		                			<input type="button" value="Delete Shift" class="btn" onClick={this.handleDelete}></input>
