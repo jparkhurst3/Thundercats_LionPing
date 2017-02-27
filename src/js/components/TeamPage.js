@@ -339,7 +339,6 @@ class UpdateOverride extends React.Component {
 		if (!this.state.allUsers) {
 			return <div></div>
 		}
-
 		const mappedAllUsers = this.state.allUsers.map(user => {return {value: user, label: user.FirstName + " " + user.LastName}}) // map users names'
 		return (
 			<div>
