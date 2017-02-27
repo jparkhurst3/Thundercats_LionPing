@@ -9,6 +9,7 @@ import "babel-polyfill";
 import Timeline from 'react-calendar-timeline'
 import moment from 'moment'
 import SelectTeam from './SelectTeam'
+import OverrideModal from './OverrideModal'
 
 
 export default class TeamPage extends React.Component {
@@ -76,7 +77,7 @@ class SchedulePane extends React.Component {
 				console.log("updatedSchedule")
 				console.log(schedules)
 				this.setState({
-					schedules: schedules
+					schedules: schedules,
 				})
 
 			})
@@ -208,6 +209,14 @@ class ScheduleData extends React.Component {
 		})
 	}
 
+	onModalClose = () => {
+		console.log("close modal")
+		this.setState({
+			clickedID: null,
+			clickedParentShift: null
+		})
+	}
+
 	onItemClick = (itemID, e) => {
 		console.log("onItemClick")
 		console.log(itemID)
@@ -270,110 +279,32 @@ class ScheduleData extends React.Component {
 					stackItems={false}
 					onItemClick={this.onItemClick}
 					/>
+
+
 					{this.state.clickedID ? 
-						<UpdateOverride 
+						<OverrideModal
 							name={this.props.name}
 							teamID={this.props.teamID}
 							parentShift={this.state.clickedParentShift}
 							handleOverrideUpdate={this.props.handleOverrideUpdate}
-							name={this.props.name} />
+							name={this.props.name}
+							onModalClose={this.onModalClose}
+							 />
 						: <div></div>
-					}
+					} 
 					
 			</div>
 		)
 	}
 }
 
-class UpdateOverride extends React.Component {
-	constructor(props) {
-		super(props)
-		this.state = {
-			allUsers: null,
-			user: {value: {Username: this.props.parentShift.Username, FirstName: this.props.parentShift.FirstName, LastName: this.props.parentShift.LastName}, label: props.parentShift.FirstName + " " + props.parentShift.LastName},
-			start: moment(props.parentShift.Timestamp).format('YYYY-MM-DDThh:mm'),
-			end: moment(props.parentShift.Timestamp).add(props.parentShift.Duration, 'minutes').format('YYYY-MM-DDThh:mm'),
-		}
-	}
-
-	componentDidMount() {
-        axios.get('/api/users/getUsers') //needs to be get users on a team
-            .then(res => {
-                this.setState({
-                    allUsers: res.data // get users from database
-                })
-            })
-            .catch(err => {
-                console.log(err)
-            })
-    }
-
-    handleSubmit = () => {
-    	//rebuild a parentShift
-    	console.log("handleSubmit")
-    	const newParentShift = {
-    		ID: this.props.parentShift.ID,
-			TeamID : this.props.teamID,
-			ScheduleName : this.props.name,
-			Timestamp: moment(this.state.start).format(),
-			Duration: moment.duration(moment(this.state.end).diff(moment(this.state.start))).asMinutes(),
-			Username: this.state.user.value.Username
-    	}
-    	console.log("newParentShift")
-    	console.log(newParentShift)
-    	this.props.handleOverrideUpdate(newParentShift, this.props.name)
-    }
-
-    handleChange = (event) => {
-	    this.setState({
-	    	[event.target.name]: event.target.value
-	    });
-	}
-
-	handleUserChange = (user) => {
-		console.log("handleuserchange")
-		this.setState({user: user})
-	}
-
-	render() {
-		if (!this.state.allUsers) {
-			return <div></div>
-		}
-		const mappedAllUsers = this.state.allUsers.map(user => {return {value: user, label: user.FirstName + " " + user.LastName}}) // map users names'
-		return (
-			<div>
-				<h3>Edit Override</h3>
-				<form>
-					<div class="form-group row">
-						<div class="col-xs-10">
-							<input class="form-control" name="start" placeholder="Start Date and Time" type="datetime-local" onChange={this.handleChange} value={this.state.start} id="example-datetime-local-input"></input>
-						</div>
-					</div>
-					<div class="form-group row">
-						<div class="col-xs-10">
-							<input class="form-control" name="end" placeholder="End Date and Time" type="datetime-local" onChange={this.handleChange} value={this.state.end} id="example-datetime-local-input"></input>
-						</div>
-					</div>
-					<div class="form-group row">
-						<Select class="col-xs-10" name="user" clearable={false} value={this.state.user} placeholder="Select User" options={mappedAllUsers} onChange={this.handleUserChange} />
-					</div>
-					<div class="form-group row">
-						<div class="col-xs-10">
-                			<input type="button" value="Submit Changes" class="btn" onClick={this.handleSubmit}></input>
-						</div>
-					</div>
-				</form>
-			</div>
-		)
-	}
-}
-
-
-
-
-
-				// <div class="col-xs-4"></div>
-                // <SearchInput class="col-xs-4" className="search-input" onChange={this.searchUpdated} />
-                // <input class="col-xs-2" type="button" value="search" onClick={this.search}> </input>
-
+// {this.state.clickedID ? 
+// 						<UpdateOverride 
+// 							name={this.props.name}
+// 							teamID={this.props.teamID}
+// 							parentShift={this.state.clickedParentShift}
+// 							handleOverrideUpdate={this.props.handleOverrideUpdate}
+// 							name={this.props.name} />
+// 						: <div></div>
+// 					}
 
