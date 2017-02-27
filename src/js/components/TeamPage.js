@@ -60,30 +60,40 @@ class SchedulePane extends React.Component {
 	handleOverrideUpdate = (parentShift, scheduleName, firstName, lastName) => {
 		axios.post('/api/teams/updateOverrideShift', parentShift)
 			.then(res => {
-				console.log(res)
-				console.log("succses")
-				const schedules = this.state.schedules;
-				console.log('schedules')
-				console.log(this.state.schedules)
+				// console.log(res)
+				// console.log("succses")
+				// const schedules = this.state.schedules;
+				// console.log('schedules')
+				// console.log(this.state.schedules)
 
-				parentShift.FirstName = firstName
-				parentShift.LastName = lastName
+				// parentShift.FirstName = firstName
+				// parentShift.LastName = lastName
 
-				const correctScheduleIndex = schedules.findIndex(schedule => schedule.ScheduleName == scheduleName)
-				console.log(correctScheduleIndex)
-				const correctShiftIndex = schedules[correctScheduleIndex].OverrideShifts.findIndex(shift => shift.ID == parentShift.ID)
-				console.log(correctShiftIndex)
+				// const correctScheduleIndex = schedules.findIndex(schedule => schedule.ScheduleName == scheduleName)
+				// console.log(correctScheduleIndex)
+				// const correctShiftIndex = schedules[correctScheduleIndex].OverrideShifts.findIndex(shift => shift.ID == parentShift.ID)
+				// console.log(correctShiftIndex)
 
 
-				//update schedules
-				schedules[correctScheduleIndex].OverrideShifts[correctShiftIndex] = parentShift
-				console.log("updatedSchedule")
-				console.log(schedules)
-				this.setState({
-					schedules: schedules,
-				})
+				// //update schedules
+				// schedules[correctScheduleIndex].OverrideShifts[correctShiftIndex] = parentShift
+				// console.log("updatedSchedule")
+				// console.log(schedules)
+				// this.setState({
+				// 	schedules: schedules,
+				// })
+				axios.get('/api/teams/getSchedulesForTeam?Name=' + this.props.team)
+					.then(res => {
+						this.setState({
+							teamID: res.data.TeamID,
+							schedules: res.data.Schedules,
+						})
+					})
+					.catch(err => {
+						console.log(err)
+					})
 
-				
+
 
 			})
 			.catch(err => {
