@@ -13,7 +13,7 @@ export default class OverrideModal extends React.Component {
 	return (
 		<div>
 			<ReactModal 
-				isOpen={!this.props.createdID}
+				isOpen={this.props.updateItem || this.props.createItem}
 				contentLabel="Minimal Modal Example" 
 				onRequestClose={this.props.onModalClose}
         		shouldCloseOnOverlayClick={true}
@@ -23,7 +23,7 @@ export default class OverrideModal extends React.Component {
 					},
 					content: {
 						position: 'absolute',
-						height: '300px',
+						height: '400px',
 						width: '500px',
 						left: '50%',
 						top: '50%',
@@ -45,11 +45,20 @@ export default class OverrideModal extends React.Component {
 class OverrideCard extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state = {
-			allUsers: null,
-			user: {value: {Username: this.props.parentShift.Username, FirstName: this.props.parentShift.FirstName, LastName: this.props.parentShift.LastName}, label: props.parentShift.FirstName + " " + props.parentShift.LastName},
-			start: moment(props.parentShift.Timestamp).format('YYYY-MM-DDThh:mm'),
-			end: moment(props.parentShift.Timestamp).add(props.parentShift.Duration, 'minutes').format('YYYY-MM-DDThh:mm'),
+		if (this.props.createItem) {
+			this.state = {
+				allUsers: null,
+				user: null,
+				start: moment(props.createStart).format('YYYY-MM-DDThh:mm'),
+				end: moment(props.createStart).add(60, 'minutes').format('YYYY-MM-DDThh:mm'),
+			}
+		} else if (this.props.updateItem) {
+			this.state = {
+				allUsers: null,
+				user: {value: {Username: this.props.parentShift.Username, FirstName: this.props.parentShift.FirstName, LastName: this.props.parentShift.LastName}, label: props.parentShift.FirstName + " " + props.parentShift.LastName},
+				start: moment(props.parentShift.Timestamp).format('YYYY-MM-DDThh:mm'),
+				end: moment(props.parentShift.Timestamp).add(props.parentShift.Duration, 'minutes').format('YYYY-MM-DDThh:mm'),
+			}
 		}
 	}
 
@@ -65,9 +74,9 @@ class OverrideCard extends React.Component {
             })
     }
 
-    handleSubmit = () => {
+    handleUpdate = () => {
     	//rebuild a parentShift
-    	console.log("handleSubmit")
+    	console.log("handle Submit")
     	const newParentShift = {
     		ID: this.props.parentShift.ID,
 			TeamID : this.props.teamID,
@@ -78,7 +87,27 @@ class OverrideCard extends React.Component {
     	}
     	console.log("newParentShift")
     	console.log(newParentShift)
-    	this.props.handleOverrideUpdate(newParentShift, this.props.name, this.state.user.value.FirstName, this.state.user.value.LastName)
+    	this.props.handleOverrideUpdate(newParentShift)
+    	this.props.onModalClose()
+    }
+
+    handleDelete = () => {
+    	console.log('handle Delete')
+    	this.props.handleOverrideDelete()
+    	this.props.onModalClose()
+    }
+
+    handleCreate = () => {
+    	console.log('handle Create')
+    	const newParentShift = {
+			TeamID : this.props.teamID,
+			ScheduleName : this.props.name,
+			Timestamp: moment(this.state.start).format(),
+			Duration: moment.duration(moment(this.state.end).diff(moment(this.state.start))).asMinutes(),
+			Username: this.state.user.value.Username
+    	}
+
+    	this.props.handleOverrideCreate(newParentShift)
     	this.props.onModalClose()
     }
 
@@ -119,9 +148,16 @@ class OverrideCard extends React.Component {
 							<Select class="col-xs-10" name="user" clearable={false} value={this.state.user} placeholder="Select User" options={mappedAllUsers} onChange={this.handleUserChange} />
 						</div>
 						<div class="form-group row">
-							<div class="col-xs-10">
-	                			<input type="button" value="Submit Changes" class="btn" onClick={this.handleSubmit}></input>
-							</div>
+							{this.state.updateItem ? 
+								<div class="col-xs-10" style={{display: 'inline'}}>
+		                			<input type="button" value="Update Shift" class="btn" onClick={this.handleUpdate}></input>
+		                			<input type="button" value="Delete Shift" class="btn" onClick={this.handleDelete}></input>
+								</div>
+								:
+								<div class="col-xs-10" style={{display: 'inline'}}>
+		                			<input type="button" value="Create Shift" class="btn" onClick={this.handleCreate}></input>
+								</div>
+							}
 						</div>
 					</form>
 				</div>

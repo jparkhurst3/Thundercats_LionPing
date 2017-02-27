@@ -45,6 +45,10 @@ class SchedulePane extends React.Component {
 
 	componentDidMount() {
 		//get schedules
+		this.getSchedules()
+	}
+
+	getSchedules = () => {
 		axios.get('/api/teams/getSchedulesForTeam?Name=' + this.props.team)
 			.then(res => {
 				this.setState({
@@ -57,7 +61,7 @@ class SchedulePane extends React.Component {
 			})
 	}
 
-	handleOverrideUpdate = (parentShift, scheduleName, firstName, lastName) => {
+	handleOverrideUpdate = (parentShift) => {
 		axios.post('/api/teams/updateOverrideShift', parentShift)
 			.then(res => {
 				// console.log(res)
@@ -82,16 +86,7 @@ class SchedulePane extends React.Component {
 				// this.setState({
 				// 	schedules: schedules,
 				// })
-				axios.get('/api/teams/getSchedulesForTeam?Name=' + this.props.team)
-					.then(res => {
-						this.setState({
-							teamID: res.data.TeamID,
-							schedules: res.data.Schedules,
-						})
-					})
-					.catch(err => {
-						console.log(err)
-					})
+				this.getSchedules()
 
 
 
@@ -99,6 +94,29 @@ class SchedulePane extends React.Component {
 			.catch(err => {
 				console.log("err")
 				console.log('failed to update shift')
+			})
+	}
+
+
+	handleOverrideDelete = (ID) => {
+		axios.post('/api/teams/deleteOverrideShift?ID=' + ID)
+			.then(res => {
+				console.log('team deleted')
+				this.getSchedules()
+			})
+			.catch(err => {
+				console.log(err)
+			})
+	}
+
+	handleOverrideCreate = (newParentShift) => {
+		axios.post('/api/teams/createOverrideShift', newParentShift)
+			.then(res => {
+				console.log('created team')
+				this.getSchedules()
+			})
+			.catch(err => {
+				console.log(err)
 			})
 	}
 
@@ -116,7 +134,9 @@ class SchedulePane extends React.Component {
 				name={schedule.ScheduleName} 
 				teamID={this.state.teamID}
 				schedule={schedule} 
-				handleOverrideUpdate={this.handleOverrideUpdate} />
+				handleOverrideUpdate={this.handleOverrideUpdate}
+				handleOverrideDelete={this.handleOverrideDelete}
+				handleOverrideCreate={this.handleOverrideCreate} />
 		)
 
 		return (
@@ -159,6 +179,8 @@ class ScheduleData extends React.Component {
 		this.state = {
 			clickedID: null,
 			clickedParentShift: null,
+			updateItem: false,
+			createItem: false
 		}
 	}
 
@@ -227,8 +249,10 @@ class ScheduleData extends React.Component {
 	onModalClose = () => {
 		console.log("close modal")
 		this.setState({
+			updateItem: false,
 			clickedID: null,
-			clickedParentShift: null
+			clickedParentShift: null,
+			createItem: false
 		})
 	}
 
@@ -241,7 +265,17 @@ class ScheduleData extends React.Component {
 		console.log(parentShift)
 		this.setState({
 			clickedID: itemID,
-			clickedParentShift: parentShift
+			clickedParentShift: parentShift,
+			updateItem: true
+		})
+	}
+
+	onCanvasClick = (groupId, time, e) => {
+		const timestamp = time;
+		console.log(time)
+		this.setState({
+			createItem: true,
+			createStart: time
 		})
 	}
 
@@ -293,18 +327,25 @@ class ScheduleData extends React.Component {
 					canZoom={true}
 					stackItems={false}
 					onItemClick={this.onItemClick}
+					onCanvasClick={this.onCanvasClick}
+
+
 					/>
 
 
-					{this.state.clickedID ? 
+					{this.state.updateItem || this.state.createItem ? 
 						<OverrideModal
 							name={this.props.name}
 							teamID={this.props.teamID}
 							parentShift={this.state.clickedParentShift}
 							handleOverrideUpdate={this.props.handleOverrideUpdate}
+							handleOverrideDelete={this.props.handleOverrideDelete}
+							handleOverrideCreate={this.props.handleOverrideCreate}
 							name={this.props.name}
 							onModalClose={this.onModalClose}
-							 />
+							createItem={this.state.createItem}
+							updateItem={this.state.updateItem} 
+							createStart={this.state.createStart} />
 						: <div></div>
 					} 
 					
@@ -312,14 +353,3 @@ class ScheduleData extends React.Component {
 		)
 	}
 }
-
-// {this.state.clickedID ? 
-// 						<UpdateOverride 
-// 							name={this.props.name}
-// 							teamID={this.props.teamID}
-// 							parentShift={this.state.clickedParentShift}
-// 							handleOverrideUpdate={this.props.handleOverrideUpdate}
-// 							name={this.props.name} />
-// 						: <div></div>
-// 					}
-
