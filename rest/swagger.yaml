@@ -1,0 +1,68 @@
+swagger: '2.0'
+info:
+  title: Lion Ping REST API
+  description: REST services used by Lion Ping application
+  version: 1.0.0
+host: lowcost-env.pencq722tt.us-west-2.elasticbeanstalk.com
+schemes:
+  - http
+basePath: /api
+produces:
+  - application/json
+paths:
+  /services/getNames:
+    get:
+      summary: Service Names
+      description: |
+        Gives a list of Names of all services in the System
+      tags:
+        - Services
+      responses:
+        '200':
+          description: An array of service name
+          schema:
+            type: array
+            items:
+              type: string
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /services/getServices:
+    get:
+      summary: Services
+      description: |
+        Gives a list of Services
+      tags:
+        - Services
+      responses:
+        '200':
+          description: An array of service name
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Service'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  Service:
+    type: object
+    properties:
+      Name:
+        type: string
+        description: Name of the Service
+      ID:
+        type: integer
+        description: Unique identifier for the service
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
