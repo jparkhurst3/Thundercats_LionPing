@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios'
 import SearchInput, {createFilter} from 'react-search-input'
 import CreateTeamModal from './CreateTeamModal'
+import {Link, browserHistory, withRouter} from 'react-router'
 import Select from 'react-select-plus'
 
 
