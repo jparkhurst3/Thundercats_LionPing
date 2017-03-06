@@ -10,6 +10,7 @@ import Timeline from 'react-calendar-timeline'
 import moment from 'moment'
 import SelectTeam from './SelectTeam'
 import OverrideModal from './OverrideModal'
+import ManualModal from './ManualModal'
 
 
 export default class TeamPage extends React.Component {
@@ -92,6 +93,39 @@ class SchedulePane extends React.Component {
 			})
 	}
 
+	handleManualUpdate = (newParentShift) => {
+		axios.post('/api/teams/updateManualShift', newParentShift)
+			.then(res => {
+				this.getSchedules()
+			})
+			.catch(err => {
+				console.log("err")
+				console.log('failed to update manual shift')
+			})
+	}
+
+	handleManualDelete = (ID) => {
+		axios.post('/api/teams/deleteManualShift?ID=' + ID)
+			.then(res => {
+				console.log('team deleted')
+				this.getSchedules()
+			})
+			.catch(err => {
+				console.log(err)
+			})
+	}
+
+	handleManualCreate = (newParentShift) => {
+		axios.post('/api/teams/createManualShift', newParentShift)
+			.then(res => {
+				console.log('created team')
+				this.getSchedules()
+			})
+			.catch(err => {
+				console.log(err)
+			})
+	}
+
 
 	render() {
 		if (!this.state.schedules) {
@@ -108,7 +142,11 @@ class SchedulePane extends React.Component {
 				schedule={schedule} 
 				handleOverrideUpdate={this.handleOverrideUpdate}
 				handleOverrideDelete={this.handleOverrideDelete}
-				handleOverrideCreate={this.handleOverrideCreate} />
+				handleOverrideCreate={this.handleOverrideCreate}
+				handleManualUpdate={this.handleManualUpdate}
+				handleManualCreate={this.handleManualCreate}
+				handleManualDelete={this.handleManualDelete}
+				 />
 		)
 
 		return (
@@ -151,8 +189,14 @@ class ScheduleData extends React.Component {
 		this.state = {
 			clickedID: null,
 			clickedParentShift: null,
-			updateItem: false,
-			createItem: false
+
+			updateOverrideItem: false,
+			updateRotationItem: false,
+			updateManualItem: false,
+
+			createOverrideItem: false,
+			createManualItem: false,
+			createRotationItem: false,
 		}
 	}
 
@@ -221,34 +265,71 @@ class ScheduleData extends React.Component {
 	onModalClose = () => {
 		console.log("close modal")
 		this.setState({
-			updateItem: false,
+			updateOverrideItem: false,
+			updateRotationItem: false,
+			updateManualItem: false,
 			clickedID: null,
 			clickedParentShift: null,
-			createItem: false
+			createOverrideItem: false,
+			createManualItem: false,
+			createRotationItem: false
 		})
 	}
 
-	onItemClick = (itemID, e) => {
+	onItemClick = (itemID, e, d) => {
 		console.log("onItemClick")
 		console.log(itemID)
 		console.log(e)
 		// const parentShift = this.state.shifts[itemID].parentShift
 		const parentShift = e.currentTarget.props.parentShift
 		console.log(parentShift)
+		console.log(d);
 		this.setState({
 			clickedID: itemID,
 			clickedParentShift: parentShift,
-			updateItem: true
+		})
+		
+		if (parentShift.Users) { // rotation has users
+			this.setState({
+				updateRotationItem: true
+			})
+		} else if (parentShift.RepeatType) { // manual has a repeat type
+			this.setState({
+				updateManualItem: true
+			})
+		} else if (parentShift) { // override has some data in parent shift
+			this.setState({
+				updateOverrideItem: true
+			})
+		}
+
+		this.setState({
+			clickedID: itemID,
+			clickedParentShift: parentShift,
 		})
 	}
 
 	onCanvasClick = (groupId, time, e) => {
-		const timestamp = time;
-		console.log(time)
-		this.setState({
-			createItem: true,
-			createStart: time
-		})
+		console.log("group ID: " + groupId)
+		if (groupId == 0) {
+			this.setState({
+				createRotationItem: true,
+				createStart: time
+			})
+		} else if (groupId ==  1) {
+			this.setState({
+				createManualItem: true,
+				createStart: time
+			})
+		} else if (groupId == 2) {
+			this.setState({
+				createOverrideItem: true,
+				createStart: time
+			})
+
+		} else {
+
+		}
 	}
 
 	render() {
@@ -300,26 +381,39 @@ class ScheduleData extends React.Component {
 					stackItems={false}
 					onItemClick={this.onItemClick}
 					onCanvasClick={this.onCanvasClick}
-
-
 					/>
 
 
-					{this.state.updateItem || this.state.createItem ? 
+					{this.state.updateOverrideItem || this.state.createOverrideItem ? 
 						<OverrideModal
 							name={this.props.name}
 							teamID={this.props.teamID}
 							parentShift={this.state.clickedParentShift}
-							handleOverrideUpdate={this.props.handleOverrideUpdate}
-							handleOverrideDelete={this.props.handleOverrideDelete}
-							handleOverrideCreate={this.props.handleOverrideCreate}
+							handleUpdate={this.props.handleOverrideUpdate}
+							handleDelete={this.props.handleOverrideDelete}
+							handleCreate={this.props.handleOverrideCreate}
 							name={this.props.name}
 							onModalClose={this.onModalClose}
-							createItem={this.state.createItem}
-							updateItem={this.state.updateItem} 
+							createItem={this.state.createOverrideItem}
+							updateItem={this.state.updateOverrideItem} 
 							createStart={this.state.createStart} />
 						: <div></div>
-					} 
+					}
+					{this.state.updateManualItem || this.state.createManualItem ? 
+						<ManualModal
+							name={this.props.name}
+							teamID={this.props.teamID}
+							parentShift={this.state.clickedParentShift}
+							handleUpdate={this.props.handleManualUpdate}
+							handleDelete={this.props.handleManualDelete}
+							handleCreate={this.props.handleManualCreate}
+							name={this.props.name}
+							onModalClose={this.onModalClose}
+							createItem={this.state.createManualItem}
+							updateItem={this.state.updateManualItem} 
+							createStart={this.state.createStart} />
+						: <div></div>
+					}
 					
 			</div>
 		)
