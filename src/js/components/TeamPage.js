@@ -11,6 +11,7 @@ import moment from 'moment'
 import SelectTeam from './SelectTeam'
 import OverrideModal from './OverrideModal'
 import ManualModal from './ManualModal'
+import RotationModal from './RotationModal'
 
 
 export default class TeamPage extends React.Component {
@@ -27,6 +28,41 @@ export default class TeamPage extends React.Component {
 			<div class="container">
 				<SelectTeam team={this.props.params.team} />
 				<SchedulePane team={this.props.params.team} />
+			</div>
+		)
+	}
+}
+
+class TeamMembers extends React.Component {
+	constructor() {
+		super()
+		this.setState({
+			allUsers: null,
+			users: null
+		})
+		
+	}
+
+	componentDidMount() {
+		axios.get('/api/users/getUsers') //needs to be get users on a team
+            .then(res => {
+                this.setState({
+                    allUsers: res.data // get users from database
+                })
+            })
+            .catch(err => {
+                console.log(err)
+            })
+
+        axios.get("/api/users/")
+	}
+
+
+
+	render() {
+		return (
+			<div class="form-group row">
+				<Select multi class="col-xs-10" name="user" clearable={false} value={this.state.users} placeholder="Select User" options={mappedAllUsers} onChange={this.handleUserChange} />
 			</div>
 		)
 	}
@@ -126,6 +162,39 @@ class SchedulePane extends React.Component {
 			})
 	}
 
+	handleRotationUpdate = (newParentShift) => {
+		axios.post('/api/teams/updateRotationShift', newParentShift)
+			.then(res => {
+				this.getSchedules()
+			})
+			.catch(err => {
+				console.log("err")
+				console.log('failed to update manual shift')
+			})
+	}
+
+	handleRotationDelete = (ID) => {
+		axios.post('/api/teams/deleteRotationShift?ID=' + ID)
+			.then(res => {
+				console.log('team deleted')
+				this.getSchedules()
+			})
+			.catch(err => {
+				console.log(err)
+			})
+	}
+
+	handleRotationCreate = (newParentShift) => {
+		axios.post('/api/teams/createRotationShift', newParentShift)
+			.then(res => {
+				console.log('created team')
+				this.getSchedules()
+			})
+			.catch(err => {
+				console.log(err)
+			})
+	}
+
 
 	render() {
 		if (!this.state.schedules) {
@@ -143,9 +212,14 @@ class SchedulePane extends React.Component {
 				handleOverrideUpdate={this.handleOverrideUpdate}
 				handleOverrideDelete={this.handleOverrideDelete}
 				handleOverrideCreate={this.handleOverrideCreate}
+
 				handleManualUpdate={this.handleManualUpdate}
 				handleManualCreate={this.handleManualCreate}
 				handleManualDelete={this.handleManualDelete}
+
+				handleRotationUpdate={this.handleRotationUpdate}
+				handleRotationCreate={this.handleRotationCreate}
+				handleRotationDelete={this.handleRotationDelete}
 				 />
 		)
 
@@ -290,6 +364,7 @@ class ScheduleData extends React.Component {
 		})
 		
 		if (parentShift.Users) { // rotation has users
+			console.log("has users so set rotation")
 			this.setState({
 				updateRotationItem: true
 			})
@@ -346,6 +421,7 @@ class ScheduleData extends React.Component {
 		const mappedRotationShifts = this.props.schedule.RotationShifts.map((shift, key) => {
 			return this.formatRotationShift(shift)
 		})
+
 		//aggregate from nested arrays
 		let shifts = [...mappedOverrideShifts]
 		for (const shift of mappedManualShifts) {
@@ -361,11 +437,18 @@ class ScheduleData extends React.Component {
 			return shift
 		})
 
+
+		//sort shifts by time?
+		// const mappedComputedShifts = shifts2.map((shift, key) => {
+
+		// })
+
+
 		const groups = [
+		  {id: 0, title: <h4><strong>Computed</strong></h4>},
 		  {id: 1, title: <h4>Rotation</h4>},
 		  {id: 2, title: <h4>Manual</h4>},
 		  {id: 3, title: <h4>Override</h4>},
-		  {id: 4, title: <h4><strong>Computed</strong></h4>},
 		]
 
 		return (
@@ -411,6 +494,21 @@ class ScheduleData extends React.Component {
 							onModalClose={this.onModalClose}
 							createItem={this.state.createManualItem}
 							updateItem={this.state.updateManualItem} 
+							createStart={this.state.createStart} />
+						: <div></div>
+					}
+					{this.state.updateRotationItem || this.state.createRotationItem ? 
+						<RotationModal
+							name={this.props.name}
+							teamID={this.props.teamID}
+							parentShift={this.state.clickedParentShift}
+							handleUpdate={this.props.handleRotationUpdate}
+							handleDelete={this.props.handleRotationDelete}
+							handleCreate={this.props.handleRotationCreate}
+							name={this.props.name}
+							onModalClose={this.onModalClose}
+							createItem={this.state.createRotationItem}
+							updateItem={this.state.updateRotationItem} 
 							createStart={this.state.createStart} />
 						: <div></div>
 					}
