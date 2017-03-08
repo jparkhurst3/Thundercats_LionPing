@@ -28,6 +28,7 @@ export default class TeamPage extends React.Component {
 			<div class="container">
 				<SelectTeam team={this.props.params.team} />
 				<SchedulePane team={this.props.params.team} />
+				<TeamMembers team={this.props.params.team} />
 			</div>
 		)
 	}
@@ -36,34 +37,101 @@ export default class TeamPage extends React.Component {
 class TeamMembers extends React.Component {
 	constructor() {
 		super()
-		this.setState({
+		this.state = {
 			allUsers: null,
-			users: null
-		})
-		
+			users: null,
+			disabled: true
+		}
 	}
 
 	componentDidMount() {
-		axios.get('/api/users/getUsers') //needs to be get users on a team
+		axios.get('/api/users/getUsers') //get all users
             .then(res => {
                 this.setState({
-                    allUsers: res.data // get users from database
+                    allUsers: res.data
                 })
             })
             .catch(err => {
                 console.log(err)
             })
 
-        axios.get("/api/users/")
+  		// this.setState({
+  		// 	allUsers: []
+  		// })
+
+        axios.get('/api/users/getUsers') //needs to be get users on a team
+            .then(res => {
+                this.setState({
+                    users: res.data // get users from database
+                })
+            })
+            .catch(err => {
+                console.log(err)
+            })
 	}
 
+	handleUsersChange = (users) => {
+		console.log("handleuserchange")
+		const destructedUsers = users.map(user => user.value)
+		this.setState({users: destructedUsers})
+	}
 
+	containsUser = (users, needle) => {
+        for (const user of users) {
+            if (user.Username == needle.Username) {
+                return true
+            }
+        }
+        return false
+    }
+
+    handleUserEditClick = () => {
+    	this.setState({
+    		disabled: !this.state.disabled
+    	})
+    }
 
 	render() {
+
+		if (!this.state.allUsers || !this.state.users) {
+			return <div></div>
+		}
+
+		console.log("allusers")
+		console.log(this.state.allUsers)
+		console.log("users")
+		console.log(this.state.users)
+
+		//filter out users that are already in users
+		const mappedUserOptions = this.state.allUsers
+			.filter(user => !this.containsUser(this.state.users, user))
+			.map(user => {
+				return {
+					value: {
+						Username: user.Username, FirstName: user.FirstName, LastName: user.LastName
+					}, 
+					label: user.FirstName + " " + user.LastName 
+				}})
+
+		// const mappedUserOptions = this.state.allUsers;
+
+		console.log("mappedUserOptions")
+		console.log(mappedUserOptions)
+			
+
+		const mappedUsers = this.state.users.map(user => {
+			return {
+				value: {
+					Username: user.Username, FirstName: user.FirstName, LastName: user.LastName
+				}, 
+				label: user.FirstName + " " + user.LastName 
+			}})
+
 		return (
-			<div class="form-group row">
-				<Select multi class="col-xs-10" name="user" clearable={false} value={this.state.users} placeholder="Select User" options={mappedAllUsers} onChange={this.handleUserChange} />
-			</div>
+				<div class="form-group row pad">
+					<Select multi disabled={this.state.disabled} class="col-xs-10" name="user" clearable={false} value={mappedUsers} placeholder="Select User" options={mappedUserOptions} onChange={this.handleUsersChange} />
+					<input class="btn" onClick={this.handleUserEditClick} value="Edit Users" />
+				</div>
 		)
 	}
 }
