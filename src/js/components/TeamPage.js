@@ -65,7 +65,6 @@ class TeamMembers extends React.Component {
                 console.log(res.data)
                 this.setState({
                     users: res.data // get users from database
-
                 })
             })
             .catch(err => {
@@ -98,15 +97,21 @@ class TeamMembers extends React.Component {
     	console.log("submit users");
     	console.log(this.state.users);
 
-    	axios.post("/api/users/updateUsersOnTeam", this.state.users)
+    	const submitObject = {
+    		Name: this.props.team,
+    		Users: this.state.users
+    	}
+
+    	axios.post("/api/teams/updateUsersOnTeam", submitObject)
     		.then(res => {
-
+    			console.log("success!!!!!")
     		})
-    		.err(err => {
-
+    		.catch(err => {
+    			console.log(err)
     		})
-
-
+    	this.setState({
+    		disabled: true
+    	})
     }
 
 	render() {
@@ -290,7 +295,8 @@ class SchedulePane extends React.Component {
 			<ScheduleData 
 				name={schedule.ScheduleName} 
 				teamID={this.state.teamID}
-				schedule={schedule} 
+				schedule={schedule}
+
 				handleOverrideUpdate={this.handleOverrideUpdate}
 				handleOverrideDelete={this.handleOverrideDelete}
 				handleOverrideCreate={this.handleOverrideCreate}
@@ -310,9 +316,14 @@ class SchedulePane extends React.Component {
 				<h3>Schedules</h3>
 				<ul class="nav nav-tabs" role="tablist">
 					{mappedTabs}
+					<ScheduleTab name="Add" />
 				</ul>
 				<div class="tab-content">
 					{mappedData}
+					<CreateNewSchedule 
+						name="Add"
+						teamID={this.state.teamID}
+					/>
 				</div>
 			</div>
 		)
@@ -337,6 +348,17 @@ class ScheduleTab extends React.Component {
 			</li>
 		)
 	}
+}
+
+class CreateNewSchedule extends React.Component {
+	render() {
+		return (
+			<div className="tab-pane" id={this.props.name} role="tabpanel">
+				<h1>INSIDE CREATE new SChedlele</h1>
+			</div>
+		)
+	}
+
 }
 
 class ScheduleData extends React.Component {
@@ -531,7 +553,7 @@ class ScheduleData extends React.Component {
 		  {id: 0, title: <h4><strong>Computed</strong></h4>},
 		  {id: 1, title: <h4>Rotation</h4>},
 		  {id: 2, title: <h4>Manual</h4>},
-		  {id: 3, title: <h4>Override</h4>},
+		  {id: 3, title: <h4>Override</h4>}
 		]
 
 		return (
