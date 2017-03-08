@@ -9,7 +9,7 @@ var bodyParser = require('body-parser');
 
 var database = require('./database/database.js');
 
-var slack = require('./slack/slack.js');
+var slack = require('./notifications/slack/slack.js');
 
 //middleware
 app.use(function(req, res, next) {
@@ -59,6 +59,7 @@ app.post('/api/users/createUser', users.createUser);
 var teams = require('./rest/teams');
 app.get('/api/teams/getTeams', teams.getTeams);
 app.post('/api/teams/createTeam', teams.createTeam);
+app.get('/api/teams/getUsersOnTeam', teams.getUsersOnTeam);
 app.get('/api/teams/getSchedules', teams.getSchedules);
 app.get('/api/teams/getSchedulesForTeamByID', teams.getSchedulesForTeamByID);
 app.get('/api/teams/getSchedulesForTeam', teams.getSchedulesForTeam);

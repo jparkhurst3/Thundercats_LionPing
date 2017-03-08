@@ -1,4 +1,5 @@
 var database = require('../database/database.js');
+var notifications = require('../notifications/notifications.js');
 
 /**
 * Service for getting Names/IDs of all Teams
@@ -18,6 +19,61 @@ var getTeams = function(req, res) {
     }
   })
 };
+
+/**
+* Service for getting list of users on a specified team
+* Params: team name/id
+* Returns: Username, First Name, Last Name of all users on team
+*/
+
+var getUsersOnTeam = function(req, res) {
+  res.setHeader('Content-Type', 'text/plain');
+  var whereClause = (req.query.ID) ? " WHERE (t.TeamID = ?)" : " WHERE (t.Name = ?)";
+  var queryParam = (req.query.ID) ? (req.query.ID) : (req.query.Name);
+  var getUsersOnTeamQuery = "SELECT u.Username, u.FirstName, u.LastName FROM USER u" +
+    " JOIN USER_IN_TEAM ut ON (ut.Username = u.Username) " + 
+    " JOIN TEAM t ON (t.ID = ut.TeamID) " + whereClause;
+  database.executeQuery(getUsersOnTeamQuery, queryParam, (error, rows, fields) => {
+    if (error) {
+      console.log(error)
+      res.statusCode = 500;
+      res.end("error");
+    } else {
+      res.statusCode = 200;
+      res.send(JSON.stringify(rows));
+    }
+  })
+} 
+
+/**
+*
+*
+*
+*/
+
+var updateUsersOnTeam = function(req, res) {
+  
+} 
+
+/**
+*
+*
+*
+*/
+
+var createSchedule = function(req, res) {
+  
+} 
+
+/**
+*
+*
+*
+*/
+
+var deleteSchedule = function(req, res) {
+  
+} 
 
 /**
 * Get schedules linked to a specifc team
@@ -41,32 +97,6 @@ var getSchedulesForTeamByID = function(req, res) {
     }
   })
 }
-
-// /**
-// * Get schedules linked to a specifc team
-// * Params: Team ID
-// * Returns: List of Schedules
-// */
-// var getSchedulesForTeam = function(req, res) {
-//   res.setHeader('Content-Type', 'text/plain');
-
-//   var whereClause = (req.query.ID) ? " WHERE (t.ID = ?)" : " WHERE (t.Name = ?)";
-//   var queryParam = (req.query.ID) ? (req.query.ID) : (req.query.Name);
-
-//   var getUsersInEscalation = "SELECT s.Name as ScheduleName FROM TEAM t " +
-//     " JOIN SCHEDULE s ON (s.TeamID = t.ID) " + whereClause;
-
-//   database.executeQuery(getUsersInEscalation, queryParam, (error, rows, fields) => {
-//     if (error) {
-//       console.log(error)
-//       res.statusCode = 500;
-//       res.end("error");
-//     } else {
-//       res.statusCode = 200;
-//       res.send(JSON.stringify(rows));
-//     }
-//   })
-// }
 
 /**
 * Service for getting Schedules of all Teams
@@ -254,6 +284,7 @@ var getSchedulesForTeam = function(req, res) {
     return Promise.all([overrideShiftsLoaded,manualShiftsLoaded,rotationShiftsLoaded]);
   }).then(() => {
     res.statusCode = 200;
+    notifications.notifySchedule(teamSchedules.Schedules[0]);
     res.send(JSON.stringify(teamSchedules));
   }).catch((error) => {
     console.log(error);
@@ -508,6 +539,7 @@ var deleteRotationShift = function(req, res) {
 module.exports = {
   getTeams : getTeams,
   createTeam : createTeam,
+  getUsersOnTeam : getUsersOnTeam,
   getSchedules : getSchedules,
   getSchedulesForTeamByID : getSchedulesForTeamByID,
   getSchedulesForTeam : getSchedulesForTeam,

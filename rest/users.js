@@ -40,6 +40,7 @@ var createUser = function(req, res) {
 };
 
 
+
 module.exports = {
   getUsers : getUsers,
   createUser : createUser
