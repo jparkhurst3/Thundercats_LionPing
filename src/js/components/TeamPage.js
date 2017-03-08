@@ -55,14 +55,17 @@ class TeamMembers extends React.Component {
                 console.log(err)
             })
 
-  		// this.setState({
-  		// 	allUsers: []
-  		// })
-
-        axios.get('/api/users/getUsers') //needs to be get users on a team
+        axios.get('/api/teams/getUsersOnTeam', {
+        	params: {
+        		Name: this.props.team
+        	}
+        })
             .then(res => {
+            	console.log("usersonteam")
+                console.log(res.data)
                 this.setState({
                     users: res.data // get users from database
+
                 })
             })
             .catch(err => {
@@ -91,16 +94,25 @@ class TeamMembers extends React.Component {
     	})
     }
 
-	render() {
+    handleUserSubmit = () => {
+    	console.log("submit users");
+    	console.log(this.state.users);
 
+    	axios.post("/api/users/updateUsersOnTeam", this.state.users)
+    		.then(res => {
+
+    		})
+    		.err(err => {
+
+    		})
+
+
+    }
+
+	render() {
 		if (!this.state.allUsers || !this.state.users) {
 			return <div></div>
 		}
-
-		console.log("allusers")
-		console.log(this.state.allUsers)
-		console.log("users")
-		console.log(this.state.users)
 
 		//filter out users that are already in users
 		const mappedUserOptions = this.state.allUsers
@@ -111,13 +123,7 @@ class TeamMembers extends React.Component {
 						Username: user.Username, FirstName: user.FirstName, LastName: user.LastName
 					}, 
 					label: user.FirstName + " " + user.LastName 
-				}})
-
-		// const mappedUserOptions = this.state.allUsers;
-
-		console.log("mappedUserOptions")
-		console.log(mappedUserOptions)
-			
+				}})	
 
 		const mappedUsers = this.state.users.map(user => {
 			return {
@@ -127,11 +133,19 @@ class TeamMembers extends React.Component {
 				label: user.FirstName + " " + user.LastName 
 			}})
 
+		const buttons = this.state.disabled ? 
+			<input class="btn" onClick={this.handleUserEditClick} value="Edit Users" /> :
+			<div>
+				<input class="btn" onClick={this.handleUserEditClick} value="Cancel" />
+				<input class="btn" onClick={this.handleUserSubmit} value="Submit" />
+			</div>
+
+
 		return (
-				<div class="form-group row pad">
-					<Select multi disabled={this.state.disabled} class="col-xs-10" name="user" clearable={false} value={mappedUsers} placeholder="Select User" options={mappedUserOptions} onChange={this.handleUsersChange} />
-					<input class="btn" onClick={this.handleUserEditClick} value="Edit Users" />
-				</div>
+			<div class="form-group row pad">
+				<Select multi disabled={this.state.disabled} class="col-xs-10" name="user" clearable={false} value={mappedUsers} placeholder="Select User" options={mappedUserOptions} onChange={this.handleUsersChange} />
+				{buttons}
+			</div>
 		)
 	}
 }
@@ -495,6 +509,7 @@ class ScheduleData extends React.Component {
 		for (const shift of mappedManualShifts) {
 			shifts.push(...shift)
 		}
+
 		for (const shift of mappedRotationShifts) {
 			shifts.push(...shift)
 		}
