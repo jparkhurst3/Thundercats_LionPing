@@ -52,27 +52,81 @@ var getUsersOnTeam = function(req, res) {
 */
 
 var updateUsersOnTeam = function(req, res) {
-  
+  res.setHeader('Content-Type', 'text/plain');
+  var deleteQuery = " DELETE FROM USER_IN_TEAM WHERE TeamID = ?";
+
+  var valueSets = req.body.Users.reduce(function(substring, user) {
+    if (substring != "") {
+      substring += ", ";
+    }
+    return substring + "(" + req.body.TeamID + ", \'" + user.Username + "\')";
+  }, "");
+  var insertQuery = " INSERT INTO USER_IN_TEAM (TeamID, Username) VALUES " + valueSets;
+  console.log(insertQuery);
+  var transaction = database.createTransaction();
+
+  new Promise(function(resolve,reject) {
+    database.executeQueryInTransaction(deleteQuery, transaction, req.body.TeamID, (error,rows,fields) => {
+      if (error) reject(error);
+      else resolve();
+    });
+  }).then(() => {
+    return new Promise(function(resolve,reject) {
+      database.executeQueryInTransaction(insertQuery, transaction, (error,rows,fields) => {
+        if (error) reject(error);
+        else resolve();
+      });
+    });     
+  }).then(() => {
+    transaction.commit();
+    res.statusCode = 200;
+    res.send("Successfully updated users in team");
+  }).catch((error) => {
+    transaction.rollback();
+    console.log(error);
+    res.statusCode = 500;
+    res.send("Error updating users in team");
+  });
 } 
 
 /**
-*
-*
-*
+* Service for creating a new schedule for a team
+* Params: TeamID and ScheduleName
+* Returns: None
 */
 
 var createSchedule = function(req, res) {
-  
-} 
+  res.setHeader('Content-Type', 'text/plain');
+  database.executeQuery('INSERT INTO SCHEDULE SET TeamID = ?, Name = ?', [req.body.TeamID, req.body.ScheduleName], (error, rows, fields) => {
+    if (error) {
+      console.log(error)
+      res.statusCode = 500;
+      res.end("error");
+    } else {
+      res.statusCode = 200;
+      res.send("success");
+    }
+  })
+}
 
 /**
-*
-*
-*
+* Service for deleting an schedule
+* Params: TeamID and ScheduleName
+* Returns: None
 */
 
 var deleteSchedule = function(req, res) {
-  
+  res.setHeader('Content-Type', 'text/plain');
+  database.executeQuery('DELETE FROM SCHEDULE WHERE (TeamID = ?) AND (Name = ?)', [req.body.TeamID, req.body.ScheduleName], (error, rows, fields) => {
+    if (error) {
+      console.log(error)
+      res.statusCode = 500;
+      res.end("error");
+    } else {
+      res.statusCode = 200;
+      res.send("success");
+    }
+  });
 } 
 
 /**
@@ -540,6 +594,9 @@ module.exports = {
   getTeams : getTeams,
   createTeam : createTeam,
   getUsersOnTeam : getUsersOnTeam,
+  updateUsersOnTeam : updateUsersOnTeam,
+  createSchedule : createSchedule,
+  deleteSchedule : deleteSchedule,
   getSchedules : getSchedules,
   getSchedulesForTeamByID : getSchedulesForTeamByID,
   getSchedulesForTeam : getSchedulesForTeam,
