@@ -54,23 +54,36 @@ var getUsersOnTeam = function(req, res) {
 var updateUsersOnTeam = function(req, res) {
   res.setHeader('Content-Type', 'text/plain');
   var deleteQuery = " DELETE FROM USER_IN_TEAM WHERE TeamID = ?";
-
-  var valueSets = req.body.Users.reduce(function(substring, user) {
-    if (substring != "") {
-      substring += ", ";
-    }
-    return substring + "(" + req.body.TeamID + ", \'" + user.Username + "\')";
-  }, "");
-  var insertQuery = " INSERT INTO USER_IN_TEAM (TeamID, Username) VALUES " + valueSets;
-  console.log(insertQuery);
+  
   var transaction = database.createTransaction();
 
   new Promise(function(resolve,reject) {
-    database.executeQueryInTransaction(deleteQuery, transaction, req.body.TeamID, (error,rows,fields) => {
+    database.executeQueryInTransaction("SELECT ID FROM TEAM WHERE Name = ?", transaction, req.body.Name, (error,rows,fields) => {
       if (error) reject(error);
-      else resolve();
+      else  {
+        if (rows.length > 0) {
+          resolve(rows[0].ID);
+        } else {
+          reject("Invalid Team Name");
+        }
+      }
     });
-  }).then(() => {
+  }).then((TeamID) => {
+    return new Promise(function(resolve,reject) {
+      database.executeQueryInTransaction(deleteQuery, transaction, TeamID, (error,rows,fields) => {
+        if (error) reject(error);
+        else resolve(TeamID);
+      });
+    })   
+  }).then((TeamID) => {
+    var valueSets = req.body.Users.reduce(function(substring, user) {
+      if (substring != "") {
+        substring += ", ";
+      }
+      return substring + "(" + TeamID + ", \'" + user.Username + "\')";
+    }, "");
+    var insertQuery = " INSERT INTO USER_IN_TEAM (TeamID, Username) VALUES " + valueSets;
+    console.log(insertQuery);
     return new Promise(function(resolve,reject) {
       database.executeQueryInTransaction(insertQuery, transaction, (error,rows,fields) => {
         if (error) reject(error);
