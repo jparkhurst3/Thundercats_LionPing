@@ -147,7 +147,8 @@ class TeamMembers extends React.Component {
 
 
 		return (
-			<div class="form-group row pad">
+			<div class="container form-group row" style={{paddingTop: "20px"}}>
+				<h3>Users</h3>
 				<Select multi disabled={this.state.disabled} class="col-xs-10" name="user" clearable={false} value={mappedUsers} placeholder="Select User" options={mappedUserOptions} onChange={this.handleUsersChange} />
 				{buttons}
 			</div>
@@ -167,6 +168,19 @@ class SchedulePane extends React.Component {
 	componentDidMount() {
 		//get schedules
 		this.getSchedules()
+	}
+
+	handleCreateSchedule = (submitObj) => {
+		console.log("submitObj")
+		console.log(submitObj)
+		axios.post("/api/teams/createSchedule", submitObj)
+			.then(res => {
+				console.log("created new schedule")
+				this.getSchedules()
+			})
+			.catch(err => {
+				console.log(err)
+			})
 	}
 
 	getSchedules = () => {
@@ -323,6 +337,7 @@ class SchedulePane extends React.Component {
 					<CreateNewSchedule 
 						name="Add"
 						teamID={this.state.teamID}
+						handleCreateSchedule={this.handleCreateSchedule}
 					/>
 				</div>
 			</div>
@@ -351,10 +366,32 @@ class ScheduleTab extends React.Component {
 }
 
 class CreateNewSchedule extends React.Component {
+	constructor() {
+		super()
+		this.state = {
+			scheduleName: null,
+			teamID: 1
+		}
+	}
+
+	handleChange = (event) => {
+		this.setState({
+			scheduleName: event.target.value
+		})
+	}
+
+	handleClick = () => {
+		this.props.handleCreateSchedule(
+			{ TeamID:this.state.teamID, ScheduleName:this.state.scheduleName }
+		)
+	}
+
 	render() {
 		return (
 			<div className="tab-pane" id={this.props.name} role="tabpanel">
-				<h1>INSIDE CREATE new SChedlele</h1>
+				<h2>Create New Schedule</h2>
+				<input class="form-control" name="repeatType" placeholder="Schedule Name" type="text" onChange={this.handleChange} value={this.state.scheduleName}></input>
+				<input class=" btn" onClick={this.handleClick} value="Create Schedule"></input>
 			</div>
 		)
 	}

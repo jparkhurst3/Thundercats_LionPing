@@ -1,3 +1,5 @@
+/* @flow */
+
 import React from 'react';
 import ReactModal from 'react-modal'
 import {Link} from 'react-router'
@@ -6,15 +8,13 @@ import moment from 'moment'
 import "babel-polyfill";
 import Select from 'react-select-plus'
 
-
-
-export default class RotationModal extends React.Component {      
+export default class RotationModal extends React.Component {
   render () {
 	return (
 		<div>
-			<ReactModal 
+			<ReactModal
 				isOpen={this.props.updateItem || this.props.createItem}
-				contentLabel="Minimal Modal Example" 
+				contentLabel="Minimal Modal Example"
 				onRequestClose={this.props.onModalClose}
         		shouldCloseOnOverlayClick={true}
 				style={{
@@ -66,8 +66,8 @@ class RotationCard extends React.Component {
 					return {
 						value: {
 							Username: user.Username, FirstName: user.FirstName, LastName: user.LastName
-						}, 
-						label: user.FirstName + " " + user.LastName 
+						},
+						label: user.FirstName + " " + user.LastName
 					}
 				}),
 				start: moment(props.parentShift.Timestamp).format('YYYY-MM-DDTHH:mm'),
@@ -158,7 +158,7 @@ class RotationCard extends React.Component {
 
 	handleRepeatedChange = (event) => {
 		this.setState({
-			repeated: target.checked
+			repeated: event.target.checked
 		})
 	}
 
@@ -181,7 +181,7 @@ class RotationCard extends React.Component {
 		}
 
 		const mappedAllUsers = this.state.allUsers.map(user => {return {value: user, label: user.FirstName + " " + user.LastName}}) // map users names'
-		
+
 		return (
 			<div class="card">
 				<div class="card-header"><h3>Edit Rotation</h3></div>
@@ -219,7 +219,7 @@ class RotationCard extends React.Component {
 						</div>
 
 						<div class="form-group row">
-							{this.props.updateItem ? 
+							{this.props.updateItem ?
 								<div class="col-xs-10" style={{display: 'inline'}}>
 		                			<input type="button" value="Update Shift" class="btn" onClick={this.handleUpdate}></input>
 		                			<input type="button" value="Delete Shift" class="btn" onClick={this.handleDelete}></input>

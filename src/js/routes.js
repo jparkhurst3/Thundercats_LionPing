@@ -21,7 +21,7 @@ class Routes extends React.Component {
 			<Route path="/faq" component={FAQ} />
 			<Route path="/gettingstarted" component={GettingStarted} />
 			<Route path='/profile' component={Profile} />
-			
+
 			<Route path='/myservices' component={ServicePage} />
 			<Route path='/myservices/:service' component={ServicePage} />
 
