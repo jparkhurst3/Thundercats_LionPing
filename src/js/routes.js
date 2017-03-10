@@ -8,6 +8,7 @@ import ServicePage from './components/ServicePage.js'
 import ServicesList from './components/ServicesList.js'
 import TeamsList from './components/TeamsList.js'
 import Profile from './components/Profile'
+import LoginRegister from './components/LoginRegister.js'
 
 class Routes extends React.Component {
   render() {
@@ -27,6 +28,8 @@ class Routes extends React.Component {
 
 			<Route path='/myteams' component={TeamPage} />
 			<Route path='/myteams/:team' component={TeamPage} />
+
+			<Route path='/login' component={LoginRegister} />
 
 			<Route path='*' component={NotFound} />
 		  </Route>

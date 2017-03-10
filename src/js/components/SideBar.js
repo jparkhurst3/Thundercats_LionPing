@@ -52,6 +52,9 @@ export default class SideBar extends React.Component {
                 <li className="nav-item">
                     <Link className="nav-link" activeClassName="activeLink" to={'/MyTeams'}><h5>Teams</h5></Link>
                 </li>
+                <li className="nav-item">
+                    <Link className="nav-link" activeClassName="activeLink" to={'/Login'}><h5>Login/Register</h5></Link>
+                </li>
             </ul>
 
 
