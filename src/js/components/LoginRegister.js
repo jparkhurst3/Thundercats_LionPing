@@ -1,3 +1,5 @@
+/* flow */
+
 import React from 'react';
 var Select = require('react-select');
 import axios from 'axios'
