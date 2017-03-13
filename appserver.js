@@ -18,6 +18,29 @@ app.use(function(req, res, next) {
   next();
 });
 
+var passport = require('passport')
+  , LocalStrategy = require('passport-local').Strategy;
+
+passport.use(new LocalStrategy({
+    usernameField : 'Username',
+    passwordField : 'Password'
+  },
+  function(username, password, done) {
+    database.executeQuery("SELECT Username, Password FROM USER WHERE (Username=?)", username, (err, rows, fields) => {
+      if (err) { return done(err); }
+      if (rows.length == 0) {
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+      if (rows[0].Password != password) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+      return done(null, rows[0]);
+    });
+  }
+));
+
+app.use('^(?!\/Login$).*', require('connect-ensure-login').ensureLoggedIn('/Login'));
+
 app.use(express.static('build'));
 
 //support parsing of application/json type post data
@@ -25,6 +48,25 @@ app.use(bodyParser.json());
 
 //support parsing of application/x-www-form-urlencoded post data
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// app.post('/login', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login' }));
+
+passport.serializeUser(function(user, cb) {
+  cb(null, user.Username);
+});
+
+passport.deserializeUser(function(id, cb) {
+  database.executeQuery("SELECT Username, Password FROM USER WHERE (Username=?)", username, (err, rows, fields) => {
+    if (err) { return cb(err); }
+    return done(null, rows[0]);
+  });
+});
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+  
+app.post('/login', passport.authenticate('local', { successRedirect : '/', failureRedirect: '/Login' }));
 
 //api calls
 
@@ -112,7 +154,6 @@ app.get('/api/users/:id', function(req, res) {
   }
   res.send(users[req.params.id])
 });
-
 
 //last one for page refresh
 app.get('*', function(req, res) {
