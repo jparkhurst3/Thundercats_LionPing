@@ -1,3 +1,5 @@
+/* @flow */
+
 import React from 'react';
 var moment = require('moment');
 import axios from 'axios'
@@ -71,7 +73,7 @@ class SelectService extends React.Component {
 		// 	return {value: service, label: service} : [{value: this.props.service, label: this.props.service}]
 
 		const mappedAllServices = this.state.services ? [{
-			label: 'My Services', 
+			label: 'My Services',
 			options: this.state.services.map(service => { return {value: service, label: service} })
 		}] : [{value: this.props.service, label: this.props.service}]
 

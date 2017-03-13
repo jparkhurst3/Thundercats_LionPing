@@ -1,3 +1,5 @@
+/* @flow */
+
 import React from 'react';
 import axios from 'axios'
 import CreateTeamModal from './CreateTeamModal'
@@ -126,19 +128,19 @@ class TeamMembers extends React.Component {
 				return {
 					value: {
 						Username: user.Username, FirstName: user.FirstName, LastName: user.LastName
-					}, 
-					label: user.FirstName + " " + user.LastName 
-				}})	
+					},
+					label: user.FirstName + " " + user.LastName
+				}})
 
 		const mappedUsers = this.state.users.map(user => {
 			return {
 				value: {
 					Username: user.Username, FirstName: user.FirstName, LastName: user.LastName
-				}, 
-				label: user.FirstName + " " + user.LastName 
+				},
+				label: user.FirstName + " " + user.LastName
 			}})
 
-		const buttons = this.state.disabled ? 
+		const buttons = this.state.disabled ?
 			<input class="btn" onClick={this.handleUserEditClick} value="Edit Users" /> :
 			<div>
 				<input class="btn" onClick={this.handleUserEditClick} value="Cancel" />
@@ -303,11 +305,11 @@ class SchedulePane extends React.Component {
 		}
 
 		const mappedTabs = this.state.schedules.map((schedule, key) =>
-			<ScheduleTab active={key == 1} name={schedule.ScheduleName} handleScheduleChange={this.handleScheduleChange} />
+			<ScheduleTab active={key == 1} name={schedule.ScheduleName} />
 		)
-		const mappedData = this.state.schedules.map((schedule, key) => 
-			<ScheduleData 
-				name={schedule.ScheduleName} 
+		const mappedData = this.state.schedules.map((schedule, key) =>
+			<ScheduleData
+				name={schedule.ScheduleName}
 				teamID={this.state.teamID}
 				schedule={schedule}
 
@@ -334,7 +336,7 @@ class SchedulePane extends React.Component {
 				</ul>
 				<div class="tab-content">
 					{mappedData}
-					<CreateNewSchedule 
+					<CreateNewSchedule
 						name="Add"
 						teamID={this.state.teamID}
 						handleCreateSchedule={this.handleCreateSchedule}
@@ -419,8 +421,8 @@ class ScheduleData extends React.Component {
 		return {
 			id: null,
 			group: 3,
-			title: shift.Username, 
-			start_time: moment(shift.Timestamp), 
+			title: shift.Username,
+			start_time: moment(shift.Timestamp),
 			end_time: moment(shift.Timestamp).add(shift.Duration, 'minutes'),
 			itemProps: {
 				parentShift: shift
@@ -442,9 +444,9 @@ class ScheduleData extends React.Component {
 		return [...Array(num)].map((_, key) => {
 			return {
 				id: null,
-				group: 2, 
-				title: shift.Username, 
-				start_time: moment(shift.Timestamp).add(key, adder), 
+				group: 2,
+				title: shift.Username,
+				start_time: moment(shift.Timestamp).add(key, adder),
 				end_time: moment(shift.Timestamp).add(key, adder).add(shift.Duration, 'minutes'),
 				itemProps: {
 					parentShift: shift
@@ -468,7 +470,7 @@ class ScheduleData extends React.Component {
 				id: null,
 				group: 1,
 				title: shift.Users[key % shift.Users.length].Username, //rotates through users
-				start_time: moment(shift.Timestamp).add(key, adder), 
+				start_time: moment(shift.Timestamp).add(key, adder),
 				end_time: moment(shift.Timestamp).add(key, adder).add(shift.Duration, 'minutes'),
 				itemProps: {
 					parentShift: shift
@@ -503,7 +505,7 @@ class ScheduleData extends React.Component {
 			clickedID: itemID,
 			clickedParentShift: parentShift,
 		})
-		
+
 		if (parentShift.Users) { // rotation has users
 			console.log("has users so set rotation")
 			this.setState({
@@ -609,7 +611,7 @@ class ScheduleData extends React.Component {
 					/>
 
 
-					{this.state.updateOverrideItem || this.state.createOverrideItem ? 
+					{this.state.updateOverrideItem || this.state.createOverrideItem ?
 						<OverrideModal
 							name={this.props.name}
 							teamID={this.props.teamID}
@@ -620,11 +622,11 @@ class ScheduleData extends React.Component {
 							name={this.props.name}
 							onModalClose={this.onModalClose}
 							createItem={this.state.createOverrideItem}
-							updateItem={this.state.updateOverrideItem} 
+							updateItem={this.state.updateOverrideItem}
 							createStart={this.state.createStart} />
 						: <div></div>
 					}
-					{this.state.updateManualItem || this.state.createManualItem ? 
+					{this.state.updateManualItem || this.state.createManualItem ?
 						<ManualModal
 							name={this.props.name}
 							teamID={this.props.teamID}
@@ -635,11 +637,11 @@ class ScheduleData extends React.Component {
 							name={this.props.name}
 							onModalClose={this.onModalClose}
 							createItem={this.state.createManualItem}
-							updateItem={this.state.updateManualItem} 
+							updateItem={this.state.updateManualItem}
 							createStart={this.state.createStart} />
 						: <div></div>
 					}
-					{this.state.updateRotationItem || this.state.createRotationItem ? 
+					{this.state.updateRotationItem || this.state.createRotationItem ?
 						<RotationModal
 							name={this.props.name}
 							teamID={this.props.teamID}
@@ -650,11 +652,11 @@ class ScheduleData extends React.Component {
 							name={this.props.name}
 							onModalClose={this.onModalClose}
 							createItem={this.state.createRotationItem}
-							updateItem={this.state.updateRotationItem} 
+							updateItem={this.state.updateRotationItem}
 							createStart={this.state.createStart} />
 						: <div></div>
 					}
-					
+
 			</div>
 		)
 	}
