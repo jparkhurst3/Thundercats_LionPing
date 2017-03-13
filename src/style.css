@@ -157,8 +157,17 @@ tr:selected {
   margin-bottom: 20px;
 }
 
-.sidebar .nav-item {
+.sidebar .nav-title {
   width: 100%;
+}
+
+.sidebar .nav-item {
+  float: left;
+  display: inline-block;
+}
+
+.sidebar .nav-img {
+  float: left;
 }
 
 .sidebar .nav-item + .nav-item {
@@ -166,6 +175,7 @@ tr:selected {
 }
 
 .sidebar .nav-link {
+  display: inline-block;
   border-radius: 0;
 }
 
