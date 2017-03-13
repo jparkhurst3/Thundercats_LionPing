@@ -4,8 +4,11 @@ import axios from 'axios'
 import Select from 'react-select';
 
 export default class EscalationTable extends React.Component {
-    constructor(props) {
-        super(props)
+  state: {
+
+  }
+    constructor() {
+        super()
         this.state = {
             policyID: null,
             layers: null,
@@ -29,7 +32,7 @@ export default class EscalationTable extends React.Component {
                 const sortedLayers = res.data.Layers.sort((a,b) => a.Level - b.Level)
                 console.log('ID::: ', res.data.ID)
                 this.setState({
-                    policyID: res.data.ID, 
+                    policyID: res.data.ID,
                     layers: sortedLayers,
                     oldLayers: JSON.parse(JSON.stringify(sortedLayers))
                 })
@@ -142,13 +145,13 @@ export default class EscalationTable extends React.Component {
     render() {
         const mappedLayers = (this.state.layers && this.state.allSchedules && this.state.allUsers) ? this.state.layers.map((layer, index) => {
             return (
-                <EscalationLayer 
-                    key={index} 
-                    index={index} 
-                    disabled={this.state.disabled} 
-                    layer={layer} 
-                    handleLayerChange={this.handleLayerChange} 
-                    deleteLayer={this.deleteLayer} 
+                <EscalationLayer
+                    key={index}
+                    index={index}
+                    disabled={this.state.disabled}
+                    layer={layer}
+                    handleLayerChange={this.handleLayerChange}
+                    deleteLayer={this.deleteLayer}
                     allUsers={this.state.allUsers}
                     allSchedules={this.state.allSchedules}
                     />
@@ -156,7 +159,7 @@ export default class EscalationTable extends React.Component {
             }
         ) : <tr><td>loading</td></tr>
 
-        const buttons = this.state.disabled ? 
+        const buttons = this.state.disabled ?
             <input type="button" value="Edit" class="btn" onClick={this.toggleEdit}></input> :
             <div>
                 <input type="button" value="Cancel" class="btn" onClick={this.handleCancel}></input>
