@@ -11,6 +11,16 @@ var database = require('./database/database.js');
 
 var slack = require('./notifications/slack/slack.js');
 
+//support parsing of application/json type post data
+app.use(bodyParser.json());
+
+app.use(require('cookie-parser')());
+
+//support parsing of application/x-www-form-urlencoded post data
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
+
 //middleware
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -26,47 +36,63 @@ passport.use(new LocalStrategy({
     passwordField : 'Password'
   },
   function(username, password, done) {
+    console.log('working');
     database.executeQuery("SELECT Username, Password FROM USER WHERE (Username=?)", username, (err, rows, fields) => {
-      if (err) { return done(err); }
+      if (err) { 
+        console.log("error");
+        return done(err); 
+      }
       if (rows.length == 0) {
+        console.log("user not found");
         return done(null, false, { message: 'Incorrect username.' });
       }
       if (rows[0].Password != password) {
+        console.log("incorrect password");
         return done(null, false, { message: 'Incorrect password.' });
       }
+      console.log("success");
       return done(null, rows[0]);
     });
   }
 ));
-
-app.use('^(?!\/Login$).*', require('connect-ensure-login').ensureLoggedIn('/Login'));
-
-app.use(express.static('build'));
-
-//support parsing of application/json type post data
-app.use(bodyParser.json());
-
-//support parsing of application/x-www-form-urlencoded post data
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// app.post('/login', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login' }));
-
+  
 passport.serializeUser(function(user, cb) {
   cb(null, user.Username);
 });
 
-passport.deserializeUser(function(id, cb) {
+passport.deserializeUser(function(username, cb) {
   database.executeQuery("SELECT Username, Password FROM USER WHERE (Username=?)", username, (err, rows, fields) => {
     if (err) { return cb(err); }
-    return done(null, rows[0]);
+    return cb(null, rows[0]);
   });
 });
 
 
+
 app.use(passport.initialize());
 app.use(passport.session());
-  
-app.post('/login', passport.authenticate('local', { successRedirect : '/', failureRedirect: '/Login' }));
+
+app.use('/api', require('connect-ensure-login').ensureLoggedIn());
+
+app.use(express.static('build'));
+
+
+
+app.post('/auth/login', passport.authenticate('local'), function(req, res) {
+  console.log("callback to login");
+  res.setHeader('Content-Type', 'text/plain');
+  res.statusCode = 200;
+  var result = {
+    success : true
+  }
+  res.send(JSON.stringify(result));
+});
+
+app.get('/auth/logout',
+  function(req, res){
+    req.logout();
+    res.redirect('/Login');
+  });
 
 //api calls
 

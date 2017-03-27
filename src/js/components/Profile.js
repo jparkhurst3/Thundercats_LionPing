@@ -2,6 +2,7 @@
 
 import React from 'react'
 import NotificationCard from './Home/NotificationCard'
+import axios from 'axios'
 
 export default class Profile extends React.Component {
     render() {
@@ -24,6 +25,17 @@ export default class Profile extends React.Component {
 }
 
 class ProfileInfoCard extends React.Component {
+    handleLogout = () => {
+        debugger;
+        console.log("here");
+        axios.get('/auth/logout')
+            .then(res => {
+                console.log("logged out");
+            })
+            .catch(err => {
+                console.log(err)
+            });
+    }
     render() {
         return (
             <div class="card">
@@ -34,6 +46,7 @@ class ProfileInfoCard extends React.Component {
                     <span class="card-text"><h5>Name: Sam Ford </h5></span>
                     <span class="card-text"><h5>Username: sford34</h5></span>
                     <span class="card-text"><h5>Change password ? </h5></span>
+                    <button class="btn" onClick={this.handleLogout}>Logout</button>
                 </div>
             </div>
         )
