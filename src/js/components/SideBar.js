@@ -39,7 +39,7 @@ export default class SideBar extends React.Component {
         <div className="col-xs-2 bg-inverse sidebar">
             <ul className="nav nav-pills flex-column">
                 <li className="nav-item">
-                    <Link className="nav-link" activeClassName="activeLink" to={'/'}><h2 style={{'fontFamily': 'Droid Serif', "color": "gold"}}>LION PING</h2></Link>
+                    <Link className="nav-link" activeClassName="activeLink" to={'/'}><h2 style={{'fontFamily': 'Playfair Display', "color": "#D4A461"}}>LION PING</h2></Link>
                 </li>
                 <li className="nav-item">
                     <div>
