@@ -1,72 +1,11 @@
 /*
- * Base structure
+ * BASE STYLING - START
  */
 
-/* Move down content because we have a fixed navbar that is 50px tall */
-
-
-/*
- * Typography
- */
-
-/*h1 {
-  margin-bottom: 20px;
-  padding-bottom: 9px;
-  border-bottom: 1px solid #eee;
-}*/
-
-
-.react-calendar-timeline .rct-items .rct-item.analysis {
-  background: gold;
-}
-
-/* bootstrap hack: fix content width inside hidden tabs */
-.tab-content > .tab-pane:not(.active),
-.pill-content > .pill-pane:not(.active) {
-    display: block;
-    height: 0;
-    overflow-y: hidden;
-} 
-/* bootstrap hack end */
-
-.rct-sidebar-header {
-  background: gold !important; 
-}
-
-.rct-label-group {
-  background: gold !important; 
-}
-
-/*
-sidebar links
-*/
-.sidebar a {
-  color: white;
-}
-
-.active-row {
-  background-color: lightgray;
-}
-
-a:focus {
-  outline: none;
-    text-decoration: none
-
-}
-
-.changeArrow:hover {
-  color: gold;
-  cursor: pointer;
-}
-
-.sidebar a:hover, .sidebar a:focus {
-  color: gold;
+h5 {
   text-decoration: none
-  outline: none;
-}
-
-.sidebar h5 {
-  text-decoration: none
+  font-family: 'Roboto', sans-serif;
+  color: green;
 }
 
 a:hover {
@@ -114,12 +53,15 @@ tr:selected {
 }
 
 .btn {
-  background-color: gold;
+  background-color: #E6E6DF0;
 }
 
+/*
+ * BASE STYLING - END
+ */
 
 /*
- * Sidebar
+ * SIDEBAR - START
  */
 
 .sidebar {
@@ -132,19 +74,14 @@ tr:selected {
   border-right: 1px solid #eee;
 }
 
-.nav-link {
-  display: inline-block;
+.sidebar a {
+  color: white;
+  font-family: 'Roboto', sans-serif;
 }
 
-
-.footer {
-  position: absolute;
-  top:92vh;
-  bottom: 0vh;
-  width: 100%;
-  /* Set the fixed height of the footer here */
-  height: 60px;
-  line-height: 60px; /* Vertically center the text there */
+.sidebar h2 {
+  font-family: 'Playfair Display', serif;
+  color: #D4A461;
 }
 
 /* Sidebar navigation */
@@ -179,9 +116,51 @@ tr:selected {
   border-radius: 0;
 }
 
+.nav-link {
+  display: inline-block;
+}
+
+.footer {
+  position: absolute;
+  top:92vh;
+  bottom: 0vh;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  line-height: 60px; /* Vertically center the text there */
+}
+.rct-sidebar-header {
+  background: #DDB680 !important; 
+}
+
+.rct-label-group {
+  background: #DDB680 !important; 
+}
+
+.changeArrow:hover {
+  color: #DDB680;
+  cursor: pointer;
+}
+
+.sidebar a:hover, .sidebar a:focus {
+  color: #DDB680;
+  text-decoration: none
+  outline: none;
+}
+
 /*
- * Dashboard
+ * SIDEBAR - END
  */
+
+
+/*
+ * HOME - START
+ */
+
+/*Dashboard*/
+.active-row {
+  background-color: #A5A5A5;
+}
 
  /* Placeholders */
 .placeholders {
@@ -192,3 +171,43 @@ tr:selected {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
 }
+
+/*
+ * HOME - END
+ */
+
+/*
+ * IDK - START
+ */
+
+/*a:focus {
+  outline: none;
+    text-decoration: none
+}
+*/
+
+/*
+ * IDK - END
+ */
+
+
+/*
+ * CALENDAR - START
+ */
+
+.react-calendar-timeline .rct-items .rct-item.analysis {
+  background: gold;
+}
+
+/* bootstrap hack: fix content width inside hidden tabs */
+.tab-content > .tab-pane:not(.active),
+.pill-content > .pill-pane:not(.active) {
+    display: block;
+    height: 0;
+    overflow-y: hidden;
+} 
+/* bootstrap hack end */
+
+/*
+ * CALENDAR - END
+ */
