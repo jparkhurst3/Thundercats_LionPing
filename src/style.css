@@ -19,27 +19,27 @@ a:hover {
 }
 
 nav a {
-  color: gold;
+  color: #D4A461;
 }
 
 .activeLink {
-  color: gold;
+  color: #D4A461;
 }
 
 a:hover {
-  color: gold;
+  color: #D4A461;
     text-decoration: none
 
 }
 
 a:focus {
-  color: gold;
+  color: #D4A461;
     text-decoration: none
 
 }
 
 a:active {
-  color: gold;
+  color: #D4A461;
     text-decoration: none
 
 }
@@ -49,11 +49,11 @@ a {
 }
 
 tr:selected {
-  background-color: gold;
+  background-color: #D4A461;
 }
 
 .btn {
-  background-color: #E6E6DF0;
+  background-color: #E6EDF0;
 }
 
 /*
