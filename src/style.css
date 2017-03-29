@@ -14,6 +14,11 @@ a:hover {
 
 }
 
+.btn {
+  background-color: #D4A461;
+  color:white;
+}
+
 .nav a {
   display: block;
 }
@@ -52,9 +57,9 @@ tr:selected {
   background-color: #D4A461;
 }
 
-.btn {
+/*.btn {
   background-color: #E6EDF0;
-}
+}*/
 
 /*
  * BASE STYLING - END
@@ -130,11 +135,11 @@ tr:selected {
   line-height: 60px; /* Vertically center the text there */
 }
 .rct-sidebar-header {
-  background: #DDB680 !important; 
+  background: #DDB680 !important;
 }
 
 .rct-label-group {
-  background: #DDB680 !important; 
+  background: #DDB680 !important;
 }
 
 .changeArrow:hover {
@@ -205,7 +210,7 @@ tr:selected {
     display: block;
     height: 0;
     overflow-y: hidden;
-} 
+}
 /* bootstrap hack end */
 
 /*

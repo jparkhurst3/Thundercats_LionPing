@@ -6,11 +6,6 @@ import ToolTip from 'react-portal-tooltip'
 import CreateServiceModal from './CreateServiceModal'
 import CreateTeamModal from './CreateTeamModal'
 
-/*
-need to decide which option we want
-I like the simple version
-Should this switch so the Link and Tooltips can be combined to make it simpler?
-*/
 export default class SideBar extends React.Component {
     constructor(props) {
         super(props)

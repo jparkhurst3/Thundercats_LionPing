@@ -11,6 +11,7 @@ import ServicesList from './components/ServicesList.js'
 import TeamsList from './components/TeamsList.js'
 import Profile from './components/Profile'
 import LoginRegister from './components/LoginRegister.js'
+import PingResponse from './components/PingResponse.js'
 
 class Routes extends React.Component {
   render() {
@@ -19,7 +20,9 @@ class Routes extends React.Component {
 		<Router history={browserHistory}>
 		  <Route path='/' component={Container}>
 			<IndexRoute component={Home} />
+
 			<Route path="/pings" component={Pings} />
+      <Route path="/pings/:id" component={PingResponse} />
 
 			<Route path="/faq" component={FAQ} />
 			<Route path="/gettingstarted" component={GettingStarted} />
