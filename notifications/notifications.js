@@ -1,9 +1,31 @@
 var slack = require('./slack/slack.js');
 var moment = require('moment');
+var twilio = require('twilio');
+var config = require('config');
 
 var notifyUser = function(username) {
 	//get user notification preferences
 	//use appropriate notification tool to send notification
+}
+
+var sendText = function(number, message) {
+	// var accountSid = 'AC25242c1a6c1f8c6792ffbe3fd2571264'; // Your Account SID from www.twilio.com/console
+	// var authToken = '70607d01451bd9d277dc0d8d8d763abc';   // Your Auth Token from www.twilio.com/console
+	var twilioConfig = config.get('twilio');
+	var client = new twilio.RestClient(twilioConfig.accountSid, twilioConfig.authToken);
+
+	client.messages.create({
+	    body: message,
+	    to: number,  // Text this number
+	    from: twilioConfig.phoneNumber// From a valid Twilio number
+	}, function(err, message) {
+	  if (err) {
+	    console.log(err);
+	    
+	  } else {
+	    console.log(message.sid);
+	  }
+	});
 }
 
 var notifySchedule = function(schedule) {
@@ -62,5 +84,6 @@ var getRelevantRepeatedShiftMoment = function(shift) {
 
 module.exports = {
 	notifyUser : notifyUser,
-	notifySchedule : notifySchedule
+	notifySchedule : notifySchedule,
+	sendText : sendText
 }

@@ -11,6 +11,14 @@ var database = require('./database/database.js');
 
 var slack = require('./notifications/slack/slack.js');
 
+//support parsing of application/json type post data
+app.use(bodyParser.json());
+
+app.use(require('cookie-parser')());
+
+//support parsing of application/x-www-form-urlencoded post data
+app.use(bodyParser.urlencoded({ extended: true }));
+
 //middleware
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -19,12 +27,6 @@ app.use(function(req, res, next) {
 });
 
 app.use(express.static('build'));
-
-//support parsing of application/json type post data
-app.use(bodyParser.json());
-
-//support parsing of application/x-www-form-urlencoded post data
-app.use(bodyParser.urlencoded({ extended: true }));
 
 //api calls
 
@@ -49,6 +51,9 @@ app.post('/api/services/updateEscalationPolicy', services.updateEscalationPolicy
 var pings = require('./rest/pings');
 app.get('/api/pings/getPingsForService', pings.getPingsForService);
 app.post('/api/pings/createPing', pings.createPing);
+app.get('/api/pings/getPing', pings.getPing);
+app.post('/api/pings/acknowledgePing', pings.acknowledgePing);
+app.post('/api/pings/resolvePing', pings.resolvePing);
 
 //Users
 var users = require('./rest/users');
@@ -112,7 +117,6 @@ app.get('/api/users/:id', function(req, res) {
   }
   res.send(users[req.params.id])
 });
-
 
 //last one for page refresh
 app.get('*', function(req, res) {

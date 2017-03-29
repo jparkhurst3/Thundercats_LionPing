@@ -33,9 +33,54 @@ var createPing = function(req, res) {
   })
 }
 
+var getPing = function(req, res) { //get ping by id
+  res.setHeader('Content-Type', 'text/plain');
+  database.executeQuery('SELECT * FROM PING WHERE ID=?', req.query.ID, (error, rows, fields) => {
+    if (error || rows.length == 0) {
+      console.log(error)
+      res.statusCode = 500;
+      res.end("error");
+    } else {
+      res.statusCode = 200;
+      res.send(JSON.stringify(rows[0]));
+    }
+  });
+}
 
+var acknowledgePing = function(req, res) { //acknowledge ping by id
+  res.setHeader('Content-Type', 'text/plain');
+
+  database.executeQuery('UPDATE PING SET Status = "Acknowledged" WHERE ID=?', req.query.ID, (error, rows, fields) => {
+    if (error) {
+      console.log(error);
+      res.statusCode = 500;
+      res.end("error");
+    } else {
+      res.statusCode = 200;
+      res.send("success");
+    }
+  })
+}
+
+var resolvePing = function(req, res) { //resolve ping by id
+  res.setHeader('Content-Type', 'text/plain');
+
+  database.executeQuery('UPDATE PING SET Status = "Resolved" WHERE ID=?', req.query.ID, (error, rows, fields) => {
+    if (error) {
+      console.log(error);
+      res.statusCode = 500;
+      res.end("error");
+    } else {
+      res.statusCode = 200;
+      res.send("success");
+    }
+  })
+}
 
 module.exports = {
 	getPingsForService : getPingsForService,
-	createPing : createPing
+	createPing : createPing,
+  getPing : getPing,
+  resolvePing : resolvePing,
+  acknowledgePing : acknowledgePing
 }

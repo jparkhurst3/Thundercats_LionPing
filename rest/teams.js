@@ -46,9 +46,9 @@ var getUsersOnTeam = function(req, res) {
 } 
 
 /**
-*
-*
-*
+* service for updating the users that are part of team
+* params: Name: team name, Users: list of users (objects including field Username)
+* returns: none
 */
 
 var updateUsersOnTeam = function(req, res) {
