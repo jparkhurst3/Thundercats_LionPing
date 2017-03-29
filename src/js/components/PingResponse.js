@@ -11,6 +11,10 @@ export default class PingResponse extends React.Component {
   }
 
   componentDidMount() {
+    this.getPing()
+  }
+
+  getPing = () => {
     axios.get("/api/pings/getPing?ID=" + this.props.params.id)
       .then(res => {
         console.log(res)
@@ -29,9 +33,7 @@ export default class PingResponse extends React.Component {
       .then(res => {
         console.log("acknowledged")
         this.state.pingData.Status = "Acknowledged"
-        this.setState({
-          pingData: this.state.pingData
-        })
+        this.getPing()
       })
       .catch(err => {
         console.log(err)
@@ -43,10 +45,7 @@ export default class PingResponse extends React.Component {
     axios.post("/api/pings/resolvePing?ID="+this.props.params.id)
       .then(res => {
         console.log("resolved")
-        this.state.pingData.Status = "Resolved"
-        this.setState({
-          pingData: this.state.pingData
-        })
+        this.getPing();
       })
       .catch(err => {
         console.log(err)
@@ -62,26 +61,34 @@ export default class PingResponse extends React.Component {
       )
     }
 
+    let button = null;
+    if (this.state.pingData.Status == "Open") {
+      button = <div><input class="btn" name="acknowledge" value="Acknowledge Ping" onClick={this.acknowledgePing} /></div>
+    } else if (this.state.pingData.Status == "Acknowledged") {
+      button = <div><input class="btn" hidden={this.state.pingData.Status == "Resolved" } name="resolve" value="Resolve Ping" onClick={this.resolvePing} /></div>
+    } else {
+      button = null;
+    }
 
     return (
       <div class="container">
         <h1>Respond to Ping</h1>
         <div>
-          <p>Date created: {moment(this.state.pingData.CreatedTime).calendar()}</p>
-          <p>Service: {this.state.pingData.ServiceName}</p>
-          <p>Ping Name: {this.state.pingData.Name}</p>
-          <p>Description: {this.state.pingData.Description}</p>
-          <p>Status: {this.state.pingData.Status}</p>
-        </div>
+          <p><strong>Date created:</strong> {moment(this.state.pingData.CreatedTime).calendar()}</p>
+          <p><strong>Created By:</strong> {this.state.pingData.CreatedUser}</p>
+          <p><strong>Service:</strong> {this.state.pingData.ServiceName}</p>
+          <p><strong>Ping Name:</strong> {this.state.pingData.Name}</p>
+          <p><strong>Description:</strong> {this.state.pingData.Description}</p>
+          <p><strong>Status:</strong> {this.state.pingData.Status}</p>
+          <p><strong>Acknowledged User:</strong> {this.state.pingData.AcknowledgedUser}</p>
+          <p><strong>Date Acknowledged:</strong> {moment(this.state.pingData.AcknowledgedTime).calendar()}</p>
+          <p><strong>Resolved User:</strong> {this.state.pingData.ResolvedUser}</p>
+          <p><strong>Date Resolved:</strong> {moment(this.state.pingData.ResolvedTime).calendar()}</p>
 
-        <div>
-          <input class="btn" hidden={this.state.pingData.Status == "Acknowledged" || this.state.pingData.Status == "Resolved"} name="acknowledge" value="Acknowledge Ping" onClick={this.acknowledgePing} />
-        </div>
-
-        <div>
-          <input class="btn" hidden={this.state.pingData.Status == "Resolved"} name="resolve" value="Resolve Ping" onClick={this.resolvePing} />
 
         </div>
+
+        {button}
 
         <a href="http://localhost:8080" >Go to site</a>
       </div>
