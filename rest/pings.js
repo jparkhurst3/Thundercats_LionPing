@@ -54,7 +54,7 @@ var getPing = function(req, res) { //get ping by id
 var acknowledgePing = function(req, res) { //acknowledge ping by id
   res.setHeader('Content-Type', 'text/plain');
 
-  database.executeQuery('UPDATE PING SET Status = "Acknowledged" WHERE ID=?', req.query.ID, (error, rows, fields) => {
+  database.executeQuery('UPDATE PING SET Status = "Acknowledged", AcknowledgedTime=NOW() WHERE ID=?', req.query.ID, (error, rows, fields) => {
     if (error) {
       console.log(error);
       res.statusCode = 500;
@@ -69,7 +69,7 @@ var acknowledgePing = function(req, res) { //acknowledge ping by id
 var resolvePing = function(req, res) { //resolve ping by id
   res.setHeader('Content-Type', 'text/plain');
 
-  database.executeQuery('UPDATE PING SET Status = "Resolved" WHERE ID=?', req.query.ID, (error, rows, fields) => {
+  database.executeQuery('UPDATE PING SET Status = "Resolved", ResolvedTime=NOW() WHERE ID=?', req.query.ID, (error, rows, fields) => {
     if (error) {
       console.log(error);
       res.statusCode = 500;
