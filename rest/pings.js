@@ -35,7 +35,7 @@ var createPing = function(req, res) {
 
 var getPing = function(req, res) { //get ping by id
   res.setHeader('Content-Type', 'text/plain');
-  database.executeQuery('SELECT * FROM PING WHERE ID=?', req.query.ID, (error, rows, fields) => {
+  database.executeQuery('SELECT p.ID, p.ServiceID, s.Name as ServiceName, p.Name, p.Description, p.Status, p.CreatedTime FROM PING p JOIN SERVICE s ON (s.ID = p.ServiceID) WHERE p.ID=?', req.query.ID, (error, rows, fields) => {
     if (error || rows.length == 0) {
       console.log(error)
       res.statusCode = 500;
