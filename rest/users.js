@@ -39,9 +39,25 @@ var createUser = function(req, res) {
   })
 };
 
+var getUser = function(req,res) {
+  res.setHeader('Content-Type', 'text/plain');
+
+  var getPingQuery = 'SELECT * FROM USER WHERE Username=? ';
+  database.executeQuery(getPingQuery, req.query.Username, (error, rows, fields) => {
+    if (error || rows.length == 0) {
+      console.log(error)
+      res.statusCode = 500;
+      res.end("error");
+    } else {
+      res.statusCode = 200;
+      res.send(JSON.stringify(rows[0]));
+    }
+  });
+}
 
 
 module.exports = {
   getUsers : getUsers,
-  createUser : createUser
+  createUser : createUser,
+  getUser : getUser
 }

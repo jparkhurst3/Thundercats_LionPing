@@ -59,6 +59,7 @@ app.post('/api/pings/resolvePing', pings.resolvePing);
 var users = require('./rest/users');
 app.get('/api/users/getUsers', users.getUsers);
 app.post('/api/users/createUser', users.createUser);
+app.get('/api/users/getUser', users.getUser);
 
 //Teams
 var teams = require('./rest/teams');

@@ -1,8 +1,8 @@
-INSERT INTO USER VALUES ('sford', 'sam_is_great', 'Sam', 'Ford', 'sford3@gatech.edu', '555-555-5555');
-INSERT INTO USER VALUES ('cclegg', 'chris_is_great', 'Chris', 'Clegg', 'cclegg3@gatech.edu', '555-555-5555');
-INSERT INTO USER VALUES ('hkim', 'hokeun_is_great', 'Ho Keun', 'Kim', 'hkim3@gatech.edu', '555-555-5555');
-INSERT INTO USER VALUES ('jparkhurst', 'joanna_is_great', 'Joanna', 'Parkhurst', 'jparkhurst3@gatech.edu', '555-555-5555');
-INSERT INTO USER VALUES ('zhancock', 'zack_is_great', 'Zack', 'Hancock', 'zhancock3@gatech.edu', '555-555-5555');
+INSERT INTO USER (Username, Password, FirstName, LastName, Email, Phone) VALUES ('sford', 'sam_is_great', 'Sam', 'Ford', 'sford3@gatech.edu', '555-555-5555');
+INSERT INTO USER (Username, Password, FirstName, LastName, Email, Phone) VALUES ('cclegg', 'chris_is_great', 'Chris', 'Clegg', 'cclegg3@gatech.edu', '555-555-5555');
+INSERT INTO USER (Username, Password, FirstName, LastName, Email, Phone) VALUES ('hkim', 'hokeun_is_great', 'Ho Keun', 'Kim', 'hkim3@gatech.edu', '555-555-5555');
+INSERT INTO USER (Username, Password, FirstName, LastName, Email, Phone) VALUES ('jparkhurst', 'joanna_is_great', 'Joanna', 'Parkhurst', 'jparkhurst3@gatech.edu', '555-555-5555');
+INSERT INTO USER (Username, Password, FirstName, LastName, Email, Phone) VALUES ('zhancock', 'zack_is_great', 'Zack', 'Hancock', 'zhancock3@gatech.edu', '555-555-5555');
 
 INSERT INTO SERVICE (Name) VALUES ('Database');
 INSERT INTO SERVICE (Name) VALUES ('UI');
