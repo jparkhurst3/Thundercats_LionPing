@@ -140,8 +140,16 @@ CREATE TABLE PING (
     Description     VARCHAR(500),
     Status			VARCHAR(20)		NOT NULL,
     CreatedTime	    TIMESTAMP		DEFAULT CURRENT_TIMESTAMP,
+    CreatedUser		VARCHAR(25),
+    AcknowledgedTime TIMESTAMP,
+    AcknowledgedUser VARCHAR(25),
+    ResolvedTime	TIMESTAMP,
+    ResolvedUser	VARCHAR(25),
     PRIMARY KEY (ID),
-    FOREIGN KEY (ServiceID) REFERENCES SERVICE(ID) ON DELETE CASCADE
+    FOREIGN KEY (ServiceID) REFERENCES SERVICE(ID) ON DELETE CASCADE,
+    FOREIGN KEY (CreatedUser) REFERENCES USER(Username),
+    FOREIGN KEY (AcknowledgedUser) REFERENCES USER(Username),
+    FOREIGN KEY (ResolvedUser) REFERENCES USER(Username)
 );
 
 
