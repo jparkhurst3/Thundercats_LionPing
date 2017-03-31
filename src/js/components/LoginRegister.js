@@ -15,16 +15,30 @@ export default class LoginRegister extends React.Component {
 
     render() {
         return (
-            <div className="container">
-                <form>
-                    <div class="form-group">
-                        <h1>Welcome to Lion Ping!</h1>
+
+            <div class="container">
+                <h1>Welcome to Lion Ping!</h1>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <LoginCard />
+                    </div>
+                </div>
+            </div>
+        )
+    }
+}
+
+
+class LoginCard extends React.Component {
+    render() {
+        return (
+            <div class="card">
+                <div class="card-block">
                         <input type="text" class="form-control" id="uname" placeholder="Username" />
                         <input type="password" class="form-control" id="passw" placeholder="Password" />
                         <button type="login" class="btn">Login</button>
                         <button type="register" class="btn">Register</button>
-                    </div>
-                </form>
+                </div>
             </div>
         )
     }
