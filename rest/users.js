@@ -1,4 +1,4 @@
-var database = require('../database/database.js');
+var userService = require('../service/users.js');
 
 /**
 * Service for getting list of all users
@@ -7,16 +7,14 @@ var database = require('../database/database.js');
 */
 var getUsers = function(req, res) {
   res.setHeader('Content-Type', 'text/plain');
-  database.executeQuery('SELECT Username,FirstName,LastName FROM USER', (error, rows, fields) => {
-    if (error) {
-      console.log(error)
-      res.statusCode = 500;
-      res.end("error");
-    } else {
-      res.statusCode = 200;
-      res.send(JSON.stringify(rows));
-    }
-  })
+  userService.getUsers().then(function(users) {
+    res.statusCode = 200;
+    res.send(users);
+  }).catch(function(error) {
+    console.log(error);
+    res.statusCode = 500;
+    res.end(error);
+  });
 };
 
 /**
@@ -26,32 +24,42 @@ var getUsers = function(req, res) {
 */
 var createUser = function(req, res) {
   res.setHeader('Content-Type', 'text/plain');
-  var queryParams = [req.body.Username,req.body.Password,req.body.FirstName,req.body.LastName];
-  database.executeQuery('INSERT INTO USER SET Username=?, Password=?, FirstName=?, LastName=?', queryParams, (error, rows, fields) => {
-    if (error) {
-      console.log(error)
-      res.statusCode = 500;
-      res.end("error");
-    } else {
-      res.statusCode = 200;
-      res.send(String(rows.insertId));
-    }
-  })
+  userService.createUser(req.body).then(function(newUserID) {
+    res.statusCode = 200;
+    res.send(JSON.stringify(newUserID));
+  }).catch(function(error) {
+    console.log(error);
+    res.statusCode = 500;
+    res.end(error);
+  });
 };
 
 var getUser = function(req,res) {
   res.setHeader('Content-Type', 'text/plain');
+  userService.getUser(req.query.Username).then(function(user) {
+    res.statusCode = 200;
+    res.send(user);
+  }).catch(function(error) {
+    console.log(error);
+    res.statusCode = 500;
+    res.end(error);
+  });
+}
 
-  var getPingQuery = 'SELECT * FROM USER WHERE Username=? ';
-  database.executeQuery(getPingQuery, req.query.Username, (error, rows, fields) => {
-    if (error || rows.length == 0) {
-      console.log(error)
-      res.statusCode = 500;
-      res.end("error");
-    } else {
-      res.statusCode = 200;
-      res.send(JSON.stringify(rows[0]));
-    }
+/**
+* Service for updating user notification preferences
+* Params: Username, NotifyEmail, NotifyCall, NotifyText
+* Returns: none
+*/
+var updateUserNotificationPreferences = function(req,res) {
+  res.setHeader('Content-Type', 'text/plain');
+  userService.updateUserNotificationPreferences(req.body).then(function() {
+    res.statusCode = 200;
+    res.send("success");
+  }).catch(function(error) {
+    console.log(error);
+    res.statusCode = 500;
+    res.end(error);
   });
 }
 
@@ -59,5 +67,6 @@ var getUser = function(req,res) {
 module.exports = {
   getUsers : getUsers,
   createUser : createUser,
-  getUser : getUser
+  getUser : getUser,
+  updateUserNotificationPreferences : updateUserNotificationPreferences
 }

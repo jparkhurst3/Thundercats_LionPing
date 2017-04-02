@@ -60,6 +60,7 @@ var users = require('./rest/users');
 app.get('/api/users/getUsers', users.getUsers);
 app.post('/api/users/createUser', users.createUser);
 app.get('/api/users/getUser', users.getUser);
+app.post('/api/users/updateUserNotificationPreferences', users.updateUserNotificationPreferences)
 
 //Teams
 var teams = require('./rest/teams');
