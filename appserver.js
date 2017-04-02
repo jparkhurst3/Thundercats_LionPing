@@ -42,7 +42,6 @@ var services = require('./rest/services');
 app.get('/api/services/getNames', services.getNames);
 app.get('/api/services/getServices', services.getServices);
 app.post('/api/services/createService', services.createService);
-app.get('/api/services/getEscalationPolicyByID', services.getEscalationPolicyByID);
 app.get('/api/services/getEscalationPolicy', services.getEscalationPolicy)
 app.post('/api/services/updateEscalationPolicy', services.updateEscalationPolicy);
 
@@ -83,7 +82,12 @@ app.post('/api/teams/createRotationShift', teams.createRotationShift);
 app.post('/api/teams/updateRotationShift', teams.updateRotationShift);
 app.post('/api/teams/deleteRotationShift', teams.deleteRotationShift);
 
-
+// var notifications = require('./notifications/notifications.js');
+// notifications.notifyUser('cclegg', 'testMessage');
+// require('./service/teams.js').getSchedulesForTeam('ID',1).then((schedules)=>{
+//   console.log(schedules);
+//   notifications.notifySchedule(schedules.Schedules[0],'testMessage');
+// })
 
 //All fake calls for frontend testing
 app.get('/api/schedule', function(req, res) {

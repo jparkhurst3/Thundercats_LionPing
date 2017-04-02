@@ -1,7 +1,4 @@
 var database = require('../database/database.js');
-var notifications = require('../notifications/notifications.js');
-var teamService = require('../service/teams.js');
-
 /**
 * Service for getting Names/IDs of all Teams
 * Params: None
@@ -236,20 +233,120 @@ var repeatTypes = ["daily", "weekly"];
 * Params: Service ID or Name
 * Returns Escalation Policy
 */
-var getSchedulesForTeam = function(req, res) {
-  res.setHeader('Content-Type', 'text/plain');
+var getSchedulesForTeam = function(nameOrID, queryParam) {
 
-  var nameOrID = (req.query.ID) ? "ID" : "Name";
-  var queryParam = (req.query.ID) ? (req.query.ID) : (req.query.Name);
+  var whereClause = (nameOrID == "ID") ? " WHERE (t.ID = ?)" : " WHERE (t.Name = ?)";
 
-  teamService.getSchedulesForTeam(nameOrID,queryParam).then((schedules) => {
-    res.statusCode = 200;
-    // notifications.notifySchedule(teamSchedules.Schedules[0]);
-    res.send(JSON.stringify(schedules));
-  }).catch((error) => {
-    console.log(error);
-    res.statusCode = 500;
-    res.send("Error getting schedules for team.");
+  var getSchedules = "SELECT t.Name as TeamName, t.ID as TeamID, s.Name as ScheduleName FROM TEAM t " +
+    " LEFT OUTER JOIN SCHEDULE s ON (s.TeamID = t.ID) " + whereClause;
+
+  var getOverrideShifts = "SELECT s.ID, s.Timestamp, s.Duration, s.Username, u.FirstName, u.LastName FROM OVERRIDE_SHIFT s JOIN USER u ON (s.Username = u.Username) " +
+    " WHERE (s.TeamID = ?) AND (s.ScheduleName = ?)";
+
+  var getManualShifts = "SELECT s.ID, s.Timestamp, s.Duration, s.Username, u.FirstName, u.LastName, s.Repeated, s.RepeatType FROM MANUAL_SHIFT s JOIN USER u ON (s.Username = u.Username) " +
+    " WHERE (TeamID = ?) AND (ScheduleName = ?)";
+
+  var getRotationShifts = "SELECT ID, Timestamp, Duration, Repeated, RepeatType FROM ROTATION_SHIFT " +
+    " WHERE (TeamID = ?) AND (ScheduleName = ?)";
+
+  var getUsersInRotationShift = "SELECT u.Username, u.FirstName, u.LastName, s.Position FROM USER_IN_ROTATION_SHIFT s JOIN USER u ON (s.Username = u.Username) WHERE (ShiftID = ?) ";
+
+  var teamSchedules = {
+    Schedules : []
+  }
+
+  // var convertDaysByteToObj = function(daysByte) {
+  //   return {
+  //     Monday: (daysByte & 0x1) != 0,
+  //     Tuesday: (daysByte & 0x2) != 0,
+  //     Wednesday: (daysByte & 0x4) != 0,
+  //     Thursday: (daysByte & 0x8) != 0,
+  //     Friday: (daysByte & 0x10) != 0,
+  //     Saturday: (daysByte & 0x20) != 0,
+  //     Sunday: (daysByte & 0x40) != 0,
+  //   };
+  // }
+
+  return new Promise(function(resolve, reject) {
+    database.executeQuery(getSchedules,queryParam,(error, rows, fields) => {
+      if (error) {
+        reject(error);
+      } else {
+        teamSchedules.TeamName = rows[0].TeamName;
+        teamSchedules.TeamID = rows[0].TeamID;
+        teamSchedules.Schedules = rows.map((scheduleRow) => {
+          return {
+            ScheduleName:scheduleRow.ScheduleName,
+            OverrideShifts:[],
+            ManualShifts:[],
+            RotationShifts:[]
+          };
+        });
+        resolve();
+      }
+    });
+  }).then(function() {
+    var overrideShiftsLoaded = Promise.all(teamSchedules.Schedules.map(function(schedule) {
+      return new Promise(function(resolve,reject) {
+        database.executeQuery(getOverrideShifts,[teamSchedules.TeamID,schedule.ScheduleName],(error, rows, fields) => {
+          if (error) {
+            reject(error);
+          } else {
+            schedule.OverrideShifts = rows;
+            resolve(rows);
+          }
+        });
+      });
+    }));
+    var manualShiftsLoaded = Promise.all(teamSchedules.Schedules.map(function(schedule) {
+      return new Promise(function(resolve,reject) {
+        database.executeQuery(getManualShifts,[teamSchedules.TeamID,schedule.ScheduleName],(error, rows, fields) => {
+          if (error) {
+            reject(error);
+          } else {
+            rows.forEach(function(manualShift) {
+              manualShift.Repeated = (manualShift.Repeated === 1);
+              manualShift.RepeatType = repeatTypes[manualShift.RepeatType];
+            });
+            schedule.ManualShifts = rows;
+            resolve(rows);
+          }
+        });
+      });
+    }));
+    var rotationShiftsLoaded = Promise.all(teamSchedules.Schedules.map(function(schedule) {
+      return new Promise(function(resolve,reject) {
+        database.executeQuery(getRotationShifts,[teamSchedules.TeamID,schedule.ScheduleName],(error, rows, fields) => {
+          if (error) {
+            reject(error);
+          } else {
+            rows.forEach(function(rotationShift) {
+              rotationShift.Repeated = (rotationShift.Repeated === 1);
+              rotationShift.RepeatType = repeatTypes[rotationShift.RepeatType];
+            });
+            schedule.RotationShifts = rows;
+            resolve(rows);
+          }
+        });
+      }).then(function(rotationShifts) {
+        var shiftUsersLoaded = rotationShifts.map(function(rotationShift) {
+          return new Promise(function(resolve, reject) {
+            database.executeQuery(getUsersInRotationShift,rotationShift.ID,(error, rows, fields) => {
+              if (error) {
+                reject(error);
+              } else {
+                rotationShift.Users = rows;
+                resolve();
+              }
+            });
+          });
+        });
+        return Promise.all(shiftUsersLoaded);
+      });
+    }));
+    return Promise.all([overrideShiftsLoaded,manualShiftsLoaded,rotationShiftsLoaded]);
+  }).then(() => {
+    return teamSchedules;
   });
 } 
 

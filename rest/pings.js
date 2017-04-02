@@ -1,84 +1,72 @@
-var database = require('../database/database.js');
+var pingService = require('../service/pings.js');
 
 var getPingsForService = function(req, res) {
-	res.setHeader('Content-Type', 'text/plain');
 
-	var whereClause = (req.query.ID) ? " WHERE (s.ID = ?)" : " WHERE (s.Name = ?)";
+	var nameOrID = (req.query.ID) ? "ID" : "Name";
   var queryParam = (req.query.ID) ? (req.query.ID) : (req.query.Name);
 
-  database.executeQuery('SELECT p.ID, p.ServiceID, p.Name, p.Description, p.Status, p.CreatedTime FROM PING p JOIN SERVICE s ON (p.ServiceID = s.ID) ' + whereClause, queryParam, (error, rows, fields) => {
-    if (error) {
-      console.log(error);
-      res.statusCode = 500;
-      res.end("error");
-    } else {
-      res.statusCode = 200;
-      res.send(JSON.stringify(rows));
-    }
+  res.setHeader('Content-Type', 'text/plain');
+
+  pingService.getPingsForService(nameOrID,queryParam).then((pings)=>{
+    res.statusCode = 200;
+    res.send(JSON.stringify(pings));
+  }).catch((error)=>{
+    console.log(error);
+    res.statusCode = 500;
+    res.end("error");
   });
 }
 
 var createPing = function(req, res) {
   res.setHeader('Content-Type', 'text/plain');
 
-  database.executeQuery('INSERT INTO PING SET ServiceID = ?, Name = ?, Description = ?, Status = "Open"', [req.body.ServiceID, req.body.Name, req.body.Description], (error, rows, fields) => {
-    if (error) {
-      console.log(error);
-      res.statusCode = 500;
-      res.end("error");
-    } else {
-      res.statusCode = 200;
-      res.send(JSON.stringify(rows.insertId))
-    }
-  })
+  pingService.createPing(req.body).then((pingID)=>{
+    res.statusCode = 200;
+    res.send(JSON.stringify(pingID));
+  }).catch((error)=>{
+    console.log(error);
+    res.statusCode = 500;
+    res.end("error");
+  });
 }
 
 var getPing = function(req, res) { //get ping by id
   res.setHeader('Content-Type', 'text/plain');
 
-  var getPingQuery = 'SELECT p.ID, p.ServiceID, s.Name as ServiceName, p.Name, p.Description, p.Status, p.CreatedTime, ' +
-    ' p.CreatedUser, p.AcknowledgedUser, p.AcknowledgedTime, p.ResolvedUser, p.ResolvedTime ' +
-    ' FROM PING p JOIN SERVICE s ON (s.ID = p.ServiceID) WHERE p.ID=? ';
-  database.executeQuery(getPingQuery, req.query.ID, (error, rows, fields) => {
-    if (error || rows.length == 0) {
-      console.log(error)
-      res.statusCode = 500;
-      res.end("error");
-    } else {
-      res.statusCode = 200;
-      res.send(JSON.stringify(rows[0]));
-    }
+  pingService.getPing(req.query.ID).then((ping)=>{
+    res.statusCode = 200;
+    res.send(JSON.stringify(ping));
+  }).catch((error)=>{
+    console.log(error);
+    res.statusCode = 500;
+    res.end("error");
   });
 }
 
 var acknowledgePing = function(req, res) { //acknowledge ping by id
   res.setHeader('Content-Type', 'text/plain');
 
-  database.executeQuery('UPDATE PING SET Status = "Acknowledged", AcknowledgedTime=NOW() WHERE ID=?', req.query.ID, (error, rows, fields) => {
-    if (error) {
-      console.log(error);
-      res.statusCode = 500;
-      res.end("error");
-    } else {
-      res.statusCode = 200;
-      res.send("success");
-    }
-  })
+  pingService.acknowledgePing(req.query.ID).then(()=>{
+    res.statusCode = 200;
+    res.send("success");
+  }).catch((error)=>{
+    console.log(error);
+    res.statusCode = 500;
+    res.end("error");
+  });
 }
 
 var resolvePing = function(req, res) { //resolve ping by id
   res.setHeader('Content-Type', 'text/plain');
 
-  database.executeQuery('UPDATE PING SET Status = "Resolved", ResolvedTime=NOW() WHERE ID=?', req.query.ID, (error, rows, fields) => {
-    if (error) {
-      console.log(error);
-      res.statusCode = 500;
-      res.end("error");
-    } else {
-      res.statusCode = 200;
-      res.send("success");
-    }
-  })
+  pingService.resolvePing(req.query.ID).then(()=>{
+    res.statusCode = 200;
+    res.send("success");
+  }).catch((error)=>{
+    console.log(error);
+    res.statusCode = 500;
+    res.end("error");
+  });
 }
 
 module.exports = {

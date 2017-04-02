@@ -2,10 +2,31 @@ var slack = require('./slack/slack.js');
 var moment = require('moment');
 var twilio = require('twilio');
 var config = require('config');
+var userService = require('../service/users.js');
+var nodemailer = require('nodemailer');
+let transporter = nodemailer.createTransport({
+    service: config.email.service,
+    auth: config.email.auth
+});
 
-var notifyUser = function(username) {
+var notifyUser = function(username, message) {
 	//get user notification preferences
 	//use appropriate notification tool to send notification
+	userService.getUser(username).then((user)=>{
+		console.log(user);
+		if(user.NotifyText) {
+			sendText(user.Phone,message);
+		}
+		if(user.NotifyCall) {
+			call(user.Phone,message);
+		}
+		if(user.NotifyEmail) {
+			sendEmail(user.Email,message);
+		}
+	}).catch((error)=>{
+		console.log("error notifying user " + username +": ");
+		console.log(error);
+	});
 }
 
 var sendText = function(number, message) {
@@ -28,10 +49,41 @@ var sendText = function(number, message) {
 	});
 }
 
-var notifySchedule = function(schedule) {
-	console.log(schedule);
-	console.log("notifying user: " + getOnCallUser(schedule));
+var sendEmail = function(email, message) {
+	// setup email data with unicode symbols
+	let mailOptions = {
+	    from: '"Lion Ping" <' + config.email.auth.user + '>', // sender address
+	    to: email, // list of receivers
+	    subject: 'Notification From Lion Ping', // Subject line
+	    text: message, // plain text body
+	    // html: '<b>Hello world ?</b>' // html body
+	};
+
+	// send mail with defined transport object
+	transporter.sendMail(mailOptions, (error, info) => {
+	    if (error) {
+	        return console.log(error);
+	    }
+	    console.log('Message %s sent: %s', info.messageId, info.response);
+	});
+}
+
+var call = function(number, message) {
+	console.log("calling " + number + " with message: " + message);
+}
+
+var notifySchedule = function(schedule, message) {
+	// console.log(schedule);
+	// console.log("notifying user: " + getOnCallUser(schedule));
 	//get user currently on call for schedule
+	var user = getOnCallUser(schedule);
+	// console.log("user: " + user);
+	if (user) {
+		notifyUser(user,message);
+	} else {
+		console.log('no user on call for schedule');
+	}
+	
 	//notifyUser(user)
 }
 

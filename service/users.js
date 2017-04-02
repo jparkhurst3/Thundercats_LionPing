@@ -12,7 +12,7 @@ var getUsers = function() {
         console.log(error)
         reject(error);
       } else {
-        resolve(JSON.stringify(rows));
+        resolve(rows);
       }
     })
   });
@@ -45,7 +45,7 @@ var getUser = function(Username) {
         console.log(error);
         reject(error);
       } else {
-        resolve(JSON.stringify(rows[0]));
+        resolve(rows[0]);
       }
     })
   });
