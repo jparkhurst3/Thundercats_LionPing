@@ -1,4 +1,5 @@
 var pingService = require('../service/pings.js');
+var notifications = require('../notifications/notifications');
 
 var getPingsForService = function(req, res) {
 
@@ -23,6 +24,7 @@ var createPing = function(req, res) {
   pingService.createPing(req.body).then((pingID)=>{
     res.statusCode = 200;
     res.send(JSON.stringify(pingID));
+    notifications.notifyForPing(pingID);
   }).catch((error)=>{
     console.log(error);
     res.statusCode = 500;

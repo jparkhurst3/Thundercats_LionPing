@@ -3,6 +3,9 @@ var moment = require('moment');
 var twilio = require('twilio');
 var config = require('config');
 var userService = require('../service/users.js');
+var pingService = require('../service/pings.js');
+var serviceService = require('../service/services.js');
+var teamService = require('../service/teams.js');
 var nodemailer = require('nodemailer');
 let transporter = nodemailer.createTransport({
     service: config.email.service,
@@ -88,7 +91,6 @@ var notifySchedule = function(schedule, message) {
 }
 
 var getOnCallUser = function(schedule) {
-
 	var overrideShift = schedule.OverrideShifts.find(function(shift) {
 		var startTime = moment(shift.Timestamp);
 		var endTime = startTime.clone().add(shift.Duration,'minutes');
@@ -132,10 +134,38 @@ var getRelevantRepeatedShiftMoment = function(shift) {
 	} 
 	return startTime;
 }
+
+var notifyService = function(serviceID, message) {
+	serviceService.getEscalationPolicy('ID', serviceID).then((escalationPolicy)=>{
+		escalationPolicy.Layers[0].Users.forEach(function(user) {
+			notifyUser(user.Username, message);
+		});
+		escalationPolicy.Layers[0].Schedules.forEach(function(schedule) {
+			console.log("schedule:");
+			console.log(schedule);
+			teamService.getSchedule(schedule.TeamID,schedule.ScheduleName).then((detailedSchedule)=>{
+				notifySchedule(detailedSchedule, message);
+				console.log("detailedSchedule:");
+				console.log(detailedSchedule);
+			})
+		});
+	}).catch((error)=>{
+		console.log(error);
+	});
+}
+
+var notifyForPing = function(pingID) {
+	pingService.getPing(pingID).then((ping)=>{
+		notifyService(ping.ServiceID, "Go to following URL to acknowledge ping: localhost:8080/pings/" + pingID);
+	}).catch((error)=>{
+		console.log(error);
+	});
+}
 			
 
 module.exports = {
 	notifyUser : notifyUser,
 	notifySchedule : notifySchedule,
-	sendText : sendText
+	sendText : sendText,
+	notifyForPing : notifyForPing
 }

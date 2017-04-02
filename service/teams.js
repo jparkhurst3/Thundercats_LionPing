@@ -140,6 +140,89 @@ var deleteSchedule = function(req, res) {
   });
 } 
 
+var getSchedule = function(TeamID, ScheduleName) {
+
+  // var whereClause = " WHERE (t.ID = ?)";
+
+  // var getSchedules = "SELECT t.Name as TeamName, t.ID as TeamID, s.Name as ScheduleName FROM TEAM t " +
+  //   " LEFT OUTER JOIN SCHEDULE s ON (s.TeamID = t.ID) " + whereClause;
+
+  var getOverrideShifts = "SELECT s.ID, s.Timestamp, s.Duration, s.Username, u.FirstName, u.LastName FROM OVERRIDE_SHIFT s JOIN USER u ON (s.Username = u.Username) " +
+    " WHERE (s.TeamID = ?) AND (s.ScheduleName = ?)";
+
+  var getManualShifts = "SELECT s.ID, s.Timestamp, s.Duration, s.Username, u.FirstName, u.LastName, s.Repeated, s.RepeatType FROM MANUAL_SHIFT s JOIN USER u ON (s.Username = u.Username) " +
+    " WHERE (TeamID = ?) AND (ScheduleName = ?)";
+
+  var getRotationShifts = "SELECT ID, Timestamp, Duration, Repeated, RepeatType FROM ROTATION_SHIFT " +
+    " WHERE (TeamID = ?) AND (ScheduleName = ?)";
+
+  var getUsersInRotationShift = "SELECT u.Username, u.FirstName, u.LastName, s.Position FROM USER_IN_ROTATION_SHIFT s JOIN USER u ON (s.Username = u.Username) WHERE (ShiftID = ?) ";
+
+  var schedule = {
+    TeamID : TeamID,
+    ScheduleName : ScheduleName,
+    OverrideShifts : [],
+    ManualShifts : [],
+    RotationShifts : []
+  }
+  
+  var overrideShiftsLoaded = new Promise(function(resolve,reject) {
+    database.executeQuery(getOverrideShifts,[schedule.TeamID,schedule.ScheduleName],(error, rows, fields) => {
+      if (error) {
+        reject(error);
+      } else {
+        schedule.OverrideShifts = rows;
+        resolve(rows);
+      }
+    });
+  });
+  var manualShiftsLoaded = new Promise(function(resolve,reject) {
+    database.executeQuery(getManualShifts,[schedule.TeamID,schedule.ScheduleName],(error, rows, fields) => {
+      if (error) {
+        reject(error);
+      } else {
+        rows.forEach(function(manualShift) {
+          manualShift.Repeated = (manualShift.Repeated === 1);
+          manualShift.RepeatType = repeatTypes[manualShift.RepeatType];
+        });
+        schedule.ManualShifts = rows;
+        resolve(rows);
+      }
+    });
+  });
+  var rotationShiftsLoaded = new Promise(function(resolve,reject) {
+    database.executeQuery(getRotationShifts,[schedule.TeamID,schedule.ScheduleName],(error, rows, fields) => {
+      if (error) {
+        reject(error);
+      } else {
+        rows.forEach(function(rotationShift) {
+          rotationShift.Repeated = (rotationShift.Repeated === 1);
+          rotationShift.RepeatType = repeatTypes[rotationShift.RepeatType];
+        });
+        schedule.RotationShifts = rows;
+        resolve(rows);
+      }
+    });
+  }).then(function(rotationShifts) {
+    var shiftUsersLoaded = rotationShifts.map(function(rotationShift) {
+      return new Promise(function(resolve, reject) {
+        database.executeQuery(getUsersInRotationShift,rotationShift.ID,(error, rows, fields) => {
+          if (error) {
+            reject(error);
+          } else {
+            rotationShift.Users = rows;
+            resolve();
+          }
+        });
+      });
+    });
+    return Promise.all(shiftUsersLoaded);
+  });
+  return Promise.all([overrideShiftsLoaded,manualShiftsLoaded,rotationShiftsLoaded]).then(()=>{
+    return schedule;
+  });
+}
+
 /**
 * Get schedules linked to a specifc team
 * Params: Team ID
@@ -599,6 +682,7 @@ module.exports = {
   getUsersOnTeam : getUsersOnTeam,
   updateUsersOnTeam : updateUsersOnTeam,
   createSchedule : createSchedule,
+  getSchedule : getSchedule,
   deleteSchedule : deleteSchedule,
   getSchedules : getSchedules,
   getSchedulesForTeamByID : getSchedulesForTeamByID,

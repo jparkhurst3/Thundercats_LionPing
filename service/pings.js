@@ -41,7 +41,7 @@ var getPing = function(ID) { //get ping by id
   });
 }
 
-var acknowledgePing = function(req, res) { //acknowledge ping by id
+var acknowledgePing = function(ID) { //acknowledge ping by id
   return new Promise((resolve,reject)=>{
     database.executeQuery('UPDATE PING SET Status = "Acknowledged", AcknowledgedTime=NOW() WHERE ID=?', ID, (error, rows, fields) => {
       if (error) {
