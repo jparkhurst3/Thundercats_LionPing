@@ -15,7 +15,7 @@ export default class PingsTable extends React.Component {
 	componentDidMount() {
 		// fetchSchedule("Database")
 		console.log("compoent will mount")
-		
+
 	}
 
 	onServiceChange = (pings) => {
@@ -35,7 +35,7 @@ export default class PingsTable extends React.Component {
 			axios.get("/api/pings/getPingsForService?Name="+nextProps.service)
 				.then((result) => {
 					console.log("got pings for service")
-					const pings = result.data
+					const pings = result.data.slice(0, 5); //only show 5 - do this in database
 					this.onServiceChange(pings)
 				}).catch((err) => {
 					console.log(err)
@@ -44,20 +44,23 @@ export default class PingsTable extends React.Component {
 	}
 
 	render() {
-		const mappedPingRows = this.state.pings ? this.state.pings.map(ping => 
+		const mappedPingRows = this.state.pings ? this.state.pings.map(ping =>
 			<tr><td>{ping.Name}</td></tr>
 		)  : <tr><td></td></tr>
+
 		return (
-			<div className="col-xs-4">
-				<table class="table">
-				  <thead className="thead-inverse">
-				    <tr><th>Pings</th></tr>
-				  </thead>
-				  <tbody>
-				  	{mappedPingRows}
-				  </tbody>
-				</table>
-				<Link style={{color: 'black'}} class="btn" to={`/myservices/${this.props.service}`} >Go to Service Page</Link>
+			<div class="card home-card">
+				<div class="home-card-header card-header">
+					<h3>Pings</h3>
+				</div>
+				<div class="card-block">
+					<table class="table home-table">
+						<tbody>
+							{mappedPingRows}
+						</tbody>
+					</table>
+					<Link class="btn home-button" to={`/myservices/${this.props.service}`} >Go to {this.props.service} Service Page</Link>
+				</div>
 			</div>
 		)
 	}

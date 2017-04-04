@@ -180,7 +180,7 @@ export default class EscalationTable extends React.Component {
                     </div>
                 </div>
                 <table class="table">
-                    <thead className="thead-inverse">
+                    <thead className="thead">
                         <tr>
                             <th>Level</th>
                             <th>Delay (Minutes)</th>

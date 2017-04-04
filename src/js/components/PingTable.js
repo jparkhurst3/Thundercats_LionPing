@@ -42,7 +42,7 @@ export default class PingTable extends React.Component {
 						//on page 0 return 3 elements
 						return index < 3;
 					})
-					.map((ping) => <PingRow ping={ping} />)				
+					.map((ping) => <PingRow ping={ping} />)
 						this.setState({
 							mappedPingRows: mappedPingRows
 						})
@@ -50,7 +50,7 @@ export default class PingTable extends React.Component {
 			.catch((error) => {
 				console.log(error)
 			})
-		
+
 
 	}
 
@@ -59,7 +59,7 @@ export default class PingTable extends React.Component {
 			<div>
 				<h3>Pings</h3>
 				<table class="table table-hover">
-					<thead className="thead-inverse">
+					<thead className="thead">
 						<tr>
 							<th>Created At</th>
 							<th>Name</th>

@@ -67,9 +67,9 @@ export default class NewPingCard extends React.Component {
 	render() {
 		const mappedOptions = this.state.services ? this.state.services.map(service => <option value={service.ID}>{service.Name}</option>) : <option disabled>Loading</option>
 		return (
-		<div class="card">
-		  	<div class="card-header">
-			  New Ping
+		<div class="card home-card">
+		  <div class="home-card-header card-header ">
+			  <h3>New Ping</h3>
 			</div>
 		    <div class="card-block">
 		      <form>
@@ -85,7 +85,7 @@ export default class NewPingCard extends React.Component {
 				      	{mappedOptions}
 				    </select>
 				</div>
-				<input value="Create Ping" class="btn" onClick={this.sendPing}></input>
+				<input value="Create Ping" class="btn home-button" onClick={this.sendPing}></input>
 		      </form>
 		    </div>
 		  </div>

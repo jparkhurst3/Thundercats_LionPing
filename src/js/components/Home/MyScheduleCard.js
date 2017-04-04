@@ -7,8 +7,8 @@ export default class MyScheduleCard extends React.Component {
 
 	render() {
 		return (
-			<div class="card">
-				<div class="card-header">
+			<div class="card home-card">
+				<div class="card-header home-card-header">
 					<h3>Next On-Call</h3>
 				</div>
 				<div class="card-block">

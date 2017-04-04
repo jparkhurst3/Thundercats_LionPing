@@ -67,8 +67,8 @@ export default class Profile extends React.Component {
 class ProfileInfoCard extends React.Component {
     render() {
         return (
-            <div class="card">
-                <div class="card-header">
+            <div class="card home-card">
+                <div class="card-header home-card-header">
                     <h3>Profile</h3>
                 </div>
                 <div class="card-block">
@@ -122,32 +122,32 @@ class PingSettings extends React.Component {
 
 	render() {
     const buttons = this.state.disabled ?
-      <div class="col-xs-4">
-        <input type="button" name="disabled" class="btn" value="Edit" onClick={this.toggleDisabled} />
+      <div>
+        <input type="button" name="disabled" style={{width: "30%", float:"left"}} name="disabled" class="btn" value="Edit" onClick={this.toggleDisabled} />
       </div> :
       <div>
-        <input type="button" name="disabled" style={{width: "50%"}} class="col-xs-3 btn" value="Cancel" onClick={this.toggleDisabled} />
-        <input type="button" style={{width: "50%"}} class="col-xs-3 btn" value="Submit" onClick={this.submitChanges} />
+        <input class="btn" type="button" name="disabled" style={{width: "30%", float:"left"}} value="Cancel" onClick={this.toggleDisabled} />
+        <input class="btn" type="button" style={{width: "30%", float:"right"}} value="Submit" onClick={this.submitChanges} />
       </div>
 
 
 
 		return (
-			<div class="card">
-				<div class="card-header">
+			<div class="card home-card">
+				<div class="card-header home-card-header">
 					<h3>Ping Settings</h3>
 				</div>
 				<div class="card-block">
           <h4 style={{textAlign:"left"}}>Email</h4>
           <div class="row">
-            <div class="col-xs-6">
+            <div class="col-xs-12">
               <input class="form-control" type="email" disabled={this.state.disabled} name="Email" value={this.state.Email} onChange={this.handleChange}  />
             </div>
           </div>
 
           <h4 style={{textAlign:"left"}}>Phone</h4>
           <div class="row">
-            <div class="col-xs-6">
+            <div class="col-xs-12">
               <input class="form-control" type="phone" disabled={this.state.disabled} name="Phone" value={this.state.Phone} onChange={this.handleChange}  />
             </div>
           </div>
@@ -170,7 +170,6 @@ class PingSettings extends React.Component {
               </label>
             </div>
           </div>
-
           <div>
             {buttons}
           </div>

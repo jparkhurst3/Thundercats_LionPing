@@ -20,20 +20,21 @@ export default class ScheduleTable extends React.Component {
 	}
 
 	render() {
-		if (!this.state.schedule) {
-			return <p>loading</p>
-		}
-		const mappedRows = this.state.schedule.map(s => <ScheduleRow date={s.date} name={s.name} time={s.time} />)
-		return (
-			<div className="col-xs-4">
-				<table className="table">
-				  <thead className="thead-inverse">
-				    <tr><th></th><th>Schedule</th></tr>
-				  </thead>
-				  <tbody>
-				  	{mappedRows}
-				  </tbody>
-				</table>
+		const mappedRows = this.state.schedule ?
+			this.state.schedule.map(s => <ScheduleRow date={s.date} name={s.name} time={s.time} />)
+			: <tr></tr>
+		return(
+			<div class="card home-card">
+				<div class="home-card-header card-header">
+					<h3>Schedule</h3>
+				</div>
+				<div class="card-block">
+					<table className="table home-table">
+						<tbody>
+							{mappedRows}
+						</tbody>
+					</table>
+				</div>
 			</div>
 		)
 	}

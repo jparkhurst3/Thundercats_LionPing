@@ -24,19 +24,22 @@ export default class ServicesTable extends React.Component {
 	}
 
 	render() {
-		const mappedServiceRows = this.state.services ? this.state.services.map(service => 
+		const mappedServiceRows = this.state.services ? this.state.services.map(service =>
 			<tr className={this.props.currentService == service ? "active-row" : ""} onClick={() => this.props.onServiceClick(service)}><td>{service}</td></tr>
 		) : <tr><td>loading</td></tr>
+
 		return (
-			<div className="col-xs-4">
-				<table class="table table-hover">
-				  <thead className="thead-inverse">
-				    <tr><th>Services</th></tr>
-				  </thead>
-				  <tbody>
-				  	{mappedServiceRows}
-				  </tbody>
-				</table>
+			<div class="card home-card">
+				<div class="home-card-header card-header">
+					<h3>Services</h3>
+				</div>
+				<div class="card-block">
+					<table class="table table-hover">
+					  <tbody>
+					  	{mappedServiceRows}
+					  </tbody>
+					</table>
+				</div>
 			</div>
 		)
 	}

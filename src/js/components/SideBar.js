@@ -5,6 +5,7 @@ import {Link} from 'react-router'
 import ToolTip from 'react-portal-tooltip'
 import CreateServiceModal from './CreateServiceModal'
 import CreateTeamModal from './CreateTeamModal'
+import Logo from './Logo'
 
 export default class SideBar extends React.Component {
     constructor(props) {
@@ -29,12 +30,14 @@ export default class SideBar extends React.Component {
             [event.target.name]: false
         })
     }
+    // <Link className="nav-link" activeClassName="activeLink" to={'/'}><h1>LION PING</h1></Link>
+
     render() {
         return (
-        <div className="col-xs-2 bg-inverse sidebar">
+        <div className="col-xs-2 sidebar">
             <ul className="nav nav-pills flex-column">
                 <li className="nav-item">
-                    <Link className="nav-link" activeClassName="activeLink" to={'/'}><h2 style={{'fontFamily': 'Playfair Display', "color": "#D4A461"}}>LION PING</h2></Link>
+                  <Link className="nav-link logo" activeClassName="activeLink" to={'/'}><Logo /></Link>
                 </li>
                 <li className="nav-item">
                     <div>
