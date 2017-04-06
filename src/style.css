@@ -5,7 +5,7 @@
 h5 {
   text-decoration: none;
   font-family: 'Roboto', sans-serif;
-  color: green;
+  /*color: green;*/
 }
 
 a:hover {
@@ -55,6 +55,21 @@ a:hover {
   border-radius: 2px;
 }
 
+.shadow {
+    -webkit-filter: drop-shadow( 1px 1px 1px black );
+            filter: drop-shadow( 100px 100px 10px black );
+}
+
+.logo-text {
+  font-family: "Londrina Solid";
+  font-size: 55px;
+  white-space: pre;
+}
+
+.logo-text:hover {
+  /*text-shadow: 0px 0px 20px black;*/
+}
+
 .nav a {
   display: block;
 }
@@ -89,8 +104,8 @@ a {
   text-decoration: none
 }
 
-tr:selected {
-  background-color: lightgray;
+.table-hover tbody tr:hover {
+  /*box-shadow: 1px 0px 40px #888888!important;*/
 }
 
 /*.btn {
@@ -218,8 +233,9 @@ tr:selected {
  */
 
 /*Dashboard*/
-.active-row {
-  background-color: #A5A5A5;
+.active-row td {
+  background-color: #D4A461!important;
+  border-top-color: #D4A461;
 }
 
 .home-table {
@@ -228,20 +244,44 @@ tr:selected {
   /*border-radius:5px;*/
 }
 
+.home-table-button-wrapper {
+  text-align:center;
+  padding-left:20px;
+  padding-right:20px;
+}
+
+.home-table tbody tr td {
+  padding-left:20px!important;
+  padding-right:20px;
+}
+.home-table tbody tr td:first-child {
+  /*border-top: 0px!important;*/
+}
+
+.card-block {
+  /*padding:0px!important;*/
+}
+
+.services-card-block {
+  padding:0px;
+}
+
 thead {
   /*background-color: #4F5D75;*/
   /*background-color:#93A3B1;*/
   /*background-color: light-gray;*/
-  background-color: #D4A461;
-  color: #F2F5F7;
+  /*background-color: #D4A461;*/
+  /*background-color: #446889;*/
+  /*color: #F2F5F7;*/
+  color:black;
 }
 
 thead th:first-child {
-  border-top-left-radius: 5px;
+  border-top-left-radius: 0px;
 }
 
 thead th:last-child {
-  border-top-right-radius: 5px;
+  border-top-right-radius: 0px;
 }
 
 
@@ -260,12 +300,26 @@ thead th:last-child {
 }
 
 .home-card {
+  margin-top: 20px!important;
   border: none!important;
   border-radius:0px!important;
   box-shadow: 0px 0px 20px #888888;
 }
 
+.modal-card {
+  border: none;
+  border-radius:0px;
+}
 
+.home-card-block {
+  padding: 0px!important;
+  width: 100%;
+
+}
+
+.home-button {
+  width:100%;
+}
 
 .home-thead th {
   text-align:center;
@@ -282,10 +336,10 @@ thead th:last-child {
   padding-bottom: 1.5rem;
 }
 
-.home-button {
+.home-table-button {
   width: 100%;
   color: #F2F5F7;
-  font-size: 50px;
+  /*font-size: 20px;*/
 }
 
 /*

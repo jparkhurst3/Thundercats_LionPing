@@ -28,7 +28,7 @@ export default class ScheduleTable extends React.Component {
 				<div class="home-card-header card-header">
 					<h3>Schedule</h3>
 				</div>
-				<div class="card-block">
+				<div class="card-block home-card-block">
 					<table className="table home-table">
 						<tbody>
 							{mappedRows}

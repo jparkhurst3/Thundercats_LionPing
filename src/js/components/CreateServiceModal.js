@@ -5,27 +5,27 @@ import axios from 'axios'
 
 export default class CreateServiceModal extends React.Component {
   constructor() {
-	super();
-	this.state = {
-	  showModal: false
-	}
+  	super();
+  	this.state = {
+  	  showModal: false
+  	}
   }
-  
+
   handleToggleModal = () => {
 	this.setState({ showModal: !this.state.showModal });
   }
-  
+
   handleCloseModal = () => {
 	this.setState({ showModal: false });
   }
-  
+
   render () {
 	return (
 		<div class="align-right" style={{float: "right"}}>
 			<span style={{textAlign: "right"}}><a class="btn" href="javascript:;" onClick={this.handleToggleModal}>Create Service</a></span>
-			<ReactModal 
+			<ReactModal
 				isOpen={this.state.showModal}
-				contentLabel="Minimal Modal Example" 
+				contentLabel="Minimal Modal Example"
 				onRequestClose={this.handleToggleModal}
         		shouldCloseOnOverlayClick={true}
 				style={{
@@ -33,8 +33,9 @@ export default class CreateServiceModal extends React.Component {
 						background: 'rgba(255, 255, 255, .9)'
 					},
 					content: {
+            textAlign:"center",
 						position: 'absolute',
-						height: '300px',
+						height: 'auto',
 						width: '500px',
 						left: '50%',
 						top: '50%',
@@ -43,7 +44,10 @@ export default class CreateServiceModal extends React.Component {
 						bottom: 'auto',
 						zIndex: '100',
 						padding: 'none',
-						border: 'none'
+						border: 'none',
+            boxShadow: "0px 0px 20px #888888",
+            borderRadius: "2px",
+            border:"none"
 					}
 				}} >
 				<CreateServiceCard />
@@ -99,10 +103,10 @@ class CreateServiceCard extends React.Component {
 
 	render() {
 		if (this.state.created) {
-			//should link to that team 
+			//should link to that team
 			return (
-				<div class="card">
-					<div class="card-header">Create Service</div>
+				<div class="card modal-card">
+					<div class="card-header home-card-header">Create Service</div>
 					<div class="card-block">
 						<h3>Service Successfully Created</h3>
 					</div>
@@ -110,8 +114,8 @@ class CreateServiceCard extends React.Component {
 			)
 		}
 		return (
-			<div class="card">
-				<div class="card-header"><h3>Create Service</h3></div>
+			<div class="card modal-card">
+				<div class="card-header home-card-header"><h3>Create Service</h3></div>
 				<div class="card-block">
 					<form>
 						<div class="form-group">

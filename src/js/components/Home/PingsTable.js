@@ -53,13 +53,15 @@ export default class PingsTable extends React.Component {
 				<div class="home-card-header card-header">
 					<h3>Pings</h3>
 				</div>
-				<div class="card-block">
+				<div class="card-block home-card-block">
 					<table class="table home-table">
 						<tbody>
 							{mappedPingRows}
 						</tbody>
 					</table>
-					<Link class="btn home-button" to={`/myservices/${this.props.service}`} >Go to {this.props.service} Service Page</Link>
+					<div class="home-table-button-wrapper">
+						<Link class="btn home-table-button" to={`/myservices/${this.props.service}`} >Go to {this.props.service} Service</Link>
+					</div>
 				</div>
 			</div>
 		)

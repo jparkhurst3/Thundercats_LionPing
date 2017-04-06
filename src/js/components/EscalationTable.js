@@ -170,15 +170,11 @@ export default class EscalationTable extends React.Component {
 
 
         return (
-            <div>
-                <div className="row">
-                    <div className="col-xs-3">
-                        <h3>Escalation Policy</h3>
-                    </div>
-                    <div className="col-xs-9">
-                        {buttons}
-                    </div>
-                </div>
+            <div class="card home-card">
+              <div class="card-header home-card-header">
+                <h3>Escalation Policy</h3>
+              </div>
+              <div class="card-block services-card-block">
                 <table class="table">
                     <thead className="thead">
                         <tr>
@@ -193,7 +189,16 @@ export default class EscalationTable extends React.Component {
                         {mappedLayers}
                     </tbody>
                 </table>
+                <div className="row">
+                    <div className="col-xs-3">
+
+                    </div>
+                    <div className="col-xs-9">
+                        {buttons}
+                    </div>
+                </div>
                 {this.state.disabled ? <div></div> : <input type="button" value="+" class="btn" onClick={this.addLayer} ></input>}
+                </div>
             </div>
         )
     }

@@ -33,8 +33,8 @@ export default class ServicesTable extends React.Component {
 				<div class="home-card-header card-header">
 					<h3>Services</h3>
 				</div>
-				<div class="card-block">
-					<table class="table table-hover">
+				<div class="card-block home-card-block">
+					<table class="table home-table table-hover">
 					  <tbody>
 					  	{mappedServiceRows}
 					  </tbody>

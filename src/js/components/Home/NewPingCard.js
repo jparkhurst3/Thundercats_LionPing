@@ -68,7 +68,7 @@ export default class NewPingCard extends React.Component {
 		const mappedOptions = this.state.services ? this.state.services.map(service => <option value={service.ID}>{service.Name}</option>) : <option disabled>Loading</option>
 		return (
 		<div class="card home-card">
-		  <div class="home-card-header card-header ">
+		  <div class="home-card-header card-header">
 			  <h3>New Ping</h3>
 			</div>
 		    <div class="card-block">

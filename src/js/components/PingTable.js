@@ -56,26 +56,31 @@ export default class PingTable extends React.Component {
 
 	render() {
 		return (
-			<div>
-				<h3>Pings</h3>
-				<table class="table table-hover">
-					<thead className="thead">
-						<tr>
-							<th>Created At</th>
-							<th>Name</th>
-							<th>Description</th>
-							<th>Status</th>
-						</tr>
-					</thead>
-					<tbody>
-						{this.state.mappedPingRows}
-					</tbody>
-				</table>
-				<PingPagination activePage={this.state.activePage} handlePageClick={this.handlePageClick} />
+			<div class="card home-card">
+				<div class="card-header home-card-header">
+					<h3>Pings</h3>
+				</div>
+					<div class="card-block services-card-block">
+					<table class="table table-hover">
+						<thead className="thead">
+							<tr>
+								<th>Created At</th>
+								<th>Name</th>
+								<th>Description</th>
+								<th>Status</th>
+							</tr>
+						</thead>
+						<tbody>
+							{this.state.mappedPingRows}
+						</tbody>
+					</table>
+				</div>
 			</div>
 		)
 	}
 }
+// <PingPagination activePage={this.state.activePage} handlePageClick={this.handlePageClick} />
+
 
 class PingPagination extends React.Component {
 	render() {

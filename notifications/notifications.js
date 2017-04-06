@@ -45,7 +45,7 @@ var sendText = function(number, message) {
 	}, function(err, message) {
 	  if (err) {
 	    console.log(err);
-	    
+
 	  } else {
 	    console.log(message.sid);
 	  }
@@ -86,7 +86,7 @@ var notifySchedule = function(schedule, message) {
 	} else {
 		console.log('no user on call for schedule');
 	}
-	
+
 	//notifyUser(user)
 }
 
@@ -131,7 +131,7 @@ var getRelevantRepeatedShiftMoment = function(shift) {
 		} else {
 			startTime.week(currentTime.week());
 		}
-	} 
+	}
 	return startTime;
 }
 
@@ -156,12 +156,12 @@ var notifyService = function(serviceID, message) {
 
 var notifyForPing = function(pingID) {
 	pingService.getPing(pingID).then((ping)=>{
-		notifyService(ping.ServiceID, "Go to following URL to acknowledge ping: localhost:8080/pings/" + pingID);
+		notifyService(ping.ServiceID, "ROAR!!! Go to the following url to acknowledge the ping: http://localhost:8080/pings/" + pingID);
 	}).catch((error)=>{
 		console.log(error);
 	});
 }
-			
+
 
 module.exports = {
 	notifyUser : notifyUser,
