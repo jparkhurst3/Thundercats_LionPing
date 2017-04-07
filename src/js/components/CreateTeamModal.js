@@ -35,17 +35,21 @@ export default class CreateTeamModal extends React.Component {
                         background: 'rgba(255, 255, 255, 0.9)'
                     },
                     content: {
-                        position: 'absolute',
-                        height: '300px',
-                        width: '500px',
-                        left: '50%',
-                        top: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        right: 'auto',
-                        bottom: 'auto',
-                        zIndex: '1',
-                        padding: 'none',
-                        border: 'none'
+                      textAlign:"center",
+                      position: 'absolute',
+                      height: 'auto',
+                      width: '500px',
+                      left: '50%',
+                      top: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      right: 'auto',
+                      bottom: 'auto',
+                      zIndex: '100',
+                      padding: 'none',
+                      border: 'none',
+                      boxShadow: "0px 0px 20px #888888",
+                      borderRadius: "2px",
+                      border:"none"
                     }
                 }} >
                 <CreateTeamCard />
@@ -127,8 +131,8 @@ class CreateTeamCard extends React.Component {
 
         // display everything
         return (
-            <div class="card">
-                <div class="card-header"><h3>Create Team</h3></div>
+            <div class="card modal-card">
+                <div class="card-header home-card-header"><h3>Create Team</h3></div>
                 <div class="card-block">
                     <form>
                         <div class = "form-group">

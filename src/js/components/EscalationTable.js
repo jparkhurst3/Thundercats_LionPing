@@ -70,6 +70,7 @@ export default class EscalationTable extends React.Component {
         const layers = this.state.layers;
         //get last level
         const level = this.state.layers.length;
+        console.log("length: ", level);
         const newLayer = {
             "Level": level,
             "Delay": 5,

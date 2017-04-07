@@ -370,7 +370,7 @@ thead th:last-child {
 }
 
 .rct-item {
-  border-radius: 50px;
+  border-radius: 0px;
 }
 
 .rct-item-content {
