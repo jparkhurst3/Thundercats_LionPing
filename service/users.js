@@ -45,7 +45,9 @@ var getUser = function(Username) {
         console.log(error);
         reject(error);
       } else {
-        resolve(rows[0]);
+        var user = rows[0];
+        user.Password = undefined;
+        resolve(user);
       }
     })
   });

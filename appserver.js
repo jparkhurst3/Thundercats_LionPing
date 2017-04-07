@@ -19,6 +19,8 @@ app.use(require('cookie-parser')());
 //support parsing of application/x-www-form-urlencoded post data
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
+
 //middleware
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -26,7 +28,60 @@ app.use(function(req, res, next) {
   next();
 });
 
+var passport = require('passport')
+  , LocalStrategy = require('passport-local').Strategy;
+
+passport.use(new LocalStrategy({
+    usernameField : 'Username',
+    passwordField : 'Password'
+  },
+  function(username, password, done) {
+    console.log('working');
+    database.executeQuery("SELECT Username, Password FROM USER WHERE (Username=?)", username, (err, rows, fields) => {
+      if (err) { 
+        console.log("error");
+        return done(err); 
+      }
+      if (rows.length == 0) {
+        console.log("user not found");
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+      if (rows[0].Password != password) {
+        console.log("incorrect password");
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+      console.log("success");
+      return done(null, rows[0]);
+    });
+  }
+));
+
+passport.serializeUser(function(user, cb) {
+  cb(null, user.Username);
+});
+
+passport.deserializeUser(function(username, cb) {
+  database.executeQuery("SELECT Username, Password FROM USER WHERE (Username=?)", username, (err, rows, fields) => {
+    if (err) { return cb(err); }
+    return cb(null, rows[0]);
+  });
+});
+
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+// app.use('/api', require('connect-ensure-login').ensureLoggedIn());
+
 app.use(express.static('build'));
+
+var authServices = require('./auth/http.js');
+
+app.post('/auth/login', passport.authenticate('local'), authServices.login);
+app.get('/auth/logout', authServices.logout);
+app.get('/auth/isLoggedIn', authServices.isLoggedIn);
+app.get('/auth/getCurrentUser', authServices.getCurrentUser);
 
 //api calls
 
@@ -82,12 +137,7 @@ app.post('/api/teams/createRotationShift', teams.createRotationShift);
 app.post('/api/teams/updateRotationShift', teams.updateRotationShift);
 app.post('/api/teams/deleteRotationShift', teams.deleteRotationShift);
 
-// var notifications = require('./notifications/notifications.js');
-// notifications.notifyUser('cclegg', 'testMessage');
-// require('./service/teams.js').getSchedulesForTeam('ID',1).then((schedules)=>{
-//   console.log(schedules);
-//   notifications.notifySchedule(schedules.Schedules[0],'testMessage');
-// })
+var auth = require('./auth/http');
 
 //All fake calls for frontend testing
 app.get('/api/schedule', function(req, res) {
