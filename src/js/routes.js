@@ -45,24 +45,30 @@ class Routes extends React.Component {
 };
 
 class Container extends React.Component {
+  constructor() {
+    super()
+  }
+
+  
+
   render() {
-	return (
-	  <div className="container-fluid">
-		<div className="row">
-		  <div className="col-xs-2">
-			<SideBar />
-		  </div>
-		  <div className="col-xs-10">
-		  	<NavBar/>
-			{this.props.children}
-		  </div>
-		</div>
-	  </div>
-	)
+  	return (
+  	  <div className="container-fluid">
+    		<div className="row">
+    		  <div className="col-xs-2">
+    			<SideBar />
+    		  </div>
+    		  <div className="col-xs-10">
+    		  	<NavBar />
+    			{this.props.children}
+    		  </div>
+    		</div>
+  	  </div>
+  	)
   }
 }
 
-class NavBar extends React.Component{
+class NavBar extends React.Component {
   render() {
     return (
       <div className="container row" style={{paddingBottom: '20px', paddingTop: '20px', paddingRight:'0px', marginRight: '0px'}}>
@@ -70,7 +76,7 @@ class NavBar extends React.Component{
       		<input type="text" class="form-control" placeholder="Search"></input>
       	</div>
       	<div class="col-xs-8" style={{textAlign: "right"}}>
-			<h4><Link style={{display:"inline-block"}} to="/profile">Sam Ford</Link></h4>
+			     <h4><Link style={{display:"inline-block"}} to="/profile">Sam Ford</Link></h4>
       	</div>
       </div>
     )
@@ -79,11 +85,11 @@ class NavBar extends React.Component{
 
 class NotFound extends React.Component {
   render() {
-	return (
-	  <div class="container">
-		<h1>404 Not Found</h1>
-	  </div>
-	)
+  	return (
+  	  <div class="container">
+  		<h1>404 Not Found</h1>
+  	  </div>
+  	)
   }
 }
 

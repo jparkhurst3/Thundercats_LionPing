@@ -58,20 +58,20 @@ class TeamMembers extends React.Component {
             })
 
         axios.get('/api/teams/getUsersOnTeam', {
-        	params: {
-        		Name: this.props.team
-        	}
-        })
-            .then(res => {
-            	console.log("usersonteam")
-                console.log(res.data)
-                this.setState({
-                    users: res.data // get users from database
-                })
-            })
-            .catch(err => {
-                console.log(err)
-            })
+	        	params: {
+	        		Name: this.props.team
+	        	}
+	        })
+          .then(res => {
+          	console.log("usersonteam")
+              console.log(res.data)
+              this.setState({
+                  users: res.data // get users from database
+              })
+          })
+          .catch(err => {
+              console.log(err)
+          })
 	}
 
 	handleUsersChange = (users) => {
@@ -149,10 +149,14 @@ class TeamMembers extends React.Component {
 
 
 		return (
-			<div class="container form-group row" style={{paddingTop: "20px"}}>
-				<h3>Users</h3>
-				<Select multi disabled={this.state.disabled} class="col-xs-10" name="user" clearable={false} value={mappedUsers} placeholder="Select User" options={mappedUserOptions} onChange={this.handleUsersChange} />
-				{buttons}
+			<div class="card home-card">
+				<div class="card-header home-card-header">
+					<h3>Users</h3>
+				</div>
+				<div class="card-block services-card-block">
+					<Select multi disabled={this.state.disabled} class="" name="user" clearable={false} value={mappedUsers} placeholder="Select User" options={mappedUserOptions} onChange={this.handleUsersChange} />
+					{buttons}
+				</div>
 			</div>
 		)
 	}
@@ -311,6 +315,7 @@ class SchedulePane extends React.Component {
 			<ScheduleData
 				name={schedule.ScheduleName}
 				teamID={this.state.teamID}
+				team={this.props.team}
 				schedule={schedule}
 
 				handleOverrideUpdate={this.handleOverrideUpdate}
@@ -329,18 +334,24 @@ class SchedulePane extends React.Component {
 
 		return (
 			<div style={{paddingTop: '20px'}}>
-				<h3>Schedules</h3>
-				<ul class="nav nav-tabs" role="tablist">
-					{mappedTabs}
-					<ScheduleTab name="Add" />
-				</ul>
-				<div class="tab-content">
-					{mappedData}
-					<CreateNewSchedule
-						name="Add"
-						teamID={this.state.teamID}
-						handleCreateSchedule={this.handleCreateSchedule}
-					/>
+				<div class="card home-card">
+					<div class="card-header home-card-header">
+						<h3>Schedules</h3>
+					</div>
+					<div class="card-block services-card-block" style={{paddingTop:"5px"}}>
+						<ul class="nav nav-tabs" role="tablist">
+							{mappedTabs}
+							<ScheduleTab name="Add" />
+						</ul>
+						<div class="tab-content">
+							{mappedData}
+							<CreateNewSchedule
+								name="Add"
+								teamID={this.state.teamID}
+								handleCreateSchedule={this.handleCreateSchedule}
+							/>
+						</div>
+					</div>
 				</div>
 			</div>
 		)
@@ -614,6 +625,7 @@ class ScheduleData extends React.Component {
 					{this.state.updateOverrideItem || this.state.createOverrideItem ?
 						<OverrideModal
 							name={this.props.name}
+							team={this.props.team}
 							teamID={this.props.teamID}
 							parentShift={this.state.clickedParentShift}
 							handleUpdate={this.props.handleOverrideUpdate}
@@ -630,6 +642,7 @@ class ScheduleData extends React.Component {
 						<ManualModal
 							name={this.props.name}
 							teamID={this.props.teamID}
+							team={this.props.team}
 							parentShift={this.state.clickedParentShift}
 							handleUpdate={this.props.handleManualUpdate}
 							handleDelete={this.props.handleManualDelete}
@@ -645,6 +658,7 @@ class ScheduleData extends React.Component {
 						<RotationModal
 							name={this.props.name}
 							teamID={this.props.teamID}
+							team={this.props.team}
 							parentShift={this.state.clickedParentShift}
 							handleUpdate={this.props.handleRotationUpdate}
 							handleDelete={this.props.handleRotationDelete}

@@ -81,8 +81,15 @@ class RotationCard extends React.Component {
 	}
 
 	componentDidMount() {
-        axios.get('/api/users/getUsers') //needs to be get users on a team
+    console.log("team:" + this.props.team)
+        axios.get('/api/teams/getUsersOnTeam', {
+	        	params: {
+	        		Name: this.props.team
+	        	}
+	        }) //needs to be get users on a team
             .then(res => {
+              console.log("gotusersonteam");
+              console.log(res.data)
                 this.setState({
                     allUsers: res.data // get users from database
                 })

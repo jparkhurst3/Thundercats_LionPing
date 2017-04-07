@@ -204,13 +204,7 @@ a {
   height: 60px;
   line-height: 60px; /* Vertically center the text there */
 }
-.rct-sidebar-header {
-  background: #DDB680 !important;
-}
 
-.rct-label-group {
-  background: #DDB680 !important;
-}
 
 .changeArrow:hover {
   color: #DDB680;
@@ -366,15 +360,39 @@ thead th:last-child {
  */
 
 .react-calendar-timeline .rct-items .rct-item.analysis {
-  background: gold;
+
 }
 
 .rct-item {
-  border-radius: 0px;
+  border-radius: 2px;
+  border:none!important;
+  background: #D4A461;
+
 }
 
 .rct-item-content {
   font-size:20px;
+}
+
+.rct-sidebar-header {
+  background: #FFFFFF !important;
+  border-left:none!important;
+}
+
+.rct-label-group {
+  background: #FFFFFF !important;
+  border-left:none!important;
+}
+
+.selected {
+  box-shadow: 0px 0px 20px #888888;
+}
+
+.rct-item-overflow {
+  border-radius: 2px;
+  border:none!important;
+  background: #D4A461;
+
 }
 
 /* bootstrap hack: fix content width inside hidden tabs */

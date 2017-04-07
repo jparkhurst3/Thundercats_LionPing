@@ -25,7 +25,7 @@ var getCurrentUser = function(req, res) {
       res.send("invalid user session");
       req.logout();
     });
-  }  
+  }
 }
 
 var login = function(req, res) {
