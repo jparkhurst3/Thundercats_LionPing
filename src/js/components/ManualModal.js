@@ -8,33 +8,38 @@ import Select from 'react-select-plus'
 
 
 
-export default class ManualModal extends React.Component {      
+export default class ManualModal extends React.Component {
   render () {
 	return (
 		<div>
-			<ReactModal 
+			<ReactModal
 				isOpen={this.props.updateItem || this.props.createItem}
-				contentLabel="Minimal Modal Example" 
+				contentLabel="Minimal Modal Example"
 				onRequestClose={this.props.onModalClose}
         		shouldCloseOnOverlayClick={true}
-				style={{
-					overlay: {
-						background: 'rgba(255, 255, 255, .9)'
-					},
-					content: {
-						position: 'absolute',
-						height: '600px',
-						width: '500px',
-						left: '50%',
-						top: '50%',
-						transform: 'translate(-50%, -50%)',
-						right: 'auto',
-						bottom: 'auto',
-						zIndex: '100',
-						padding: 'none',
-						border: 'none'
-					}
-				}} >
+            style = {{
+                overlay: {
+                    background: 'rgba(255, 255, 255, 0.9)',
+                    zIndex:"1000"
+                },
+                content: {
+                  textAlign:"center",
+                  position: 'absolute',
+                  height: 'auto',
+                  width: '500px',
+                  left: '50%',
+                  top: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  right: 'auto',
+                  bottom: 'auto',
+                  zIndex: '1000',
+                  padding: 'none',
+                  border: 'none',
+                  boxShadow: "0px 0px 20px #888888",
+                  borderRadius: "2px",
+                  border:"none"
+                }
+            }} >
 				<ManualCard {...this.props} />
 			</ReactModal>
 		</div>
@@ -71,16 +76,20 @@ class ManualCard extends React.Component {
 	}
 
 	componentDidMount() {
-        axios.get('/api/users/getUsers') //needs to be get users on a team
-            .then(res => {
-                this.setState({
-                    allUsers: res.data // get users from database
-                })
-            })
-            .catch(err => {
-                console.log(err)
-            })
-    }
+    axios.get('/api/teams/getUsersOnTeam', {
+        params: {
+          Name: this.props.team
+        }
+      })
+      .then(res => {
+          this.setState({
+              allUsers: res.data // get users from database
+          })
+      })
+      .catch(err => {
+          console.log(err)
+      })
+  }
 
     handleUpdate = () => {
     	//rebuild a parentShift
@@ -158,24 +167,20 @@ class ManualCard extends React.Component {
 		}
 
 		const mappedAllUsers = this.state.allUsers.map(user => {return {value: user, label: user.FirstName + " " + user.LastName}}) // map users names'
-		
+
 		return (
-			<div class="card">
-				<div class="card-header"><h3>Edit Manual</h3></div>
-				<div class="card-block">
+			<div class="card modal-card">
+				<div class="card-header home-card-header"><h3>Edit Manual</h3></div>
+				<div class="card-block modal-card-block">
 					<form>
-						<div class="form-group row">
-							<div class="col-xs-10">
-								<input class="form-control" name="start" placeholder="Start Date and Time" type="datetime-local" onChange={this.handleChange} value={this.state.start}></input>
-							</div>
+						<div class="form-group">
+							<input class="form-control" name="start" placeholder="Start Date and Time" type="datetime-local" onChange={this.handleChange} value={this.state.start}></input>
 						</div>
-						<div class="form-group row">
-							<div class="col-xs-10">
+						<div class="form-group">
 								<input class="form-control" name="end" placeholder="End Date and Time" type="datetime-local" onChange={this.handleChange} value={this.state.end}></input>
-							</div>
 						</div>
-						<div class="form-group row">
-							<Select class="col-xs-10" name="user" clearable={false} value={this.state.user} placeholder="Select User" options={mappedAllUsers} onChange={this.handleUserChange} />
+						<div class="form-group">
+							<Select name="user" clearable={false} value={this.state.user} placeholder="Select User" options={mappedAllUsers} onChange={this.handleUserChange} />
 						</div>
 
 						<div>
@@ -189,20 +194,20 @@ class ManualCard extends React.Component {
 							</label>
 						</div>
 
-						<div class="form-group row">
-							<div class="col-xs-10">
+						<div class="form-group">
+							<div>
 								<input class="form-control" name="repeatType" placeholder="daily | weekly" type="text" onChange={this.handleChange} value={this.state.repeatType}></input>
 							</div>
 						</div>
 
-						<div class="form-group row">
-							{this.props.updateItem ? 
-								<div class="col-xs-10" style={{display: 'inline'}}>
+						<div class="form-group">
+							{this.props.updateItem ?
+								<div class="" style={{display: 'inline'}}>
 		                			<input type="button" value="Update Shift" class="btn" onClick={this.handleUpdate}></input>
 		                			<input type="button" value="Delete Shift" class="btn" onClick={this.handleDelete}></input>
 								</div>
 								:
-								<div class="col-xs-10" style={{display: 'inline'}}>
+								<div class="" style={{display: 'inline'}}>
 		                			<input type="button" value="Create Shift" class="btn" onClick={this.handleCreate}></input>
 								</div>
 							}

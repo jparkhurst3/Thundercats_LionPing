@@ -47,6 +47,10 @@ class TeamMembers extends React.Component {
 	}
 
 	componentDidMount() {
+		this.getMembers()
+	}
+
+	getMembers = () => {
 		axios.get('/api/users/getUsers') //get all users
             .then(res => {
                 this.setState({
@@ -72,6 +76,13 @@ class TeamMembers extends React.Component {
           .catch(err => {
               console.log(err)
           })
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps !== this.props) {
+			this.props = nextProps
+			this.getMembers()
+		}
 	}
 
 	handleUsersChange = (users) => {
@@ -174,6 +185,13 @@ class SchedulePane extends React.Component {
 	componentDidMount() {
 		//get schedules
 		this.getSchedules()
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps !== this.props) {
+			this.props = nextProps
+			this.getSchedules()
+		}
 	}
 
 	handleCreateSchedule = (submitObj) => {

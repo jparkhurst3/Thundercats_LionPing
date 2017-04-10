@@ -43,7 +43,7 @@ export default class SelectTeam extends React.Component {
 		console.log("selected")
 		console.log(value)
 		browserHistory.push(`myteams/${value.label}`);
-		window.location.reload()
+		// window.location.reload()
 
 		this.setState({
 			value
@@ -56,7 +56,7 @@ export default class SelectTeam extends React.Component {
 
 	render() {
 		const mappedAllTeams = this.state.teams ? [{
-			label: 'My Teams', 
+			label: 'My Teams',
 			options: this.state.teams.map(team => { return {value: team.Name, label: team.Name} })
 		}] : [{value: this.props.team, label: this.props.team}]
                 const KEYS_TO_FILTER=['Name', 'ID']
@@ -64,7 +64,7 @@ export default class SelectTeam extends React.Component {
                 console.log(filteredTeams)
 		console.log(mappedAllTeams)
 		return (
-			<div class="row" style={{verticalAlign: 'text-bottom'}}>                          
+			<div class="row" style={{verticalAlign: 'text-bottom'}}>
 				<Select class="col-xs-4" style={{paddingLeft: '0px', height: "50px"}} valueRenderer={this.valueRenderer} clearable={false} value={this.state.value} placeholder={<h3 style={{ paddingTop: '8px' }}><strong>Select Team</strong></h3>} options={mappedAllTeams} onChange={this.handleSelected} />
 				<input type="button" class="btn btn-secondary col-xs-4" data-container="body" value="Team Description" data-toggle="popover" data-placement="bottom" data-content="popover text"></input>
 				<div class="col-xs-2"></div>

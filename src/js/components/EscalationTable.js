@@ -6,9 +6,6 @@ import axios from 'axios'
 import Select from 'react-select';
 
 export default class EscalationTable extends React.Component {
-  state: {
-
-  }
     constructor() {
         super()
         this.state = {
@@ -22,6 +19,10 @@ export default class EscalationTable extends React.Component {
     }
 
     componentDidMount() {
+      this.getData()
+    }
+
+    getData = () => {
         //get escalation policy for this service
         console.log(this.props.service)
         const apiCall = '/api/services/getEscalationPolicy?Name=' + this.props.service;
@@ -65,6 +66,14 @@ export default class EscalationTable extends React.Component {
                 console.log(err)
             })
     }
+
+    componentWillReceiveProps(nextProps) {
+      console.log("new props")
+  		if (nextProps !== this.props) {
+        this.props = nextProps
+  			this.getData()
+  		}
+  	}
 
     addLayer = () => {
         const layers = this.state.layers;
@@ -179,11 +188,11 @@ export default class EscalationTable extends React.Component {
                 <table class="table">
                     <thead className="thead">
                         <tr>
-                            <th>Level</th>
-                            <th>Delay (Minutes)</th>
-                            <th>Users</th>
-                            <th>Teams: Schedules</th>
-                            {this.state.disabled ? <th></th> : <th>Delete</th>}
+                            <th style={{width:"5%"}}>Level</th>
+                            <th style={{width:"15%"}}>Delay</th>
+                            <th style={{width:"35%"}}>Users</th>
+                            <th style={{width:"35%"}}>Teams: Schedules</th>
+                            {this.state.disabled ? <th style={{width:"10%"}}></th> : <th style={{width:"10%"}}>Delete</th>}
                         </tr>
                     </thead>
                     <tbody>

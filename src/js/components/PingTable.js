@@ -29,7 +29,18 @@ export default class PingTable extends React.Component {
 		})
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (nextProps !== this.props) {
+			this.props = nextProps
+			this.getPings()
+		}
+	}
+
 	componentDidMount() {
+		this.getPings()
+	}
+
+	getPings = () => {
 		//database call for all pings for this service
 		const apiCall = `/api/pings/getPingsForService?Name=${this.props.service}`
 		console.log(apiCall);
@@ -50,8 +61,6 @@ export default class PingTable extends React.Component {
 			.catch((error) => {
 				console.log(error)
 			})
-
-
 	}
 
 	render() {

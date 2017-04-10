@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios'
 import {Link} from 'react-router'
+import {browserHistory} from 'react-router';
+
 
 
 export default class PingsTable extends React.Component {
@@ -43,9 +45,16 @@ export default class PingsTable extends React.Component {
 		}
 	}
 
+	onClick = (id) => {
+		console.log("onclick: " + id)
+		browserHistory.push(`/pings/${id}`);
+		// this.router.transitionTo(`/pings/${id}`);
+		// <Link to={`/pings/${ping.ID}`}>{ping.Name}</Link>
+	}
+
 	render() {
 		const mappedPingRows = this.state.pings ? this.state.pings.map(ping =>
-			<tr><td>{ping.Name}</td></tr>
+			<tr onClick={() => this.onClick(ping.ID)}><td>{ping.Name}</td></tr>
 		)  : <tr><td></td></tr>
 
 		return (
@@ -54,7 +63,7 @@ export default class PingsTable extends React.Component {
 					<h3>Pings</h3>
 				</div>
 				<div class="card-block home-card-block">
-					<table class="table home-table">
+					<table class="table home-table table-hover">
 						<tbody>
 							{mappedPingRows}
 						</tbody>

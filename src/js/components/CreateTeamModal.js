@@ -32,7 +32,8 @@ export default class CreateTeamModal extends React.Component {
 
                 style = {{
                     overlay: {
-                        background: 'rgba(255, 255, 255, 0.9)'
+                        background: 'rgba(255, 255, 255, 0.9)',
+                        zIndex:"1000"
                     },
                     content: {
                       textAlign:"center",
@@ -44,7 +45,7 @@ export default class CreateTeamModal extends React.Component {
                       transform: 'translate(-50%, -50%)',
                       right: 'auto',
                       bottom: 'auto',
-                      zIndex: '100',
+                      zIndex: '1000',
                       padding: 'none',
                       border: 'none',
                       boxShadow: "0px 0px 20px #888888",

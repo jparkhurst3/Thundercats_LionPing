@@ -13,6 +13,9 @@ import Profile from './components/Profile'
 import LoginRegister from './components/LoginRegister.js'
 import PingResponse from './components/PingResponse.js'
 
+import axios from 'axios'
+import auth from './auth.js'
+
 class Routes extends React.Component {
   render() {
 	return (
@@ -47,20 +50,73 @@ class Routes extends React.Component {
 class Container extends React.Component {
   constructor() {
     super()
+    this.state = {
+      currentUser: null,
+      loaded: false
+    }
   }
 
-  
+  componentDidMount() {
+    console.log("container mounted")
+    auth.getCurrentUser()
+      .then(res => {
+        console.log("getCurrentUser:")
+        console.log(res)
+        this.setState({
+          loaded: true,
+          loggedIn: true,
+          currentUser: res
+        })
+      })
+      .catch(err => {
+        console.log(err)
+        this.setState({
+          loggedIn: false,
+          loaded: true,
+        })
+
+      })
+  }
+
+  login = (user) => {
+    console.log("loggin")
+    this.setState({
+      currentUser: user,
+      loggedIn: true
+    })
+  }
+
+  logout = () => {
+    this.setState({
+      currentUser: null,
+      loggedIn: false,
+      // loaded: true
+    })
+  }
 
   render() {
+    // this.checkLogin()
+    if (!this.state.loaded) {
+      return <div></div>
+    }
+
+    if (!this.state.loggedIn) {
+      console.log("no current user")
+      // console.log(this.state.currentUser)
+      return (
+        <LoginRegister login={this.login} />
+      )
+    }
+
   	return (
   	  <div className="container-fluid">
     		<div className="row">
     		  <div className="col-xs-2">
-    			<SideBar />
+    			   <SideBar logout={this.logout} />
     		  </div>
     		  <div className="col-xs-10">
-    		  	<NavBar />
-    			{this.props.children}
+    		  	<NavBar currentUser={this.state.currentUser} />
+    			  {this.props.children}
     		  </div>
     		</div>
   	  </div>
@@ -76,7 +132,7 @@ class NavBar extends React.Component {
       		<input type="text" class="form-control" placeholder="Search"></input>
       	</div>
       	<div class="col-xs-8" style={{textAlign: "right"}}>
-			     <h4><Link style={{display:"inline-block"}} to="/profile">Sam Ford</Link></h4>
+			     <h4><Link style={{display:"inline-block"}} to="/profile">{this.props.currentUser.Username}</Link></h4>
       	</div>
       </div>
     )

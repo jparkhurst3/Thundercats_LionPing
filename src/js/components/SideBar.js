@@ -83,7 +83,7 @@ export default class SideBar extends React.Component {
                     </div>
                 </li>
                 <li className="nav-item">
-                    <Link className="nav-link" activeClassName="activeLink" to={'/Login'}><h5>Login/Register</h5></Link>
+                    <h5 style={{color: "white", paddingLeft:"15px"}} onClick={this.props.logout} className="nav-link" activeClassName="activeLink">Logout</h5>
                 </li>
             </ul>
 

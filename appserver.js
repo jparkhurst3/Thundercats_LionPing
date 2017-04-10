@@ -38,9 +38,9 @@ passport.use(new LocalStrategy({
   function(username, password, done) {
     console.log('working');
     database.executeQuery("SELECT Username, Password FROM USER WHERE (Username=?)", username, (err, rows, fields) => {
-      if (err) { 
+      if (err) {
         console.log("error");
-        return done(err); 
+        return done(err);
       }
       if (rows.length == 0) {
         console.log("user not found");

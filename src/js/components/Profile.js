@@ -4,6 +4,7 @@ import React from 'react'
 
 import NotificationCard from './Home/NotificationCard'
 import axios from 'axios'
+import auth from '../auth.js'
 
 export default class Profile extends React.Component {
   constructor() {
@@ -15,10 +16,11 @@ export default class Profile extends React.Component {
   }
 
   getUser = () => {
-    axios.get("api/users/getUser?Username=" + "sford")
+    auth.getCurrentUser()
       .then(res => {
+        console.log("getUser")
         console.log(res);
-        this.setState({...res.data})
+        this.setState({...res})
       })
       .catch(err => {
         console.log(err)
@@ -43,7 +45,19 @@ export default class Profile extends React.Component {
   }
   render() {
     if (!this.state) {
-      return <h1>asdf</h1>
+      return (
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-6">
+                    <EmptyCard name="Profile" />
+                    <EmptyCard name="Ping Settings" />
+                </div>
+                <div class="col-xs-6">
+                  <EmptyCard name="Notifications" />
+                </div>
+            </div>
+        </div>
+      )
     }
     const props = {...this.state};
     console.log(props)
@@ -60,6 +74,21 @@ export default class Profile extends React.Component {
               </div>
           </div>
       )
+  }
+}
+
+class EmptyCard extends React.Component {
+  render() {
+    return (
+      <div class="card home-card">
+        <div class="card-header home-card-header">
+            <h3>{this.props.name}</h3>
+        </div>
+        <div class="card-block">
+        </div>
+      </div>
+
+    )
   }
 }
 

@@ -300,9 +300,31 @@ thead th:last-child {
   box-shadow: 0px 0px 20px #888888;
 }
 
+.login-card {
+  margin-top: 20px!important;
+  border: none!important;
+  border-radius:0px!important;
+  box-shadow: 0px 0px 20px #888888;
+  position: absolute;
+  height: auto;
+  width: 500px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, 50%);
+  right: auto;
+  bottom: auto;
+
+}
+
 .modal-card {
-  border: none;
-  border-radius:0px;
+  border: none!important;
+  border-radius:0px!important;
+  box-shadow: 0px 0px 20px #888888;
+  margin-bottom:0px;
+}
+
+.modal-card-block {
+  width: 100%;
 }
 
 .home-card-block {

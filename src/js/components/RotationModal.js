@@ -17,24 +17,29 @@ export default class RotationModal extends React.Component {
 				contentLabel="Minimal Modal Example"
 				onRequestClose={this.props.onModalClose}
         		shouldCloseOnOverlayClick={true}
-				style={{
-					overlay: {
-						background: 'rgba(255, 255, 255, .9)'
-					},
-					content: {
-						position: 'absolute',
-						height: '600px',
-						width: '500px',
-						left: '50%',
-						top: '50%',
-						transform: 'translate(-50%, -50%)',
-						right: 'auto',
-						bottom: 'auto',
-						zIndex: '100',
-						padding: 'none',
-						border: 'none'
-					}
-				}} >
+            style = {{
+                overlay: {
+                    background: 'rgba(255, 255, 255, 0.9)',
+                    zIndex:"1000"
+                },
+                content: {
+                  textAlign:"center",
+                  position: 'absolute',
+                  height: 'auto',
+                  width: '500px',
+                  left: '50%',
+                  top: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  right: 'auto',
+                  bottom: 'auto',
+                  zIndex: '1000',
+                  padding: 'none',
+                  border: 'none',
+                  boxShadow: "0px 0px 20px #888888",
+                  borderRadius: "2px",
+                  border:"none"
+                }
+            }} >
 				<RotationCard {...this.props} />
 			</ReactModal>
 		</div>
@@ -86,7 +91,7 @@ class RotationCard extends React.Component {
 	        	params: {
 	        		Name: this.props.team
 	        	}
-	        }) //needs to be get users on a team
+	        })
             .then(res => {
               console.log("gotusersonteam");
               console.log(res.data)
@@ -190,22 +195,18 @@ class RotationCard extends React.Component {
 		const mappedAllUsers = this.state.allUsers.map(user => {return {value: user, label: user.FirstName + " " + user.LastName}}) // map users names'
 
 		return (
-			<div class="card">
-				<div class="card-header"><h3>Edit Rotation</h3></div>
-				<div class="card-block">
+			<div class="card modal-card">
+				<div class="card-header home-card-header"><h3>Edit Rotation</h3></div>
+				<div class="card-block modal-card-block">
 					<form>
-						<div class="form-group row">
-							<div class="col-xs-10">
+						<div class="form-group">
 								<input class="form-control" name="start" placeholder="Start Date and Time" type="datetime-local" onChange={this.handleChange} value={this.state.start}></input>
-							</div>
 						</div>
-						<div class="form-group row">
-							<div class="col-xs-10">
+						<div class="form-group">
 								<input class="form-control" name="end" placeholder="End Date and Time" type="datetime-local" onChange={this.handleChange} value={this.state.end}></input>
-							</div>
 						</div>
-						<div class="form-group row">
-							<Select multi class="col-xs-10" name="user" clearable={false} value={this.state.users} placeholder="Select User" options={mappedAllUsers} onChange={this.handleUserChange} />
+						<div class="form-group">
+							<Select multi class="" name="user" clearable={false} value={this.state.users} placeholder="Select User" options={mappedAllUsers} onChange={this.handleUserChange} />
 						</div>
 
 						<div>
@@ -219,20 +220,18 @@ class RotationCard extends React.Component {
 							</label>
 						</div>
 
-						<div class="form-group row">
-							<div class="col-xs-10">
+						<div class="form-group">
 								<input class="form-control" name="repeatType" placeholder="daily | weekly" type="text" onChange={this.handleChange} value={this.state.repeatType}></input>
-							</div>
 						</div>
 
-						<div class="form-group row">
+						<div class="form-group">
 							{this.props.updateItem ?
-								<div class="col-xs-10" style={{display: 'inline'}}>
+								<div  style={{display: 'inline'}}>
 		                			<input type="button" value="Update Shift" class="btn" onClick={this.handleUpdate}></input>
 		                			<input type="button" value="Delete Shift" class="btn" onClick={this.handleDelete}></input>
 								</div>
 								:
-								<div class="col-xs-10" style={{display: 'inline'}}>
+								<div style={{display: 'inline'}}>
 		                			<input type="button" value="Create Shift" class="btn" onClick={this.handleCreate}></input>
 								</div>
 							}

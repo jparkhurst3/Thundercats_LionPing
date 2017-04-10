@@ -38,7 +38,7 @@ var login = function(username,password) {
           reject(err);
         })
   })
-  
+
 }
 
 var logout = function() {
