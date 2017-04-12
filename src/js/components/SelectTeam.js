@@ -45,7 +45,7 @@ export default class SelectTeam extends React.Component {
 	handleSelected = (value) => {
 		console.log("selected")
 		console.log(value)
-		browserHistory.push(`myteams/${value.label}`);
+		browserHistory.push(`teams/${value.label}`);
 		// window.location.reload()
 
 		this.setState({

@@ -34,9 +34,11 @@ export default class Profile extends React.Component {
       "Username":user.Username,
       "Email":user.Email,
       "Phone":user.Phone,
+      "Slack":user.Slack,
       "NotifyEmail":user.NotifyEmail,
       "NotifyText":user.NotifyText,
-      "NotifyCall":user.NotifyCall
+      "NotifyCall":user.NotifyCall,
+      "NotifySlack":user.NotifySlack,
     })
     .then(res => {
       console.log("posted")
@@ -118,9 +120,11 @@ class PingSettings extends React.Component {
       Username:this.props.Username,
       Email: this.props.Email,
       Phone: this.props.Phone,
+      Slack: this.props.Slack,
       NotifyEmail: this.props.NotifyEmail == 1 ? true : false,
       NotifyText: this.props.NotifyText == 1 ? true : false,
       NotifyCall: this.props.NotifyCall == 1 ? true : false,
+      NotifySlack: this.props.NotifySlack == 1 ? true : false,
       disabled: true,
     }
   }
@@ -181,6 +185,13 @@ class PingSettings extends React.Component {
             </div>
           </div>
 
+          <h4 style={{textAlign:"left"}}>Slack</h4>
+          <div class="row">
+            <div class="col-xs-12">
+              <input class="form-control" type="phone" disabled={this.state.disabled} name="Slack" value={this.state.Slack} onChange={this.handleChange}  />
+            </div>
+          </div>
+
           <div>
             <h4 style={{textAlign: "left"}}>Notification Options</h4>
             <div class="form-check form-check-inline">
@@ -196,6 +207,11 @@ class PingSettings extends React.Component {
             <div class="form-check form-check-inline">
               <label class="form-check-label">
                 <input disabled={this.state.disabled} class="form-check-input" type="checkbox" name="NotifyCall" value={this.state.NotifyCall} checked={this.state.NotifyCall} onChange={this.handleChange} />Call
+              </label>
+            </div>
+            <div class="form-check form-check-inline">
+              <label class="form-check-label">
+                <input disabled={this.state.disabled} class="form-check-input" type="checkbox" name="NotifySlack" value={this.state.NotifySlack} checked={this.state.NotifySlack} onChange={this.handleChange} />Slack
               </label>
             </div>
           </div>
