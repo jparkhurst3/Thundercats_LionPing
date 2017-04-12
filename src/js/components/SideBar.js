@@ -55,7 +55,7 @@ export default class SideBar extends React.Component {
                 </li>
                 <li className="nav-item">
                     <div>
-                        <Link className="nav-link" activeClassName="activeLink" to={'/MyServices'}><h3>Services</h3></Link>
+                        <Link className="nav-link" activeClassName="activeLink" to={'/services'}><h3>Services</h3></Link>
                         <img id="serviceQuestion" style={{float: "right", marginRight:"15px", marginTop:"10px"}} height="15" width="15" name="serviceQuestion" onMouseEnter={this.showToolTip} onMouseLeave={this.hideToolTip} src={require("../../../assets/questionmark.png")} />
                         <ToolTip position="right" parent="#serviceQuestion" active={this.state.serviceQuestion}>
                             <div>
@@ -69,7 +69,7 @@ export default class SideBar extends React.Component {
                 </li>
                 <li className="nav-item">
                     <div>
-                        <Link className="nav-link" activeClassName="activeLink" to={'/MyTeams'}><h3>Teams</h3></Link>
+                        <Link className="nav-link" activeClassName="activeLink" to={'/teams'}><h3>Teams</h3></Link>
                         <img id="teamQuestion" style={{float: "right", marginRight:"15px", marginTop:"10px"}} height="15" width="15" name="teamQuestion" onMouseEnter={this.showToolTip} onMouseLeave={this.hideToolTip} src={require("../../../assets/questionmark.png")} />
                         <ToolTip position="right" parent="#teamQuestion" active={this.state.teamQuestion}>
                             <div>
