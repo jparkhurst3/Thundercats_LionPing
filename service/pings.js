@@ -26,7 +26,7 @@ var createPing = function(newPing) {
   });
 }
 
-var getPing = function(ID) { //get ping by id
+var getPing = function(ID, username) { //get ping by id
   var getPingQuery = 'SELECT p.ID, p.ServiceID, s.Name as ServiceName, p.Name, p.Description, p.Status, p.CreatedTime, ' +
     ' p.CreatedUser, p.AcknowledgedUser, p.AcknowledgedTime, p.ResolvedUser, p.ResolvedTime ' +
     ' FROM PING p JOIN SERVICE s ON (s.ID = p.ServiceID) WHERE p.ID=? ';
@@ -41,9 +41,9 @@ var getPing = function(ID) { //get ping by id
   });
 }
 
-var acknowledgePing = function(ID) { //acknowledge ping by id
+var acknowledgePing = function(ID, username) { //acknowledge ping by id
   return new Promise((resolve,reject)=>{
-    database.executeQuery('UPDATE PING SET Status = "Acknowledged", AcknowledgedTime=NOW() WHERE ID=?', ID, (error, rows, fields) => {
+    database.executeQuery('UPDATE PING SET Status = "Acknowledged", AcknowledgedTime=NOW(), AcknowledgedUser=? WHERE ID=?', [ID, username], (error, rows, fields) => {
       if (error) {
         reject(error);
       } else {
@@ -55,7 +55,7 @@ var acknowledgePing = function(ID) { //acknowledge ping by id
 
 var resolvePing = function(ID) { //resolve ping by id
   return new Promise((resolve,reject)=>{
-    database.executeQuery('UPDATE PING SET Status = "Resolved", ResolvedTime=NOW() WHERE ID=?', ID, (error, rows, fields) => {
+    database.executeQuery('UPDATE PING SET Status = "Resolved", ResolvedTime=NOW(), ResolvedUser=? WHERE ID=?', [ID, username], (error, rows, fields) => {
       if (error) {
         reject(error);
       } else {

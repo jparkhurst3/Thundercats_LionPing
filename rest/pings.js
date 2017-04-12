@@ -48,7 +48,7 @@ var getPing = function(req, res) { //get ping by id
 var acknowledgePing = function(req, res) { //acknowledge ping by id
   res.setHeader('Content-Type', 'text/plain');
 
-  pingService.acknowledgePing(req.query.ID).then(()=>{
+  pingService.acknowledgePing(req.query.ID, req.user.Username).then(()=>{
     res.statusCode = 200;
     res.send("success");
   }).catch((error)=>{
@@ -61,7 +61,7 @@ var acknowledgePing = function(req, res) { //acknowledge ping by id
 var resolvePing = function(req, res) { //resolve ping by id
   res.setHeader('Content-Type', 'text/plain');
 
-  pingService.resolvePing(req.query.ID).then(()=>{
+  pingService.resolvePing(req.query.ID, req.user.Username).then(()=>{
     res.statusCode = 200;
     res.send("success");
   }).catch((error)=>{
