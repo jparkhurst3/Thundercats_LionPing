@@ -12,6 +12,8 @@ import TeamsList from './components/TeamsList.js'
 import Profile from './components/Profile'
 import LoginRegister from './components/LoginRegister.js'
 import PingResponse from './components/PingResponse.js'
+import { Logo2 } from './components/Logo.js'
+import Select from 'react-select'
 
 import axios from 'axios'
 import auth from './auth.js'
@@ -37,8 +39,6 @@ class Routes extends React.Component {
 			<Route path='/myteams' component={TeamPage} />
 			<Route path='/myteams/:team' component={TeamPage} />
 
-			<Route path='/login' component={LoginRegister} />
-
 			<Route path='*' component={NotFound} />
 		  </Route>
 		</Router>
@@ -52,7 +52,8 @@ class Container extends React.Component {
     super()
     this.state = {
       currentUser: null,
-      loaded: false
+      loaded: false,
+      loggedIn: false
     }
   }
 
@@ -87,17 +88,32 @@ class Container extends React.Component {
   }
 
   logout = () => {
-    this.setState({
-      currentUser: null,
-      loggedIn: false,
-      // loaded: true
-    })
+    auth.logout().then((response)=> {
+        console.log("logged in");
+        console.log(response);
+        this.setState({
+          currentUser: null,
+          loggedIn: false,
+          // loaded: true
+        })
+    }).catch((error)=> {
+        console.log("error");
+        console.log(error);
+    });
   }
+
+  // <div class="centered-icon">
+  //   <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+  // </div>
 
   render() {
     // this.checkLogin()
     if (!this.state.loaded) {
-      return <div></div>
+      return (
+        <div class="centered-icon">
+          <Logo2 />
+        </div>
+      )
     }
 
     if (!this.state.loggedIn) {
@@ -112,7 +128,7 @@ class Container extends React.Component {
   	  <div className="container-fluid">
     		<div className="row">
     		  <div className="col-xs-2">
-    			   <SideBar logout={this.logout} />
+    			   <SideBar loading={true} logout={this.logout} />
     		  </div>
     		  <div className="col-xs-10">
     		  	<NavBar currentUser={this.state.currentUser} />
@@ -125,11 +141,58 @@ class Container extends React.Component {
 }
 
 class NavBar extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      value: null
+    }
+  }
+
+  handleSelected = (value) => {
+    //go to service, team, or ping response page
+    console.log("handle selected")
+    console.log(value)
+    if (value) {
+  		browserHistory.push(`myservices/${value.label}`);
+  		this.setState({
+  			value: ''
+  		})
+    }
+	}
+
+  search = (input) => {
+    console.log("input")
+    console.log(input)
+
+    if (!input) {
+      return Promise.resolve({options: []})
+    }
+    // return Promise.resolve({options: []})
+
+    // return axios.get("search/" + input)
+    //   .then(res => {
+    //     return {options: res}
+    //   })
+    //   .catch(err => {
+    //     console.log(err)
+    //   })
+
+    return axios.get("/api/services/getNames")
+			.then((result) => {
+				console.log(result.data)
+				// console.log(result.data[0)
+        return {options: result.data.map(val => { return {value: val, label: val}})}
+			})
+			.catch((error) => {
+				console.log(error);
+			})
+  }
+
   render() {
     return (
       <div className="container row" style={{paddingBottom: '20px', paddingTop: '20px', paddingRight:'0px', marginRight: '0px'}}>
       	<div class="col-xs-4">
-      		<input type="text" class="form-control" placeholder="Search"></input>
+          <Select.Async class="" style={{paddingLeft: '0px'}} value={this.state.value} placeholder="Search" loadOptions={this.search} onChange={this.handleSelected} />
       	</div>
       	<div class="col-xs-8" style={{textAlign: "right"}}>
 			     <h4><Link style={{display:"inline-block"}} to="/profile">{this.props.currentUser.Username}</Link></h4>

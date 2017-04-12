@@ -1,6 +1,7 @@
 import React from 'React';
 import axios from 'axios'
 import moment from 'moment'
+import {Link} from 'react-router'
 
 export default class PingResponse extends React.Component {
   constructor() {
@@ -55,42 +56,49 @@ export default class PingResponse extends React.Component {
   render() {
     if (!this.state.pingData) {
       return (
-        <div class="container">
-          <h1>Loading yo</h1>
+        <div class="card home-card">
+          <div class="card-header home-card-header">
+            <h3>Respond to Ping</h3>
+          </div>
+
+          <div class="card-block">
+          </div>
         </div>
       )
     }
 
     let button = null;
     if (this.state.pingData.Status == "Open") {
-      button = <div><input class="btn" name="acknowledge" value="Acknowledge Ping" onClick={this.acknowledgePing} /></div>
+      button = <input style={{display:"inline", width: "20%", float:"left"}} class="btn" name="acknowledge" value="Acknowledge Ping" onClick={this.acknowledgePing} />
     } else if (this.state.pingData.Status == "Acknowledged") {
-      button = <div><input class="btn" hidden={this.state.pingData.Status == "Resolved" } name="resolve" value="Resolve Ping" onClick={this.resolvePing} /></div>
+      button = <input style={{display:"inline", width: "20%", float:"left"}} class="btn" hidden={this.state.pingData.Status == "Resolved" } name="resolve" value="Resolve Ping" onClick={this.resolvePing} />
     } else {
       button = null;
     }
 
     return (
-      <div class="container">
-        <h1>Respond to Ping</h1>
-        <div>
-          <p><strong>Date created:</strong> {moment(this.state.pingData.CreatedTime).calendar()}</p>
+      <div class="card home-card">
+        <div class="card-header home-card-header">
+          <h3>Respond to Ping</h3>
+        </div>
+
+        <div class="card-block">
+          <p><strong>Date Created:</strong> {moment(this.state.pingData.CreatedTime).calendar()}</p>
           <p><strong>Created By:</strong> {this.state.pingData.CreatedUser}</p>
           <p><strong>Service:</strong> {this.state.pingData.ServiceName}</p>
           <p><strong>Ping Name:</strong> {this.state.pingData.Name}</p>
           <p><strong>Description:</strong> {this.state.pingData.Description}</p>
           <p><strong>Status:</strong> {this.state.pingData.Status}</p>
           <p><strong>Acknowledged User:</strong> {this.state.pingData.AcknowledgedUser}</p>
-          <p><strong>Date Acknowledged:</strong> {moment(this.state.pingData.AcknowledgedTime).calendar()}</p>
+          <p><strong>Date Acknowledged:</strong> {this.state.pingData.AcknowledgedTime ? moment(this.state.pingData.AcknowledgedTime).calendar() : null}</p>
           <p><strong>Resolved User:</strong> {this.state.pingData.ResolvedUser}</p>
-          <p><strong>Date Resolved:</strong> {moment(this.state.pingData.ResolvedTime).calendar()}</p>
-
+          <p><strong>Date Resolved:</strong> {this.state.pingData.ResolvedTime ? moment(this.state.pingData.ResolvedTime).calendar() : null}</p>
+          {button}
+          <Link class="btn" style={{display:"inline", width: "20%", float:"right"}} to="/" >Go to site</Link>
 
         </div>
 
-        {button}
 
-        <a href="http://localhost:8080" >Go to site</a>
       </div>
     )
   }

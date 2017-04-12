@@ -70,7 +70,7 @@ class LoginCard extends React.Component {
         }).catch((error)=> {
             console.log("error");
             console.log(error);
-        });;
+        });
         // axios.get('/auth/getCurrentUser')
         //     .then(res => {
         //         console.log("logged in");
@@ -96,9 +96,9 @@ class LoginCard extends React.Component {
             </div>
             <div class="card-block">
               <input type="text" style={{marginBottom: "20px"}} class="form-control" id="uname" onChange={this.usernameChanged} placeholder="Username" />
-              <input type="text" class="form-control" id="passw" onChange={this.passwordChanged} placeholder="Password" />
-              <input type="button" class="btn" value="Login" onClick={this.handleLogin}></input>
-              <input type="button" class="btn" value="Register" onClick={this.handleRegister}></input>
+              <input type="password" style={{marginBottom: "20px"}} class="form-control" id="passw" onChange={this.passwordChanged} placeholder="Password" />
+              <input type="button" style={{width: "40%", float:"left"}} class="btn form-control" value="Login" onClick={this.handleLogin}></input>
+              <input type="button" style={{width: "40%", float:"right"}} class="btn form-control" value="Register" onClick={this.handleRegister}></input>
             </div>
           </div>
         )

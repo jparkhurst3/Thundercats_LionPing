@@ -3,7 +3,7 @@ import axios from 'axios'
 import SearchInput, {createFilter} from 'react-search-input'
 import CreateTeamModal from './CreateTeamModal'
 import {Link, browserHistory, withRouter} from 'react-router'
-import Select from 'react-select-plus'
+import Select from 'react-select'
 
 
 export default class SelectTeam extends React.Component {
@@ -12,7 +12,6 @@ export default class SelectTeam extends React.Component {
 		this.state = {
 			teams: null,
 			value: props.team,
-            searchTerm: ''
 		}
 		console.log("value set")
 		console.log(this.state.value)
@@ -31,13 +30,17 @@ export default class SelectTeam extends React.Component {
 			})
 	}
 
-    searchUpdated = (term) => {
-        this.setState({searchTerm: term})
-    }
-    search = () => {
-        return
-    }
-
+	componentWillReceiveProps(nextProps) {
+		if (nextProps !== this.props) {
+			console.log("new props in select team")
+			// this.props = nextProps
+			console.log(this.props)
+			console.log(nextProps)
+			this.setState({
+				value: nextProps.team
+			})
+		}
+	}
 
 	handleSelected = (value) => {
 		console.log("selected")
@@ -55,13 +58,10 @@ export default class SelectTeam extends React.Component {
 	}
 
 	render() {
-		const mappedAllTeams = this.state.teams ? [{
-			label: 'My Teams',
-			options: this.state.teams.map(team => { return {value: team.Name, label: team.Name} })
-		}] : [{value: this.props.team, label: this.props.team}]
-                const KEYS_TO_FILTER=['Name', 'ID']
-                const filteredTeams = this.state.teams ? this.state.teams.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTER)) : ''
-                console.log(filteredTeams)
+		const mappedAllTeams = this.state.teams ?
+			this.state.teams.map(team => { return {value: team.Name, label: team.Name} })
+			: [{value: this.props.team, label: this.props.team}]
+
 		console.log(mappedAllTeams)
 		return (
 			<div class="row" style={{verticalAlign: 'text-bottom'}}>

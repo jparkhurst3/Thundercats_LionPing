@@ -8,11 +8,53 @@ h5 {
   /*color: green;*/
 }
 
+a {
+  color:#446889;
+}
+
 a:hover {
   color: gold;
     text-decoration: none;
 
 }
+
+.hub-icon {
+  animation: spin 4s 1 ease both;
+  transform-origin: center center;
+}
+
+@-moz-keyframes spin {
+    from { -moz-transform: rotate(0deg); }
+    to { -moz-transform: rotate(360deg); }
+}
+@-webkit-keyframes spin {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(360deg); }
+}
+@keyframes spin {
+    from {transform:rotate(0deg);}
+    to {transform:rotate(360deg);}
+}
+
+
+.centered-icon {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 50px;
+}
+
+
+.Select-value-icon  {
+  /*background:#D4A461;
+  color:white;*/
+}
+.Select-value-label  {
+  /*background:#D4A461;
+  color:white;*/
+}
+
 
 .form-control {
   border-radius: 2px!important;
@@ -253,12 +295,13 @@ a {
 }
 
 .card-block {
-  /*padding:0px!important;*/
 }
 
 .services-card-block {
   padding:0px;
 }
+
+/*.users-card-block {}*/
 
 thead {
   /*background-color: #4F5D75;*/
@@ -383,6 +426,19 @@ thead th:last-child {
 
 .react-calendar-timeline .rct-items .rct-item.analysis {
 
+}
+
+.react-calendar-timeline .rct-header .rct-label.rct-label-only {
+  background-color: #f0f0f0!important;
+  color: black!important;
+}
+
+.react-calendar-timeline .rct-today {
+  background:#446889!important;
+}
+
+.react-calendar-timeline .rct-header .rct-label {
+  color:black!important;
 }
 
 .rct-item {

@@ -6,7 +6,7 @@ import axios from 'axios'
 import {Link} from 'react-router'
 import EscalationTable from './EscalationTable.js'
 import PingTable from './PingTable.js'
-import Select from 'react-select-plus'
+import Select from 'react-select'
 import { browserHistory } from 'react-router';
 import { withRouter } from 'react-router'
 import CreateServiceModal from './CreateServiceModal'
@@ -36,6 +36,18 @@ class SelectService extends React.Component {
 		this.state = {
 			services: null,
 			value: props.service
+		}
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps !== this.props) {
+			console.log("new props in select team")
+			// this.props = nextProps
+			console.log(this.props)
+			console.log(nextProps)
+			this.setState({
+				value: nextProps.service
+			})
 		}
 	}
 
@@ -72,10 +84,9 @@ class SelectService extends React.Component {
 		// const mappedMyServices = this.state.services ? this.state.services.map((service) => {
 		// 	return {value: service, label: service} : [{value: this.props.service, label: this.props.service}]
 
-		const mappedAllServices = this.state.services ? [{
-			label: 'My Services',
-			options: this.state.services.map(service => { return {value: service, label: service} })
-		}] : [{value: this.props.service, label: this.props.service}]
+		const mappedAllServices = this.state.services ?
+			this.state.services.map(service => { return {value: service, label: service} })
+		: [{value: this.props.service, label: this.props.service}]
 
 		return (
 			<div class="row" style={{verticalAlign: 'text-bottom'}}>

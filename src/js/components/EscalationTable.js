@@ -169,13 +169,14 @@ export default class EscalationTable extends React.Component {
                     />
             )
             }
-        ) : <tr><td>loading</td></tr>
+        ) : <tr><td></td></tr>
 
         const buttons = this.state.disabled ?
-            <input type="button" value="Edit" class="btn" onClick={this.toggleEdit}></input> :
+            <input type="button" style={{float:"left", width: "20%", margin:"20px"}} value="Edit" class="btn" onClick={this.toggleEdit}></input> :
             <div>
-                <input type="button" value="Cancel" class="btn" onClick={this.handleCancel}></input>
-                <input type="button" value="Submit Changes" class="btn" onClick={this.handleSubmit}></input>
+                <input type="button" style={{float:"left", width: "20%", margin:"20px"}}  value="Cancel" class="btn" onClick={this.handleCancel}></input>
+                <input type="button" style={{float:"left", width: "auto", margin:"20px"}} value="+" class="btn" onClick={this.addLayer} ></input>
+                <input type="button" style={{float:"right", width: "30%", margin:"20px"}} value="Submit Changes" class="btn" onClick={this.handleSubmit}></input>
             </div>
 
 
@@ -199,16 +200,10 @@ export default class EscalationTable extends React.Component {
                         {mappedLayers}
                     </tbody>
                 </table>
-                <div className="row">
-                    <div className="col-xs-3">
-
-                    </div>
-                    <div className="col-xs-9">
-                        {buttons}
-                    </div>
+                <div className="">
+                    {buttons}
                 </div>
-                {this.state.disabled ? <div></div> : <input type="button" value="+" class="btn" onClick={this.addLayer} ></input>}
-                </div>
+              </div>
             </div>
         )
     }

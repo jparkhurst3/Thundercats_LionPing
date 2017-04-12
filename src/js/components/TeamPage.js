@@ -3,7 +3,7 @@
 import React from 'react';
 import axios from 'axios'
 import CreateTeamModal from './CreateTeamModal'
-import Select from 'react-select-plus'
+import Select from 'react-select'
 import {Link, browserHistory, withRouter} from 'react-router'
 import SearchInput, {createFilter} from 'react-search-input'
 import "babel-polyfill";
@@ -152,10 +152,10 @@ class TeamMembers extends React.Component {
 			}})
 
 		const buttons = this.state.disabled ?
-			<input class="btn" onClick={this.handleUserEditClick} value="Edit Users" /> :
+			<input class="btn" style={{float:"left", width: "20%", margin:"20px", marginLeft: "0px"}} onClick={this.handleUserEditClick} value="Edit Users" /> :
 			<div>
-				<input class="btn" onClick={this.handleUserEditClick} value="Cancel" />
-				<input class="btn" onClick={this.handleUserSubmit} value="Submit" />
+				<input class="btn" style={{float:"left", width: "20%", margin:"20px", marginLeft: "0px"}} onClick={this.handleUserEditClick} value="Cancel" />
+				<input class="btn" style={{float:"right", width: "20%", margin:"20px", marginRight: "0px"}} onClick={this.handleUserSubmit} value="Submit" />
 			</div>
 
 
@@ -164,7 +164,7 @@ class TeamMembers extends React.Component {
 				<div class="card-header home-card-header">
 					<h3>Users</h3>
 				</div>
-				<div class="card-block services-card-block">
+				<div class="card-block">
 					<Select multi disabled={this.state.disabled} class="" name="user" clearable={false} value={mappedUsers} placeholder="Select User" options={mappedUserOptions} onChange={this.handleUsersChange} />
 					{buttons}
 				</div>
@@ -327,7 +327,7 @@ class SchedulePane extends React.Component {
 		}
 
 		const mappedTabs = this.state.schedules.map((schedule, key) =>
-			<ScheduleTab active={key == 1} name={schedule.ScheduleName} />
+			<ScheduleTab active={key == 0} name={schedule.ScheduleName} />
 		)
 		const mappedData = this.state.schedules.map((schedule, key) =>
 			<ScheduleData
@@ -357,7 +357,7 @@ class SchedulePane extends React.Component {
 						<h3>Schedules</h3>
 					</div>
 					<div class="card-block services-card-block" style={{paddingTop:"5px"}}>
-						<ul class="nav nav-tabs" role="tablist">
+						<ul class="nav nav-tabs" style={{paddingLeft:"5px"}} role="tablist">
 							{mappedTabs}
 							<ScheduleTab name="Add" />
 						</ul>
@@ -379,7 +379,7 @@ class SchedulePane extends React.Component {
 class ScheduleTab extends React.Component {
 	constructor() {
 		super()
-		this.state ={
+		this.state = {
 			schedules: null
 		}
 	}
@@ -387,8 +387,8 @@ class ScheduleTab extends React.Component {
 	render() {
 		const id = '#' + this.props.name;
 		return (
-			<li className={this.props.active ? "nav-item active" : "nav-item"}>
-				<a className="nav-link" data-toggle="tab" href={id} role="tab">
+			<li class="nav-item">
+				<a class="nav-link" data-toggle="tab" href={id} role="tab">
 					{this.props.name}
 				</a>
 			</li>
@@ -426,7 +426,6 @@ class CreateNewSchedule extends React.Component {
 			</div>
 		)
 	}
-
 }
 
 class ScheduleData extends React.Component {
