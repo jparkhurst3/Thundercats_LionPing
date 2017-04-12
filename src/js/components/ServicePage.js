@@ -66,7 +66,7 @@ class SelectService extends React.Component {
 	handleSelected = (value) => {
 		console.log("selected")
 		console.log(value)
-		browserHistory.push(`myservices/${value.label}`);
+		browserHistory.push(`services/${value.label}`);
 		// window.location.reload()
 
 		this.setState({
@@ -78,7 +78,7 @@ class SelectService extends React.Component {
 		return <h3 style={{ paddingTop: '8px'}}><strong>{option.label}</strong></h3>
 	}
 
-	renderLink = (service) => <Link to="myservices/${value.label}`" ></Link>
+	renderLink = (service) => <Link to="services/${value.label}`" ></Link>
 
 	render() {
 		// const mappedMyServices = this.state.services ? this.state.services.map((service) => {

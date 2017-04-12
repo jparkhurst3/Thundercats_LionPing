@@ -69,7 +69,7 @@ export default class PingsTable extends React.Component {
 						</tbody>
 					</table>
 					<div class="home-table-button-wrapper">
-						<Link class="btn home-table-button" to={`/myservices/${this.props.service}`} >Go to {this.props.service} Service</Link>
+						<Link class="btn home-table-button" to={`/services/${this.props.service}`} >Go to {this.props.service} Service</Link>
 					</div>
 				</div>
 			</div>
