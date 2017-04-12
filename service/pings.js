@@ -26,7 +26,7 @@ var createPing = function(newPing) {
   });
 }
 
-var getPing = function(ID, username) { //get ping by id
+var getPing = function(ID) { //get ping by id
   var getPingQuery = 'SELECT p.ID, p.ServiceID, s.Name as ServiceName, p.Name, p.Description, p.Status, p.CreatedTime, ' +
     ' p.CreatedUser, p.AcknowledgedUser, p.AcknowledgedTime, p.ResolvedUser, p.ResolvedTime ' +
     ' FROM PING p JOIN SERVICE s ON (s.ID = p.ServiceID) WHERE p.ID=? ';
@@ -53,7 +53,7 @@ var acknowledgePing = function(ID, username) { //acknowledge ping by id
   });
 }
 
-var resolvePing = function(ID) { //resolve ping by id
+var resolvePing = function(ID, username) { //resolve ping by id
   return new Promise((resolve,reject)=>{
     database.executeQuery('UPDATE PING SET Status = "Resolved", ResolvedTime=NOW(), ResolvedUser=? WHERE ID=?', [username, ID], (error, rows, fields) => {
       if (error) {
