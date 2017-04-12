@@ -13,6 +13,7 @@
 -- DROP TABLE SERVICE;
 -- DROP TABLE USER;
 
+
 CREATE TABLE USER (
 	Username		VARCHAR(25)		NOT NULL,
     Password		VARCHAR(50)		NOT NULL,
@@ -20,9 +21,11 @@ CREATE TABLE USER (
     LastName		VARCHAR(25)		NOT NULL,
     Email			VARCHAR(254),
     Phone			VARCHAR(12),
+    SlackUsername   VARCHAR(21),
     NotifyEmail     BOOLEAN         DEFAULT FALSE,
     NotifyCall		BOOLEAN	        DEFAULT FALSE,
     NotifyText      BOOLEAN	        DEFAULT FALSE,
+    NotifySlack 	BOOLEAN 		DEFAULT FALSE,
     PRIMARY KEY (Username)
 );
 

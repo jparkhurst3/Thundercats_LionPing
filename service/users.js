@@ -61,7 +61,7 @@ var getUser = function(Username) {
 */
 var updateUserNotificationPreferences = function(user) {
   var updateUserNotificationPreferencesPromise = new Promise(function(resolve,reject) {
-    database.executeQuery('UPDATE USER SET Email=?, Phone=?, NotifyEmail=?, NotifyCall=?, NotifyText=? WHERE Username=? ', [user.Email,user.Phone,user.NotifyEmail,user.NotifyCall,user.NotifyText,user.Username], (error, rows, fields) => {
+    database.executeQuery('UPDATE USER SET Email=?, Phone=?, SlackUsername=?, NotifyEmail=?, NotifyCall=?, NotifyText=?, NotifySlack=?, WHERE Username=? ', [user.Email,user.Phone,user.SlackUsername,user.NotifyEmail,user.NotifyCall,user.NotifyText,user.NotifySlack,user.Username], (error, rows, fields) => {
       if (error) {
         console.log(error);
         reject(error);
