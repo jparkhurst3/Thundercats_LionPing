@@ -153,7 +153,7 @@ class NavBar extends React.Component {
     console.log("handle selected")
     console.log(value)
     if (value) {
-  		browserHistory.push(`myservices/${value.label}`);
+  		browserHistory.push(`services/${value.label}`);
   		this.setState({
   			value: ''
   		})
@@ -169,13 +169,14 @@ class NavBar extends React.Component {
     }
     // return Promise.resolve({options: []})
 
-    // return axios.get("search/" + input)
-    //   .then(res => {
-    //     return {options: res}
-    //   })
-    //   .catch(err => {
-    //     console.log(err)
-    //   })
+    // return axios.get("/api/search" + input)
+		// 	.then((result) => {
+		// 		console.log(result.data)
+    //     return {options: result.data.map(val => { return {value: val, label: val}})}
+		// 	})
+		// 	.catch((error) => {
+		// 		console.log(error);
+		// 	})
 
     return axios.get("/api/services/getNames")
 			.then((result) => {
