@@ -43,7 +43,7 @@ var getPing = function(ID, username) { //get ping by id
 
 var acknowledgePing = function(ID, username) { //acknowledge ping by id
   return new Promise((resolve,reject)=>{
-    database.executeQuery('UPDATE PING SET Status = "Acknowledged", AcknowledgedTime=NOW(), AcknowledgedUser=? WHERE ID=?', [ID, username], (error, rows, fields) => {
+    database.executeQuery('UPDATE PING SET Status = "Acknowledged", AcknowledgedTime=NOW(), AcknowledgedUser=? WHERE ID=?', [username, ID], (error, rows, fields) => {
       if (error) {
         reject(error);
       } else {
@@ -55,7 +55,7 @@ var acknowledgePing = function(ID, username) { //acknowledge ping by id
 
 var resolvePing = function(ID) { //resolve ping by id
   return new Promise((resolve,reject)=>{
-    database.executeQuery('UPDATE PING SET Status = "Resolved", ResolvedTime=NOW(), ResolvedUser=? WHERE ID=?', [ID, username], (error, rows, fields) => {
+    database.executeQuery('UPDATE PING SET Status = "Resolved", ResolvedTime=NOW(), ResolvedUser=? WHERE ID=?', [username, ID], (error, rows, fields) => {
       if (error) {
         reject(error);
       } else {
