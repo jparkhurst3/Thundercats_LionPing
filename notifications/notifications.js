@@ -26,6 +26,9 @@ var notifyUser = function(username, message) {
 		if(user.NotifyEmail) {
 			sendEmail(user.Email,message);
 		}
+		if(user.NotifySlack) {
+			sendSlack(user.Slack, message)
+		}
 	}).catch((error)=>{
 		console.log("error notifying user " + username +": ");
 		console.log(error);
@@ -69,6 +72,13 @@ var sendEmail = function(email, message) {
 	    }
 	    console.log('Message %s sent: %s', info.messageId, info.response);
 	});
+}
+
+var sendSlack = function(slackname, message) {
+	new_message = '@' + slackname + ' ' + message;
+	console.log(new_message)
+	console.log(message)
+	slack.postMessage(config.slack.webhookURL, new_message);
 }
 
 var call = function(number, message) {
