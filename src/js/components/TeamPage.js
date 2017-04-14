@@ -579,6 +579,7 @@ class ScheduleData extends React.Component {
 	}
 
 	render() {
+		let mappedComputedShifts = [];
 		const mappedOverrideShifts = this.props.schedule.OverrideShifts.map((shift, key) => {
 			return this.formatOverrideShift(shift)
 		})
@@ -609,10 +610,19 @@ class ScheduleData extends React.Component {
 			return shift
 		})
 
+		console.log("shifts2")
+		console.log(shifts2)
+
+
+
+		// create computed shifts
+
+
 
 		//sort shifts by time?
 		// const mappedComputedShifts = shifts2.map((shift, key) => {
-
+		// 	const shift.id = key+1;
+		//
 		// })
 
 

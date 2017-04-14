@@ -397,7 +397,13 @@ thead th:last-child {
 .home-table-button {
   width: 100%;
   color: #F2F5F7;
+  margin-bottom: 20px;
   /*font-size: 20px;*/
+}
+
+.home-table-deck {
+  min-height: 400px;
+  display:flex;
 }
 
 /*
@@ -442,7 +448,7 @@ thead th:last-child {
 
 .rct-item {
   border-radius: 2px;
-  border:none!important;
+  /*border:none!important;*/
   background: #D4A461;
 
 }

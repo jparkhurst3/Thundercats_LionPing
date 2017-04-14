@@ -58,9 +58,9 @@ export default class PingsTable extends React.Component {
 		)  : <tr><td></td></tr>
 
 		return (
-			<div class="card home-card">
+			<div class="card home-card" style={{flex:"2", marginLeft:"25px"}}>
 				<div class="home-card-header card-header">
-					<h3>Pings</h3>
+					<h3>{this.props.service} Pings</h3>
 				</div>
 				<div class="card-block home-card-block">
 					<table class="table home-table table-hover">

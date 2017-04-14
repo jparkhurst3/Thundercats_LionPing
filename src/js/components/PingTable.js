@@ -14,7 +14,7 @@ export default class PingTable extends React.Component {
 
 	handlePageClick = (page) => {
 		console.log(page)
-		const numToShow = 3;
+		const numToShow = 5;
 		//load differrent chunk or stuff
 
 		const mappedPingRows = this.state.pings
@@ -48,15 +48,17 @@ export default class PingTable extends React.Component {
 			.then((result) => {
 				console.log(result.data)
 				this.setState({ pings: result.data })
+
 				const mappedPingRows = this.state.pings
 					.filter((pings, index) => {
 						//on page 0 return 3 elements
-						return index < 3;
+						return index < 5;
 					})
 					.map((ping) => <PingRow ping={ping} />)
-						this.setState({
-							mappedPingRows: mappedPingRows
-						})
+
+				this.setState({
+					mappedPingRows: mappedPingRows
+				})
 			})
 			.catch((error) => {
 				console.log(error)
@@ -69,7 +71,7 @@ export default class PingTable extends React.Component {
 				<div class="card-header home-card-header">
 					<h3>Pings</h3>
 				</div>
-					<div class="card-block services-card-block">
+				<div class="card-block services-card-block">
 					<table class="table table-hover">
 						<thead className="thead">
 							<tr>
@@ -88,22 +90,35 @@ export default class PingTable extends React.Component {
 		)
 	}
 }
+// <PingPagination numPings={this.state.pings.length} activePage={this.state.activePage} handlePageClick={this.handlePageClick} />
+
 // <PingPagination activePage={this.state.activePage} handlePageClick={this.handlePageClick} />
 
 
 class PingPagination extends React.Component {
 	render() {
 		//get number from og query
+		// return (
+		// 	<div class="text-center">
+		// 	  <ul class="pagination" style={{display:"inline-block"}}>
+		// 			<li style={{zIndex: 0}} class={this.props.activePage == item ? "page-item active" : "page-item"} onClick={() => this.props.handlePageClick(item)}><span class="page-link">Prev</span></li>
+		// 			<li style={{zIndex: 0}} class={this.props.activePage == item ? "page-item active" : "page-item"} onClick={() => this.props.handlePageClick(item)}><span class="page-link">Next</span></li>
+		// 	  </ul>
+		// 	</div>
+		//
+		// )
+
+
 		const items = [0,1,2,3,4,5,6]
 		const mappedItems = items.map(item => {
 			return <li style={{zIndex: 0}} class={this.props.activePage == item ? "page-item active" : "page-item"} onClick={() => this.props.handlePageClick(item)}><span class="page-link">{item}</span></li>
 		})
 		return (
-			<nav>
-			  <ul class="pagination">
+			<div class="text-center">
+			  <ul class="pagination" style={{display:"inline-block"}}>
 			  	{mappedItems}
 			  </ul>
-			</nav>
+			</div>
 		)
 	}
 }

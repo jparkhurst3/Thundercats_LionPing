@@ -57,9 +57,8 @@ class HomeTables extends React.Component {
 
     return (
       <div className="container">
-        <div class="card-deck">
+        <div class="home-table-deck">
           <ServicesTable onServiceClick={this.handleServiceClick} currentService={this.state.service} />
-          <ScheduleTable service={this.state.service} />
           <PingsTable service={this.state.service} />
         </div>
       </div>
