@@ -31,9 +31,10 @@ export default class NotificationCard extends React.Component {
 							{mappedPingRows}
 						</tbody>
 					</table>
-					<p class="card-text"><small class="text-muted">Last updated {moment().calendar()}</small></p>
 				</div>
 			</div>
 		)
 	}
+	// <p style="" class="card-text"><small class="text-muted">Last updated {moment().calendar()}</small></p>
+
 }

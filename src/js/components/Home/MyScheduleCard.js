@@ -12,7 +12,7 @@ export default class MyScheduleCard extends React.Component {
 					<h3>Currently On-Call</h3>
 				</div>
 				<div class="card-block">
-					<p class="card-text"><h3>Database Service</h3><p>1st Escaltion :: Until 8:00pm</p></p>
+					<p class="card-text"><h3>Database Service</h3><p>1st Escalation :: Until 8:00pm</p></p>
 					<p class="card-text"><h3>UI Service</h3><p>4th Escalation :: Always</p></p>
 
 				</div>

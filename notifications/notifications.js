@@ -1,7 +1,7 @@
 var slack = require('./slack/slack.js');
 var moment = require('moment');
-var twilio = require('twilio')(config.get('twilio').accountSid, config.get('twilio').authToken);
 var config = require('config');
+var twilio = require('twilio')(config.get('twilio').accountSid, config.get('twilio').authToken);
 var userService = require('../service/users.js');
 var pingService = require('../service/pings.js');
 var serviceService = require('../service/services.js');
