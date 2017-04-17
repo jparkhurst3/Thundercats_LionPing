@@ -1,4 +1,5 @@
 var database = require('../database/database.js');
+var serviceServce = require('./services.js');
 
 var getPingsForService = function(nameOrID, queryParam) {
 	var whereClause = (nameOrID == "ID") ? " WHERE (s.ID = ?)" : " WHERE (s.Name = ?)";
@@ -65,10 +66,41 @@ var resolvePing = function(ID, username) { //resolve ping by id
   });
 }
 
+var getUnresolvedPings = function() {
+  return new Promise((resolve,reject)=>{
+    database.executeQuery('SELECT * FROM PING WHERE Status != "Resolved" ', (error, rows, fields) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(rows);
+      }
+    })
+  });
+}
+
+var getUnresolvedPingsForUser = function(username) {
+  return new Promise((resolve,reject)=>{
+    serviceServce.getServicesForUser(username).then((services)=>{
+      var serviceIDs = services.map((service)=>{ return service.ID; });
+      var query = 'SELECT * FROM PING WHERE Status != "Resolved" AND ServiceID IN (' + serviceIDs.join(",") + ")";
+      database.executeQuery(query, (error, rows, fields) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+  });
+  
+}
+
 module.exports = {
 	getPingsForService : getPingsForService,
 	createPing : createPing,
   getPing : getPing,
   resolvePing : resolvePing,
-  acknowledgePing : acknowledgePing
+  acknowledgePing : acknowledgePing,
+  getUnresolvedPings : getUnresolvedPings,
+  getUnresolvedPingsForUser : getUnresolvedPingsForUser
 }

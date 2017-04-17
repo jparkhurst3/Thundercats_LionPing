@@ -71,10 +71,38 @@ var resolvePing = function(req, res) { //resolve ping by id
   });
 }
 
+var getUnresolvedPings = function(req, res) {
+  res.setHeader('Content-Type', 'text/plain');
+
+  pingService.getUnresolvedPings().then((result)=>{
+    res.statusCode = 200;
+    res.send(JSON.stringify(result));
+  }).catch((error)=>{
+    console.log(error);
+    res.statusCode = 500;
+    res.end("error");
+  });
+}
+
+var getMyUnresolvedPings = function(req, res) {
+  res.setHeader('Content-Type', 'text/plain');
+
+  pingService.getUnresolvedPingsForUser(req.user.Username).then((result)=>{
+    res.statusCode = 200;
+    res.send(JSON.stringify(result));
+  }).catch((error)=>{
+    console.log(error);
+    res.statusCode = 500;
+    res.end("error");
+  });
+}
+
 module.exports = {
 	getPingsForService : getPingsForService,
 	createPing : createPing,
   getPing : getPing,
   resolvePing : resolvePing,
-  acknowledgePing : acknowledgePing
+  acknowledgePing : acknowledgePing,
+  getUnresolvedPings : getUnresolvedPings,
+  getMyUnresolvedPings : getMyUnresolvedPings
 }

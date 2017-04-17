@@ -104,6 +104,7 @@ app.post('/api/pings/createPing', pings.createPing);
 app.get('/api/pings/getPing', pings.getPing);
 app.post('/api/pings/acknowledgePing', pings.acknowledgePing);
 app.post('/api/pings/resolvePing', pings.resolvePing);
+app.get('/api/pings/getUnresolvedPings', pings.getUnresolvedPings);
 
 //Users
 var users = require('./rest/users');
