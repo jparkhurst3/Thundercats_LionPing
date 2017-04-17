@@ -1,6 +1,6 @@
 var slack = require('./slack/slack.js');
 var moment = require('moment');
-var twilio = require('twilio');
+var twilio = require('twilio')(config.get('twilio').accountSid, config.get('twilio').authToken);
 var config = require('config');
 var userService = require('../service/users.js');
 var pingService = require('../service/pings.js');
@@ -36,12 +36,12 @@ var notifyUser = function(username, message) {
 }
 
 var sendText = function(number, message) {
-	var client = new twilio.RestClient(twilioConfig.accountSid, twilioConfig.authToken);
+	// var client = new twilio.RestClient(twilioConfig.accountSid, twilioConfig.authToken);
 
-	client.messages.create({
+	twilio.messages.create({
 	    body: message,
 	    to: number,  // Text this number
-	    from: twilioConfig.phoneNumber// From a valid Twilio number
+	    from: config.get('twilio').phoneNumber// From a valid Twilio number
 	}, function(err, message) {
 	  if (err) {
 	    console.log(err);
@@ -77,6 +77,17 @@ var sendSlack = function(slackname, message) {
 }
 
 var call = function(number, message) {
+	twilio.calls.create({
+		to:number,
+		from:config.get('twilio').phoneNumber,
+		method:"GET",
+	    statusCallbackMethod: "POST",
+	    statusCallbackEvent: ["initiated", "ringing", "answered", "completed"],
+	}, function(err, call) {
+		console.log("call error:");
+		console.log(err);
+		console.log(call);
+	})
 	console.log("calling " + number + " with message: " + message);
 }
 

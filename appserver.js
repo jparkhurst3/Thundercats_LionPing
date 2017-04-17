@@ -72,7 +72,7 @@ passport.deserializeUser(function(username, cb) {
 app.use(passport.initialize());
 app.use(passport.session());
 
-// app.use('/api', require('connect-ensure-login').ensureLoggedIn());
+app.use('/api', require('connect-ensure-login').ensureLoggedIn());
 
 app.use(express.static('build'));
 
@@ -83,6 +83,9 @@ app.get('/auth/logout', authServices.logout);
 app.get('/auth/isLoggedIn', authServices.isLoggedIn);
 app.get('/auth/getCurrentUser', authServices.getCurrentUser);
 
+var twilioRest = require('./rest/twilioRest.js');
+app.get('/twilio/getCallXML', twilioRest.getCallXML);
+app.get('/twilio/postCallEvent', twilioRest.postCallEvent);
 //api calls
 
 app.post('/api/slack', (req, res) => {

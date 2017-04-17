@@ -25,7 +25,8 @@
     "twilio" : {
     	"accountSid" : "AC25242c1a6c1f8c6792ffbe3fd2571264", // Your Account SID from www.twilio.com/console
 		"authToken" : "70607d01451bd9d277dc0d8d8d763abc",
-		"phoneNumber" : "+19164149358"
+		"phoneNumber" : "+19164149358",
+        "callURL" : "http://lowcost-env.pencq722tt.us-west-2.elasticbeanstalk.com"
     },
     "email" : {
     	"service" : "Gmail",
