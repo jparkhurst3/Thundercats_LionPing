@@ -41,13 +41,6 @@ export default class NewPingCard extends React.Component {
 				console.log(err)
 			})
 
-		axios.post('/api/slack/', {description: this.state.description})
-			.then((response) => {
-				console.log("posted to slack")
-			})
-			.then((error) => {
-				console.log(error)
-			})
 		this.setState({
 			name: "",
 			description: "",

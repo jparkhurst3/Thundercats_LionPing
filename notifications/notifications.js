@@ -78,9 +78,11 @@ var sendSlack = function(slackname, message) {
 
 var call = function(number, message) {
 	twilio.calls.create({
+		url: config.get('twilio').callURL + "/twilio/getCallXML",
 		to:number,
 		from:config.get('twilio').phoneNumber,
 		method:"GET",
+		statusCallback: config.get('twilio').callURL + "/twilio/postCallEvent",
 	    statusCallbackMethod: "POST",
 	    statusCallbackEvent: ["initiated", "ringing", "answered", "completed"],
 	}, function(err, call) {

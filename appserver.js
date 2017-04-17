@@ -67,8 +67,6 @@ passport.deserializeUser(function(username, cb) {
   });
 });
 
-
-
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -86,13 +84,8 @@ app.get('/auth/getCurrentUser', authServices.getCurrentUser);
 var twilioRest = require('./rest/twilioRest.js');
 app.get('/twilio/getCallXML', twilioRest.getCallXML);
 app.get('/twilio/postCallEvent', twilioRest.postCallEvent);
-//api calls
 
-app.post('/api/slack', (req, res) => {
-  slack.postMessage('/services/T25EFUYP7/B3X4YAHUL/JLLTip8VjuNdkauvMRkMim9a', req.body.description);
-  console.log(req.body.description);
-  res.end('successfully posted to slack')
-})
+//api calls
 
 //Import module from rest folder, put new modules for other entities in same folder in new module
 var services = require('./rest/services');
@@ -102,7 +95,6 @@ app.get('/api/services/getServices', services.getServices);
 app.post('/api/services/createService', services.createService);
 app.get('/api/services/getEscalationPolicy', services.getEscalationPolicy)
 app.post('/api/services/updateEscalationPolicy', services.updateEscalationPolicy);
-
 
 //Pings
 var pings = require('./rest/pings');
@@ -139,6 +131,10 @@ app.post('/api/teams/deleteManualShift', teams.deleteManualShift);
 app.post('/api/teams/createRotationShift', teams.createRotationShift);
 app.post('/api/teams/updateRotationShift', teams.updateRotationShift);
 app.post('/api/teams/deleteRotationShift', teams.deleteRotationShift);
+
+var search = require('./rest/search.js');
+app.get('/api/search/searchAll', search.searchAll);
+
 
 var auth = require('./auth/http');
 
