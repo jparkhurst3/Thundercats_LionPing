@@ -151,6 +151,9 @@ var getEscalationPolicy = function(nameOrID, queryParam) {
   });
 
   return Promise.all([usersLoaded,schedulesLoaded]).then(function(val) {
+    policy.Layers.sort((a,b)=>{
+      return (a.Level - b.Level);
+    })
     return policy;
   });
   

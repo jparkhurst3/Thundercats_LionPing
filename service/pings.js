@@ -14,9 +14,9 @@ var getPingsForService = function(nameOrID, queryParam) {
   });
 }
 
-var createPing = function(newPing) {
+var createPing = function(newPing, username) {
   return new Promise((resolve,reject)=>{
-    database.executeQuery('INSERT INTO PING SET ServiceID = ?, Name = ?, Description = ?, Status = "Open"', [newPing.ServiceID,newPing.Name,newPing.Description], (error, rows, fields) => {
+    database.executeQuery('INSERT INTO PING SET ServiceID = ?, Name = ?, Description = ?, Status = "Open", CreatedUser = ? ', [newPing.ServiceID,newPing.Name,newPing.Description,username], (error, rows, fields) => {
       if (error || rows.length == 0) {
         reject(error);
       } else {

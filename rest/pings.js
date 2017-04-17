@@ -21,7 +21,7 @@ var getPingsForService = function(req, res) {
 var createPing = function(req, res) {
   res.setHeader('Content-Type', 'text/plain');
 
-  pingService.createPing(req.body).then((pingID)=>{
+  pingService.createPing(req.body, req.user.Username).then((pingID)=>{
     res.statusCode = 200;
     res.send(JSON.stringify(pingID));
     notifications.notifyForPing(pingID);

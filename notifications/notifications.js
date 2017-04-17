@@ -36,9 +36,6 @@ var notifyUser = function(username, message) {
 }
 
 var sendText = function(number, message) {
-	// var accountSid = 'AC25242c1a6c1f8c6792ffbe3fd2571264'; // Your Account SID from www.twilio.com/console
-	// var authToken = '70607d01451bd9d277dc0d8d8d763abc';   // Your Auth Token from www.twilio.com/console
-	var twilioConfig = config.get('twilio');
 	var client = new twilio.RestClient(twilioConfig.accountSid, twilioConfig.authToken);
 
 	client.messages.create({
@@ -75,9 +72,7 @@ var sendEmail = function(email, message) {
 }
 
 var sendSlack = function(slackname, message) {
-	new_message = '@' + slackname + ' ' + message;
-	console.log(new_message)
-	console.log(message)
+	new_message = '<@' + slackname + '> ' + message;
 	slack.postMessage(config.slack.webhookURL, new_message);
 }
 
@@ -86,18 +81,13 @@ var call = function(number, message) {
 }
 
 var notifySchedule = function(schedule, message) {
-	// console.log(schedule);
-	// console.log("notifying user: " + getOnCallUser(schedule));
 	//get user currently on call for schedule
 	var user = getOnCallUser(schedule);
-	// console.log("user: " + user);
 	if (user) {
 		notifyUser(user,message);
 	} else {
 		console.log('no user on call for schedule');
 	}
-
-	//notifyUser(user)
 }
 
 var getOnCallUser = function(schedule) {
@@ -145,33 +135,51 @@ var getRelevantRepeatedShiftMoment = function(shift) {
 	return startTime;
 }
 
-var notifyService = function(serviceID, message) {
+var notifyService = function(serviceID, pingID) {
 	serviceService.getEscalationPolicy('ID', serviceID).then((escalationPolicy)=>{
-		escalationPolicy.Layers[0].Users.forEach(function(user) {
-			notifyUser(user.Username, message);
-		});
-		escalationPolicy.Layers[0].Schedules.forEach(function(schedule) {
-			console.log("schedule:");
-			console.log(schedule);
-			teamService.getSchedule(schedule.TeamID,schedule.ScheduleName).then((detailedSchedule)=>{
-				notifySchedule(detailedSchedule, message);
-				console.log("detailedSchedule:");
-				console.log(detailedSchedule);
-			})
-		});
+		notifyEscalationLevel(escalationPolicy, 0, pingID);
 	}).catch((error)=>{
 		console.log(error);
+	});
+}
+
+var notifyEscalationLevel = function(escalationPolicy, currentLevel, pingID) {
+	pingService.getPing(pingID).then((ping)=>{
+		if (ping.Status != "Open")  {
+			console.log("ping already acknowledged");
+			return;
+		}
+		var message = "ROAR!!! Go to the following url to acknowledge the ping: http://localhost:8080/pings/" + pingID;
+		escalationPolicy.Layers[currentLevel].Users.forEach(function(user) {
+				notifyUser(user.Username, message);
+			});
+		escalationPolicy.Layers[currentLevel].Schedules.forEach(function(schedule) {
+			teamService.getSchedule(schedule.TeamID,schedule.ScheduleName).then((detailedSchedule)=>{
+				notifySchedule(detailedSchedule, message);
+			})
+		});
+		currentLevel++;
+		if (escalationPolicy.Layers.length > currentLevel) {
+			waitXMinutes(escalationPolicy.Layers[currentLevel].Delay).then(()=>{
+				notifyEscalationLevel(escalationPolicy, currentLevel, pingID);
+			});
+		}
+	});
+}
+
+var waitXMinutes = function(minutes) {
+	return new Promise(function(resolve, reject) {
+		setTimeout(resolve, 1000 * 60 * minutes);
 	});
 }
 
 var notifyForPing = function(pingID) {
 	pingService.getPing(pingID).then((ping)=>{
-		notifyService(ping.ServiceID, "ROAR!!! Go to the following url to acknowledge the ping: http://localhost:8080/pings/" + pingID);
+		notifyService(ping.ServiceID, pingID);
 	}).catch((error)=>{
 		console.log(error);
 	});
 }
-
 
 module.exports = {
 	notifyUser : notifyUser,
