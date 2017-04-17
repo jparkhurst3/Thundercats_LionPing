@@ -152,7 +152,7 @@ class PingRow extends React.Component {
 	}
 
 	render() {
-		const time = moment(this.props.ping.CreatedTime).format('MMMM Do YYYY, h:mm:ss a')
+		const time = moment(this.props.ping.CreatedTime).calendar()
 		return (
 			<tr onClick={() => this.onClick(this.props.ping.ID)}>
 				<td>{time}</td>

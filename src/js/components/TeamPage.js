@@ -460,7 +460,7 @@ class ScheduleData extends React.Component {
 
 	//takes in a shift from the database and converts it to the correct format
 	formatManualShift = (shift) => {
-		const num = shift.Repeated ? 50 : 1
+		const num = shift.Repeated ? 500 : 1
 		let adder = ""
 		if (shift.RepeatType == "daily") {
 			adder = "days"

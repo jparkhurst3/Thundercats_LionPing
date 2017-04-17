@@ -153,11 +153,19 @@ class NavBar extends React.Component {
     console.log("handle selected")
     console.log(value)
     if (value) {
-  		browserHistory.push(`services/${value.label}`);
-  		this.setState({
-  			value: ''
-  		})
+      if (value.type == "Ping") {
+        browserHistory.push(`pings/${value.value}`);
+      } else if (value.type == "Service") {
+        console.log("issa service")
+        browserHistory.push(`services/${value.value}`);
+      } else if (value.type == "Team") {
+        browserHistory.push(`teams/${value.value}`);
+      }
+      this.setState({
+        value: ''
+      })
     }
+
 	}
 
   search = (input) => {
@@ -178,15 +186,30 @@ class NavBar extends React.Component {
 		// 		console.log(error);
 		// 	})
 
-    return axios.get("/api/services/getNames")
-			.then((result) => {
-				console.log(result.data)
-				// console.log(result.data[0)
-        return {options: result.data.map(val => { return {value: val, label: val}})}
-			})
-			.catch((error) => {
-				console.log(error);
-			})
+    return axios.get('/api/search/searchAll?term='+input)
+      .then(res => {
+        console.log("searched")
+        console.log(res)
+        return {
+          options: res.data.map(dp => {
+            return { value: dp.value, label: dp.label + " :: " + dp.type, type: dp.type }
+          })
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
+
+
+    // return axios.get("/api/services/getNames")
+		// 	.then((result) => {
+		// 		console.log(result.data)
+		// 		// console.log(result.data[0)
+    //     return {options: result.data.map(val => { return {value: val, label: val}})}
+		// 	})
+		// 	.catch((error) => {
+		// 		console.log(error);
+		// 	})
   }
 
   render() {
