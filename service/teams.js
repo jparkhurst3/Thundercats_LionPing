@@ -81,7 +81,7 @@ var updateUsersOnTeam = function(req, res) {
       return substring + "(" + TeamID + ", \'" + user.Username + "\')";
     }, "");
     var insertQuery = " INSERT INTO USER_IN_TEAM (TeamID, Username) VALUES " + valueSets;
-    console.log(insertQuery);
+
     return new Promise(function(resolve,reject) {
       database.executeQueryInTransaction(insertQuery, transaction, (error,rows,fields) => {
         if (error) reject(error);

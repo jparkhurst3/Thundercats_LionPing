@@ -90,10 +90,22 @@ var updateEscalationPolicy = function(req, res) {
 
 }
 
+var getMyServices = function(req, res) {
+  serviceService.getServicesForUser(req.user.Username).then((services)=>{
+    res.statusCode = 200;
+    res.send(JSON.stringify(services));
+  }).catch((error)=>{
+    console.log(error);
+    res.statusCode = 500;
+    res.end("error");
+  });
+}
+
 module.exports = {
   getNames : getNames,
   getServices : getServices,
   createService : createService,
   getEscalationPolicy : getEscalationPolicy,
-  updateEscalationPolicy : updateEscalationPolicy
+  updateEscalationPolicy : updateEscalationPolicy,
+  getMyServices : getMyServices
 }

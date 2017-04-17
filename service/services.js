@@ -216,10 +216,35 @@ var updateEscalationPolicy = function(escalationPolicy) {
 
 }
 
+var getServicesForUser = function(username) {
+  var query = "SELECT * FROM SERVICE WHERE (ID IN " + 
+  " (SELECT DISTINCT(s.ID) from SERVICE s " +
+  " JOIN ESCALATION_LEVEL el ON (s.ID = el.ServiceID) " +
+  " JOIN USER_IN_ESCALATION_LEVEL u ON (el.ServiceID = u.ServiceID AND el.Level = u.Level) " +
+  " WHERE u.Username=?)) " +
+  " OR (ID IN " +
+  " (SELECT DISTINCT(s.ID) from SERVICE s " +
+  " JOIN ESCALATION_LEVEL el ON (s.ID = el.ServiceID) " +
+  " JOIN SCHEDULE_IN_ESCALATION_LEVEL sel ON (el.ServiceID = sel.ServiceID AND el.Level = sel.Level) " +
+  " JOIN USER_IN_TEAM t ON (t.TeamID = sel.TeamID) " +
+  " WHERE t.Username=?)) ";
+
+  return new Promise((resolve,reject)=> {
+    database.executeQuery(query, [username,username], (error, rows, fields) => {
+      if (error) {
+        reject(error);       
+      } else {       
+        resolve(rows);
+      }
+    })
+  });
+}
+
 module.exports = {
   getNames : getNames,
   getServices : getServices,
   createService : createService,
   getEscalationPolicy : getEscalationPolicy,
-  updateEscalationPolicy : updateEscalationPolicy
+  updateEscalationPolicy : updateEscalationPolicy,
+  getServicesForUser : getServicesForUser
 }
