@@ -48,8 +48,6 @@ export default class PingsTable extends React.Component {
 	onClick = (id) => {
 		console.log("onclick: " + id)
 		browserHistory.push(`/pings/${id}`);
-		// this.router.transitionTo(`/pings/${id}`);
-		// <Link to={`/pings/${ping.ID}`}>{ping.Name}</Link>
 	}
 
 	render() {

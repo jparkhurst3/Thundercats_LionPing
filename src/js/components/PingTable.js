@@ -1,7 +1,7 @@
 import React from 'react';
 var moment = require('moment');
 import axios from 'axios'
-import {Link} from 'react-router'
+import {Link, browserHistory} from 'react-router'
 
 export default class PingTable extends React.Component {
 	constructor(props) {
@@ -12,20 +12,42 @@ export default class PingTable extends React.Component {
 		}
 	}
 
-	handlePageClick = (page) => {
-		console.log(page)
+	handlePrevClick = () => {
+		this.setState({
+			activePage: this.state.activePage-1
+		})
+		console.log("prevclick")
+		// console.log("activepage: " + this.state.activePage )
 		const numToShow = 5;
-		//load differrent chunk or stuff
+		const ac = this.state.activePage-1
+		console.log("ac: " + ac )
 
 		const mappedPingRows = this.state.pings
-			.filter((ping, index) => {
-				return index >= numToShow*page && index < numToShow*(page+1)
-			})
-			.map((ping) => <PingRow ping={ping} />)
+			.filter((ping, index) => numToShow * ac <= index && index < numToShow * (ac+1)) // [0,5),[5,10),
+			// .filter((ping, index) => index >= numToShow * this.state.activePage && index < numToShow * (this.state.activePage + 1))
+			.map(ping => <PingRow ping={ping} />)
 
 		this.setState({
 			mappedPingRows: mappedPingRows,
-			activePage: page
+			activePage: this.state.activePage-1
+		})
+	}
+
+	handleNextClick = () => {
+		console.log("nextclick")
+		console.log("activepage: " + this.state.activePage )
+		const numToShow = 5;
+		const ac = this.state.activePage+1
+		console.log("ac: " + ac )
+
+		const mappedPingRows = this.state.pings
+		.filter((ping, index) => numToShow * ac <= index && index < numToShow * (ac+1)) // [0,5),[5,10),
+			// .filter((ping, index) => index >= numToShow * this.state.activePage && index < numToShow * (this.state.activePage + 1))
+			.map(ping => <PingRow ping={ping} />)
+
+		this.setState({
+			mappedPingRows: mappedPingRows,
+			activePage: this.state.activePage+1
 		})
 	}
 
@@ -48,7 +70,6 @@ export default class PingTable extends React.Component {
 			.then((result) => {
 				console.log(result.data)
 				this.setState({ pings: result.data })
-
 				const mappedPingRows = this.state.pings
 					.filter((pings, index) => {
 						//on page 0 return 3 elements
@@ -86,27 +107,28 @@ export default class PingTable extends React.Component {
 						</tbody>
 					</table>
 				</div>
+				{this.state.pings ?
+					<PingPagination prevDisabled={this.state.activePage == 0} nextDisabled={this.state.pings.length / 5 <= this.state.activePage+1} numPings={this.state.pings.length} handleNextClick={this.handleNextClick} handlePrevClick={this.handlePrevClick} />
+					: null }
 			</div>
 		)
 	}
 }
-// <PingPagination numPings={this.state.pings.length} activePage={this.state.activePage} handlePageClick={this.handlePageClick} />
 
 // <PingPagination activePage={this.state.activePage} handlePageClick={this.handlePageClick} />
 
 
 class PingPagination extends React.Component {
 	render() {
-		//get number from og query
-		// return (
-		// 	<div class="text-center">
-		// 	  <ul class="pagination" style={{display:"inline-block"}}>
-		// 			<li style={{zIndex: 0}} class={this.props.activePage == item ? "page-item active" : "page-item"} onClick={() => this.props.handlePageClick(item)}><span class="page-link">Prev</span></li>
-		// 			<li style={{zIndex: 0}} class={this.props.activePage == item ? "page-item active" : "page-item"} onClick={() => this.props.handlePageClick(item)}><span class="page-link">Next</span></li>
-		// 	  </ul>
-		// 	</div>
-		//
-		// )
+		// get number from og query
+		return (
+			<div class="text-center">
+			  <ul class="pagination" style={{display:"inline-block"}}>
+					<li style={{zIndex: 0}} class={this.props.prevDisabled ? "page-item disabled":"page-item"} onClick={() => this.props.handlePrevClick()}><span class="page-link">Prev</span></li>
+					<li style={{zIndex: 0}} class={this.props.nextDisabled ? "page-item disabled":"page-item"} onClick={() => this.props.handleNextClick()}><span class="page-link">Next</span></li>
+			  </ul>
+			</div>
+		)
 
 
 		const items = [0,1,2,3,4,5,6]
@@ -124,10 +146,15 @@ class PingPagination extends React.Component {
 }
 
 class PingRow extends React.Component {
+	onClick = (id) => {
+		console.log("onclick: " + id)
+		browserHistory.push(`/pings/${id}`);
+	}
+
 	render() {
 		const time = moment(this.props.ping.CreatedTime).format('MMMM Do YYYY, h:mm:ss a')
 		return (
-			<tr>
+			<tr onClick={() => this.onClick(this.props.ping.ID)}>
 				<td>{time}</td>
 				<td>{this.props.ping.Name}</td>
 				<td>{this.props.ping.Description}</td>
