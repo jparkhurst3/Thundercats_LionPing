@@ -192,13 +192,14 @@ class NavBar extends React.Component {
         console.log(res)
         return {
           options: res.data.map(dp => {
-            return { value: dp.value, label: dp.label + " :: " + dp.type, type: dp.type }
+            return { value: dp.value, label: "[" + dp.type + "] " + dp.label, type: dp.type }
           })
         }
       })
       .catch(err => {
         console.log(err)
       })
+
 
 
     // return axios.get("/api/services/getNames")

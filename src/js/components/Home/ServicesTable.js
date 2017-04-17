@@ -11,12 +11,13 @@ export default class ServicesTable extends React.Component {
 	}
 
 	componentDidMount() {
-		axios.get("/api/services/getNames")
+		axios.get("/api/services/getMyServices")
 			.then((result) => {
+				console.log("getMyServices")
 				console.log(result.data)
-				this.setState({services: result.data});
+				this.setState({services: result.data.map(r => r.Name)});
 				console.log(result.data[0])
-				this.props.onServiceClick(result.data[0])
+				this.props.onServiceClick(result.data[0].Name)
 			})
 			.catch((error) => {
 				console.log(error);
