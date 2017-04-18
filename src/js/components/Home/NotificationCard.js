@@ -6,24 +6,43 @@ export default class NotificationCard extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			unresolvedPings: null
+			myOpenPings: null
 		}
 	}
 
 	componentDidMount() {
-		// axios
+		axios.get("/api/pings/getMyOpenPings")
+			.then(res => {
+				console.log("got my open pings")
+				console.log(res)
+				this.setState({
+					myOpenPings: res.data
+				})
+			}).catch(err => {
+				console.log(err)
+			})
+	}
+
+	onClick = (id) => {
+		console.log("onclick: " + id)
+		browserHistory.push(`/pings/${id}`);
 	}
 
 	render() {
-		const mappedPingRows = this.state.unresolvedPings ?
-			this.state.pings.map(ping =>
-				<tr onClick={() => this.onClick(ping.ID)}><td>{ping.Name}</td></tr>)
+		const mappedPingRows = this.state.myOpenPings ?
+			this.state.myOpenPings
+			.filter((ping, index) => index < 3)
+			.map(ping =>
+				<tr onClick={() => this.onClick(ping.ID)}>
+					<td><strong>{ping.Name}</strong></td>
+					<td>{moment(ping.CreatedTime).fromNow()}</td>
+				</tr>)
 			: null
 
 		return (
 			<div class="card home-card">
 				<div class="home-card-header card-header">
-					<h3>My Unresolved Pings</h3>
+					<h3>My Open Pings</h3>
 				</div>
 				<div class="card-block home-card-block">
 					<table class="table home-table table-hover">

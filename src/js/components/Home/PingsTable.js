@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios'
 import {Link} from 'react-router'
 import {browserHistory} from 'react-router';
+import moment from 'moment'
 
 
 
@@ -52,7 +53,10 @@ export default class PingsTable extends React.Component {
 
 	render() {
 		const mappedPingRows = this.state.pings ? this.state.pings.map(ping =>
-			<tr onClick={() => this.onClick(ping.ID)}><td>{ping.Name}</td></tr>
+			<tr onClick={() => this.onClick(ping.ID)}>
+				<td>{ping.Name}</td>
+				<td>{moment(ping.CreatedTime).calendar()}</td>
+			</tr>
 		)  : <tr><td></td></tr>
 
 		return (

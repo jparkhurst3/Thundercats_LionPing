@@ -449,6 +449,7 @@ class ScheduleData extends React.Component {
 		return {
 			id: null,
 			group: 3,
+			className: "override",
 			title: shift.Username,
 			start_time: moment(shift.Timestamp),
 			end_time: moment(shift.Timestamp).add(shift.Duration, 'minutes'),
@@ -460,7 +461,7 @@ class ScheduleData extends React.Component {
 
 	//takes in a shift from the database and converts it to the correct format
 	formatManualShift = (shift) => {
-		const num = shift.Repeated ? 500 : 1
+		const num = shift.Repeated ? 5 : 1
 		let adder = ""
 		if (shift.RepeatType == "daily") {
 			adder = "days"
@@ -473,6 +474,7 @@ class ScheduleData extends React.Component {
 			return {
 				id: null,
 				group: 2,
+				className: "manual",
 				title: shift.Username,
 				start_time: moment(shift.Timestamp).add(key, adder),
 				end_time: moment(shift.Timestamp).add(key, adder).add(shift.Duration, 'minutes'),
@@ -484,7 +486,7 @@ class ScheduleData extends React.Component {
 	}
 
 	formatRotationShift = (shift) => {
-		const num = shift.Repeated ? 50 : 1
+		const num = shift.Repeated ? 5 : 1
 		let adder = ""
 		if (shift.RepeatType == "daily") {
 			adder = "days"
@@ -497,6 +499,7 @@ class ScheduleData extends React.Component {
 			return {
 				id: null,
 				group: 1,
+				className: "rotation",
 				title: shift.Users[key % shift.Users.length].Username, //rotates through users
 				start_time: moment(shift.Timestamp).add(key, adder),
 				end_time: moment(shift.Timestamp).add(key, adder).add(shift.Duration, 'minutes'),
@@ -604,9 +607,19 @@ class ScheduleData extends React.Component {
 			shifts.push(...shift)
 		}
 
+		//push all computed shifts
+		const allShifts = shifts.slice(0)
+		for (const shift of allShifts) {
+			const newShift = {...shift}
+			newShift.group = 0;
+			newShift.id = null
+			newShift.className = newShift.className + " computed"
+			shifts.push(newShift)
+		}
+
 		//give all shifts ids
 		const shifts2 = shifts.map((shift, key) => {
-			shift.id = key+1;
+			shift.id = key + 1;
 			return shift
 		})
 
