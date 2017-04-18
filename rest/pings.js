@@ -8,7 +8,7 @@ var getPingsForService = function(req, res) {
 
   res.setHeader('Content-Type', 'text/plain');
 
-  pingService.getPingsForService(nameOrID,queryParam).then((pings)=>{
+  pingService.getPingsForService(nameOrID,queryParam,req.query.limit).then((pings)=>{
     res.statusCode = 200;
     res.send(JSON.stringify(pings));
   }).catch((error)=>{

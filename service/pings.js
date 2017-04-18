@@ -2,11 +2,15 @@ var database = require('../database/database.js');
 var serviceServce = require('./services.js');
 var activeUserNotifications = require('./activeUserNotifications.js');
 
-var getPingsForService = function(nameOrID, queryParam) {
-	var whereClause = (nameOrID == "ID") ? " WHERE (s.ID = ?)" : " WHERE (s.Name = ?)";
-
+var getPingsForService = function(nameOrID, queryParam, limit) {
+	var whereClause = (nameOrID == "ID") ? " WHERE (s.ID = ?)" : " WHERE (s.Name = ?) ";
+  var query = 'SELECT p.* FROM PING p JOIN SERVICE s ON (p.ServiceID = s.ID) ' + whereClause + 
+   " ORDER BY FIELD(p.Status,'Open','Acknowledged','Resolved'), CreatedTime DESC ";
+  if (limit) {
+    query += " LIMIT " + limit;
+  }
   return new Promise((resolve,reject)=>{
-    database.executeQuery('SELECT p.ID, p.ServiceID, p.Name, p.Description, p.Status, p.CreatedTime FROM PING p JOIN SERVICE s ON (p.ServiceID = s.ID) ' + whereClause, queryParam, (error, rows, fields) => {
+    database.executeQuery(query, queryParam, (error, rows, fields) => {
       if (error) {
         reject(error);
       } else {
