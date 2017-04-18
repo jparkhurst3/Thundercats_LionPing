@@ -3,7 +3,7 @@ import axios from 'axios'
 import {Link} from 'react-router'
 import {browserHistory} from 'react-router';
 import moment from 'moment'
-
+import Logo from '../Logo'
 
 
 export default class PingsTable extends React.Component {
@@ -35,11 +35,10 @@ export default class PingsTable extends React.Component {
 			this.setState({
 				service: nextProps.service
 			})
-			axios.get("/api/pings/getPingsForService?Name="+nextProps.service)
-				.then((result) => {
+			axios.get("/api/pings/getPingsForService?Name="+nextProps.service+"&limit="+5)
+				.then((res) => {
 					console.log("got pings for service")
-					const pings = result.data.slice(0, 5); //only show 5 - do this in database
-					this.onServiceChange(pings)
+					this.onServiceChange(res.data)
 				}).catch((err) => {
 					console.log(err)
 				})
@@ -54,10 +53,10 @@ export default class PingsTable extends React.Component {
 	render() {
 		const mappedPingRows = this.state.pings ? this.state.pings.map(ping =>
 			<tr onClick={() => this.onClick(ping.ID)}>
-				<td>{ping.Name}</td>
-				<td>{moment(ping.CreatedTime).calendar()}</td>
+				<td style={ping.Status == "Open" ? {fontWeight:"bold"} : {fontWeight:"normal"}}>{ping.Name}</td>
+				<td>{moment(ping.CreatedTime).fromNow()}</td>
 			</tr>
-		)  : <tr><td></td></tr>
+		)  : <tr><td><Logo loading={true}/></td></tr>
 
 		return (
 			<div class="card home-card" style={{flex:"2", marginLeft:"25px"}}>

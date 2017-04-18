@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import moment from 'moment'
+import Logo from '../Logo'
 
 export default class NotificationCard extends React.Component {
 	constructor(props) {
@@ -37,7 +38,7 @@ export default class NotificationCard extends React.Component {
 					<td><strong>{ping.Name}</strong></td>
 					<td>{moment(ping.CreatedTime).fromNow()}</td>
 				</tr>)
-			: null
+			: <tr><td><Logo loading={true}/></td></tr>
 
 		return (
 			<div class="card home-card">
