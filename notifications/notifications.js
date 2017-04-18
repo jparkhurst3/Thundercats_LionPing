@@ -11,8 +11,10 @@ let transporter = nodemailer.createTransport({
     service: config.email.service,
     auth: config.email.auth
 });
+var activeUserNotifications = require('../service/activeUserNotifications.js');
 
-var notifyUser = function(username, message) {
+var notifyUser = function(username, pingID) {
+	var message = "ROAR!!! Go to the following url to acknowledge the ping: http://localhost:8080/pings/" + pingID;
 	//get user notification preferences
 	//use appropriate notification tool to send notification
 	userService.getUser(username).then((user)=>{
@@ -29,6 +31,7 @@ var notifyUser = function(username, message) {
 		if(user.NotifySlack) {
 			sendSlack(user.Slack, message)
 		}
+		activeUserNotifications.createActiveUserNotification(username, pingID);
 	}).catch((error)=>{
 		console.log("error notifying user " + username +": ");
 		console.log(error);
@@ -93,11 +96,11 @@ var call = function(number, message) {
 	console.log("calling " + number + " with message: " + message);
 }
 
-var notifySchedule = function(schedule, message) {
+var notifySchedule = function(schedule, pingID) {
 	//get user currently on call for schedule
 	var user = getOnCallUser(schedule);
 	if (user) {
-		notifyUser(user,message);
+		notifyUser(user,pingID);
 	} else {
 		console.log('no user on call for schedule');
 	}
@@ -162,13 +165,12 @@ var notifyEscalationLevel = function(escalationPolicy, currentLevel, pingID) {
 			console.log("ping already acknowledged");
 			return;
 		}
-		var message = "ROAR!!! Go to the following url to acknowledge the ping: http://localhost:8080/pings/" + pingID;
 		escalationPolicy.Layers[currentLevel].Users.forEach(function(user) {
-				notifyUser(user.Username, message);
+				notifyUser(user.Username, pingID);
 			});
 		escalationPolicy.Layers[currentLevel].Schedules.forEach(function(schedule) {
 			teamService.getSchedule(schedule.TeamID,schedule.ScheduleName).then((detailedSchedule)=>{
-				notifySchedule(detailedSchedule, message);
+				notifySchedule(detailedSchedule, pingID);
 			})
 		});
 		currentLevel++;

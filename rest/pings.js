@@ -97,6 +97,19 @@ var getMyUnresolvedPings = function(req, res) {
   });
 }
 
+var getMyOpenPings = function(req, res) {
+  res.setHeader('Content-Type', 'text/plain');
+
+  pingService.getOpenPingsForUser(req.user.Username).then((result)=>{
+    res.statusCode = 200;
+    res.send(JSON.stringify(result));
+  }).catch((error)=>{
+    console.log(error);
+    res.statusCode = 500;
+    res.end("error");
+  });
+}
+
 module.exports = {
 	getPingsForService : getPingsForService,
 	createPing : createPing,
@@ -104,5 +117,6 @@ module.exports = {
   resolvePing : resolvePing,
   acknowledgePing : acknowledgePing,
   getUnresolvedPings : getUnresolvedPings,
-  getMyUnresolvedPings : getMyUnresolvedPings
+  getMyUnresolvedPings : getMyUnresolvedPings,
+  getMyOpenPings : getMyOpenPings
 }

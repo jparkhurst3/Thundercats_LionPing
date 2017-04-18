@@ -1,5 +1,6 @@
 var database = require('../database/database.js');
 var serviceServce = require('./services.js');
+var activeUserNotifications = require('./activeUserNotifications.js');
 
 var getPingsForService = function(nameOrID, queryParam) {
 	var whereClause = (nameOrID == "ID") ? " WHERE (s.ID = ?)" : " WHERE (s.Name = ?)";
@@ -49,6 +50,7 @@ var acknowledgePing = function(ID, username) { //acknowledge ping by id
         reject(error);
       } else {
         resolve("success");
+        activeUserNotifications.deleteActiveUserNotificationsForPing(ID);
       }
     })
   });
@@ -81,6 +83,10 @@ var getUnresolvedPings = function() {
 var getUnresolvedPingsForUser = function(username) {
   return new Promise((resolve,reject)=>{
     serviceServce.getServicesForUser(username).then((services)=>{
+      if (services.length == 0) {
+        resolve([]);
+        return;
+      }
       var serviceIDs = services.map((service)=>{ return service.ID; });
       var query = 'SELECT * FROM PING WHERE Status != "Resolved" AND ServiceID IN (' + serviceIDs.join(",") + ")";
       database.executeQuery(query, (error, rows, fields) => {
@@ -95,6 +101,28 @@ var getUnresolvedPingsForUser = function(username) {
   
 }
 
+var getOpenPingsForUser = function(username) {
+  return new Promise((resolve,reject)=>{
+    activeUserNotifications.getActiveNotificationsForUser(username).then((activeUserNotifications)=>{
+      if (activeUserNotifications.length == 0) {
+        resolve([]);
+        return;
+      }
+      var pingIDs = activeUserNotifications.map((activeUserNotification)=>{
+        return activeUserNotification.PingID;
+      });
+      var query = "SELECT * FROM PING WHERE ID IN (" + pingIDs.join(",") + ")";
+      database.executeQuery(query, (error, rows, fields) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(rows);
+        }
+      })
+    });
+  });
+}
+
 module.exports = {
 	getPingsForService : getPingsForService,
 	createPing : createPing,
@@ -102,5 +130,6 @@ module.exports = {
   resolvePing : resolvePing,
   acknowledgePing : acknowledgePing,
   getUnresolvedPings : getUnresolvedPings,
-  getUnresolvedPingsForUser : getUnresolvedPingsForUser
+  getUnresolvedPingsForUser : getUnresolvedPingsForUser,
+  getOpenPingsForUser : getOpenPingsForUser
 }
