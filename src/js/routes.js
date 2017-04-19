@@ -11,6 +11,7 @@ import ServicesList from './components/ServicesList.js'
 import TeamsList from './components/TeamsList.js'
 import Profile from './components/Profile'
 import LoginRegister from './components/LoginRegister.js'
+import PingsPage from './components/PingsPage.js'
 import PingResponse from './components/PingResponse.js'
 import { Logo2 } from './components/Logo.js'
 import Select from 'react-select'
@@ -26,7 +27,7 @@ class Routes extends React.Component {
 		  <Route path='/' component={Container}>
 			<IndexRoute component={Home} />
 
-			<Route path="/pings" component={Pings} />
+			<Route path="/pings" component={PingsPage} />
       <Route path="/pings/:id" component={PingResponse} />
 
 			<Route path="/faq" component={FAQ} />
