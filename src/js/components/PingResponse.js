@@ -15,6 +15,13 @@ export default class PingResponse extends React.Component {
     this.getPing()
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props !== nextProps) {
+      this.props = nextProps
+      this.getPing()
+    }
+  }
+
   getPing = () => {
     axios.get("/api/pings/getPing?ID=" + this.props.params.id)
       .then(res => {

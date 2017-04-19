@@ -13,7 +13,7 @@ import Profile from './components/Profile'
 import LoginRegister from './components/LoginRegister.js'
 import PingsPage from './components/PingsPage.js'
 import PingResponse from './components/PingResponse.js'
-import { Logo2 } from './components/Logo.js'
+import Logo from './components/Logo.js'
 import Select from 'react-select'
 
 import axios from 'axios'
@@ -112,7 +112,7 @@ class Container extends React.Component {
     if (!this.state.loaded) {
       return (
         <div class="centered-icon">
-          <Logo2 />
+          <Logo />
         </div>
       )
     }
@@ -129,7 +129,7 @@ class Container extends React.Component {
   	  <div className="container-fluid">
     		<div className="row">
     		  <div className="col-xs-2">
-    			   <SideBar loading={true} logout={this.logout} />
+    			   <SideBar logout={this.logout} />
     		  </div>
     		  <div className="col-xs-10">
     		  	<NavBar currentUser={this.state.currentUser} />

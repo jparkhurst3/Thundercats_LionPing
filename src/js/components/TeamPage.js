@@ -363,11 +363,15 @@ class SchedulePane extends React.Component {
 						</ul>
 						<div class="tab-content">
 							{mappedData}
-							<CreateNewSchedule
-								name="Add"
-								teamID={this.state.teamID}
-								handleCreateSchedule={this.handleCreateSchedule}
-							/>
+							{this.state.teamID ?
+								<CreateNewSchedule
+									name="Add"
+									teamID={this.state.teamID}
+									handleCreateSchedule={this.handleCreateSchedule} />
+								:
+								null
+							}
+
 						</div>
 					</div>
 				</div>
@@ -397,11 +401,10 @@ class ScheduleTab extends React.Component {
 }
 
 class CreateNewSchedule extends React.Component {
-	constructor() {
-		super()
+	constructor(props) {
+		super(props)
 		this.state = {
 			scheduleName: null,
-			teamID: 1
 		}
 	}
 
@@ -413,7 +416,7 @@ class CreateNewSchedule extends React.Component {
 
 	handleClick = () => {
 		this.props.handleCreateSchedule(
-			{ TeamID:this.state.teamID, ScheduleName:this.state.scheduleName }
+			{ TeamID:this.props.teamID, ScheduleName:this.state.scheduleName }
 		)
 	}
 

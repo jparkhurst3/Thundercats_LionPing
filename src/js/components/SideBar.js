@@ -37,7 +37,7 @@ export default class SideBar extends React.Component {
         <div className="col-xs-2 sidebar">
             <ul className="nav nav-pills flex-column">
                 <li className="nav-item">
-                  <Link className="nav-link logo" activeClassName="activeLink" to={'/'}><Logo loading={this.props.loading} /></Link>
+                  <Link className="nav-link logo" activeClassName="activeLink" to={'/'}><Logo /></Link>
                 </li>
                 <li className="nav-item">
                     <div>
