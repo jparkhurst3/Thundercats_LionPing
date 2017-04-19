@@ -64,7 +64,15 @@ export default class PingTable extends React.Component {
 
 	getPings = () => {
 		//database call for all pings for this service
-		const apiCall = `/api/pings/getPingsForService?Name=${this.props.service}`
+		var apiCall = "";
+		// how to populate table based on if it's called from ServicePage or PingsPage
+		if (this.props.service != undefined) {
+			apiCall = `/api/pings/getPingsForService?Name=${this.props.service}` // pings from given service
+		} else if (this.props.Username != undefined) {
+			apiCall = `/api/pings/getMyUnresolvedPings?Username=${this.props.Username}` // unresolved pings for given user
+		} else {
+			apiCall = `/api/pings/getUnresolvedPings` // all unresolved pings
+		}
 		console.log(apiCall);
 		axios.get(apiCall)
 			.then((result) => {
