@@ -152,12 +152,13 @@ class TeamMembers extends React.Component {
 			}})
 
 		const buttons = this.state.disabled ?
-			<input class="btn" style={{float:"left", width: "20%", margin:"20px", marginLeft: "0px"}} onClick={this.handleUserEditClick} value="Edit Users" /> :
-			<div>
-				<input class="btn" style={{float:"left", width: "20%", margin:"20px", marginLeft: "0px"}} onClick={this.handleUserEditClick} value="Cancel" />
-				<input class="btn" style={{float:"right", width: "20%", margin:"20px", marginRight: "0px"}} onClick={this.handleUserSubmit} value="Submit" />
+			<div style={{padding:"20px"}}>
+				<input class="btn" style={{float:"left", width: "20%", marginLeft: "0px"}} onClick={this.handleUserEditClick} value="Edit Users" />
+			</div> :
+			<div style={{padding:"20px"}}>
+				<input class="btn" style={{float:"left", width: "20%", marginLeft: "0px"}} onClick={this.handleUserEditClick} value="Cancel" />
+				<input class="btn" style={{float:"right", width: "20%", marginRight: "0px"}} onClick={this.handleUserSubmit} value="Submit" />
 			</div>
-
 
 		return (
 			<div class="card home-card">
@@ -423,9 +424,10 @@ class CreateNewSchedule extends React.Component {
 	render() {
 		return (
 			<div className="tab-pane" id={this.props.name} role="tabpanel">
-				<h2>Create New Schedule</h2>
-				<input class="form-control" name="repeatType" placeholder="Schedule Name" type="text" onChange={this.handleChange} value={this.state.scheduleName}></input>
-				<input class=" btn" onClick={this.handleClick} value="Create Schedule"></input>
+				<div style={{padding:"20px"}}>
+					<input class="form-control" name="scheduleName" placeholder="Schedule Name" type="text" onChange={this.handleChange} value={this.state.scheduleName}></input>
+					<input style={{marginTop:"20px"}} class="btn" onClick={this.handleClick} value="Create Schedule"></input>
+				</div>
 			</div>
 		)
 	}

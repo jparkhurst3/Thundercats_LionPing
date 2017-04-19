@@ -15,12 +15,12 @@ a {
 a:hover {
   color: gold;
     text-decoration: none;
-
 }
 
 .hub-icon {
-  animation: spin 4s 1 ease both;
+  animation: spin 3s 10 ease both;
   transform-origin: center center;
+  webkit-transform-origin: center center;
 }
 
 @-moz-keyframes spin {

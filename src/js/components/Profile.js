@@ -5,6 +5,8 @@ import React from 'react'
 import NotificationCard from './Home/NotificationCard'
 import axios from 'axios'
 import auth from '../auth.js'
+import Logo, {LogoLoading} from './Logo.js'
+
 
 export default class Profile extends React.Component {
   constructor() {
@@ -62,7 +64,6 @@ export default class Profile extends React.Component {
       )
     }
     const props = {...this.state};
-    console.log(props)
     return (
           <div class="container">
               <div class="row">
@@ -86,7 +87,8 @@ class EmptyCard extends React.Component {
         <div class="card-header home-card-header">
             <h3>{this.props.name}</h3>
         </div>
-        <div class="card-block">
+        <div class="card-block" style={{textAlign:"center"}}>
+          <LogoLoading />
         </div>
       </div>
 
@@ -94,19 +96,18 @@ class EmptyCard extends React.Component {
   }
 }
 
-
 class ProfileInfoCard extends React.Component {
     render() {
         return (
-            <div class="card home-card">
-                <div class="card-header home-card-header">
-                    <h3>Profile</h3>
-                </div>
-                <div class="card-block">
-                    <span class="card-text"><h5>Name: {this.props.FirstName + " " + this.props.LastName}</h5></span>
-                    <span class="card-text"><h5>Username: {this.props.Username}</h5></span>
-                </div>
-              </div>
+          <div class="card home-card">
+            <div class="card-header home-card-header">
+                <h3>Profile</h3>
+            </div>
+            <div class="card-block">
+                <span class="card-text"><h5>Name: {this.props.FirstName + " " + this.props.LastName}</h5></span>
+                <span class="card-text"><h5>Username: {this.props.Username}</h5></span>
+            </div>
+          </div>
         )
       }
 }

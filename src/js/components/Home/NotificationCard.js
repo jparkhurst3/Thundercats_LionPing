@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import moment from 'moment'
-import Logo from '../Logo'
+import Logo, {LogoLoading} from '../Logo'
 import {browserHistory} from 'react-router'
 
 export default class NotificationCard extends React.Component {
@@ -39,7 +39,9 @@ export default class NotificationCard extends React.Component {
 					<td><strong>{ping.Name}</strong></td>
 					<td>{moment(ping.CreatedTime).fromNow()}</td>
 				</tr>)
-			: <tr><td><Logo loading={true}/></td></tr>
+			: <tr><td style={{textAlign:"center"}}><LogoLoading /></td></tr>
+
+		// const mappedPingRows = <tr style={{textAlign:"center"}}><td><LogoLoading /></td></tr>
 
 		return (
 			<div class="card home-card">

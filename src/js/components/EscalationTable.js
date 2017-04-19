@@ -4,6 +4,7 @@ import React from 'react'
 import { Link } from 'react-router'
 import axios from 'axios'
 import Select from 'react-select';
+import {LogoLoading} from './Logo'
 
 export default class EscalationTable extends React.Component {
     constructor() {
@@ -169,8 +170,7 @@ export default class EscalationTable extends React.Component {
                     />
             )
             }
-        ) : <tr><td></td></tr>
-
+        ) : <tr style={{textAlign:"center"}}><td colSpan="5"><LogoLoading /></td></tr>
         const buttons = this.state.disabled ?
             <input type="button" style={{float:"left", width: "20%", margin:"20px"}} value="Edit" class="btn" onClick={this.toggleEdit}></input> :
             <div>

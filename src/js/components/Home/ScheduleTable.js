@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios'
-import Logo from '../Logo'
+import Logo, {LogoLoading} from '../Logo'
 
 
 
@@ -24,7 +24,7 @@ export default class ScheduleTable extends React.Component {
 	render() {
 		const mappedRows = this.state.schedule ?
 			this.state.schedule.map(s => <ScheduleRow date={s.date} name={s.name} time={s.time} />)
-			: <tr><td><Logo loading={true}/></td></tr>
+			: <tr><td style={{textAlign:"center"}}><LogoLoading /></td></tr>
 		return(
 			<div class="card home-card">
 				<div class="home-card-header card-header">

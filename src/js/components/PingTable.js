@@ -2,13 +2,16 @@ import React from 'react';
 var moment = require('moment');
 import axios from 'axios'
 import {Link, browserHistory} from 'react-router'
+import Logo, {LogoLoading} from './Logo.js'
+
 
 export default class PingTable extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			pings: null,
-			activePage: 0
+			activePage: 0,
+			mappedPingRows: <tr style={{textAlign:"center"}}><td colSpan="4"><LogoLoading /></td></tr>
 		}
 	}
 

@@ -119,8 +119,8 @@ class CreateTeamCard extends React.Component {
     render() {
         if (this.state.created) {
             return (
-                <div class="card">
-                    <div class="card-header">Create Team</div>
+                <div class="card modal-card">
+                    <div class="card-header home-card-header">Create Team</div>
                     <div class="card-block">
                         <h3>Team Successfully Created</h3>
                     </div>

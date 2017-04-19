@@ -13,7 +13,7 @@ import Profile from './components/Profile'
 import LoginRegister from './components/LoginRegister.js'
 import PingsPage from './components/PingsPage.js'
 import PingResponse from './components/PingResponse.js'
-import Logo from './components/Logo.js'
+import Logo, {LogoLoading} from './components/Logo.js'
 import Select from 'react-select'
 
 import axios from 'axios'
@@ -112,7 +112,7 @@ class Container extends React.Component {
     if (!this.state.loaded) {
       return (
         <div class="centered-icon">
-          <Logo />
+          <LogoLoading />
         </div>
       )
     }
@@ -221,7 +221,7 @@ class NavBar extends React.Component {
           <Select.Async class="" style={{paddingLeft: '0px'}} value={this.state.value} placeholder="Search" loadOptions={this.search} onChange={this.handleSelected} />
       	</div>
       	<div class="col-xs-8" style={{textAlign: "right"}}>
-			     <h4><Link style={{display:"inline-block"}} to="/profile">{this.props.currentUser.Username}</Link></h4>
+			     <h4><Link style={{display:"inline-block"}} to="/profile">{this.props.currentUser.FirstName + " " + this.props.currentUser.LastName}</Link></h4>
       	</div>
       </div>
     )

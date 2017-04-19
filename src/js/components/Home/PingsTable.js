@@ -3,7 +3,7 @@ import axios from 'axios'
 import {Link} from 'react-router'
 import {browserHistory} from 'react-router';
 import moment from 'moment'
-import Logo from '../Logo'
+import Logo, {LogoLoading} from '../Logo'
 
 
 export default class PingsTable extends React.Component {
@@ -56,8 +56,9 @@ export default class PingsTable extends React.Component {
 				<td style={ping.Status == "Open" ? {fontWeight:"bold"} : {fontWeight:"normal"}}>{ping.Name}</td>
 				<td>{moment(ping.CreatedTime).fromNow()}</td>
 			</tr>
-		)  : <tr><td><Logo loading={true}/></td></tr>
+		)  : <tr><td style={{textAlign:"center"}}><LogoLoading /></td></tr>
 
+		// const mappedPingRows = <tr><td style={{textAlign:"center"}}><LogoLoading /></td></tr>
 		return (
 			<div class="card home-card" style={{flex:"2", marginLeft:"25px"}}>
 				<div class="home-card-header card-header">

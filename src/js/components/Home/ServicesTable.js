@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import Logo from '../Logo'
+import Logo, {LogoLoading} from '../Logo'
 
 
 
@@ -29,7 +29,9 @@ export default class ServicesTable extends React.Component {
 	render() {
 		const mappedServiceRows = this.state.services ? this.state.services.map(service =>
 			<tr className={this.props.currentService == service ? "active-row" : ""} onClick={() => this.props.onServiceClick(service)}><td>{service}</td></tr>
-		) : <tr><td><Logo loading={true}/></td></tr>
+		) : <tr><td style={{textAlign:"center"}}><LogoLoading /></td></tr>
+
+		// const mappedServiceRows = <tr><td style={{textAlign:"center"}}><LogoLoading /></td></tr>
 
 		return (
 			<div class="card home-card" style={{flex:"1"}}>
