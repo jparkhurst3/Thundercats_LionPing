@@ -15,6 +15,8 @@ import OverrideModal from './OverrideModal'
 import ManualModal from './ManualModal'
 import RotationModal from './RotationModal'
 
+import {LogoLoading} from './Logo'
+
 
 export default class TeamPage extends React.Component {
 	render() {
@@ -129,7 +131,16 @@ class TeamMembers extends React.Component {
 
 	render() {
 		if (!this.state.allUsers || !this.state.users) {
-			return <div></div>
+			return (
+				<div class="card home-card">
+					<div class="card-header home-card-header">
+						<h3>Users</h3>
+					</div>
+					<div class="card-block">
+						<div style={{textAlign:"center"}}><LogoLoading /></div>
+					</div>
+				</div>
+			)
 		}
 
 		//filter out users that are already in users
@@ -324,7 +335,18 @@ class SchedulePane extends React.Component {
 
 	render() {
 		if (!this.state.schedules) {
-			return <div></div>
+			return (
+				<div style={{paddingTop: '20px'}}>
+					<div class="card home-card">
+						<div class="card-header home-card-header">
+							<h3>Schedules</h3>
+						</div>
+						<div class="card-block services-card-block" style={{paddingTop:"5px"}}>
+							<div style={{textAlign:"center"}}><LogoLoading /></div>
+						</div>
+					</div>
+				</div>
+			)
 		}
 
 		const mappedTabs = this.state.schedules.map((schedule, key) =>
