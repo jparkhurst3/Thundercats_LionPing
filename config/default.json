@@ -37,5 +37,6 @@
     },
     "slack" : {
         "webhookURL" : "/services/T25EFUYP7/B3X4YAHUL/JLLTip8VjuNdkauvMRkMim9a"
-    }
+    },
+    "url" : "http://localhost:8080"
 }

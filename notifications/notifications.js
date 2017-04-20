@@ -14,7 +14,7 @@ let transporter = nodemailer.createTransport({
 var activeUserNotifications = require('../service/activeUserNotifications.js');
 
 var notifyUser = function(username, pingID) {
-	var message = "ROAR!!! Go to the following url to acknowledge the ping: http://localhost:8080/pings/" + pingID;
+	var message = "ROAR!!! Go to the following url to acknowledge the ping: " + config.url + "/pings/" + pingID;
 	//get user notification preferences
 	//use appropriate notification tool to send notification
 	userService.getUser(username).then((user)=>{
