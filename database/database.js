@@ -2,7 +2,9 @@ var mysql = require('mysql');
 var config = require('config');
 
 var executeQuery = function(query, parameters, callback) {
-  var connection = mysql.createConnection(config.get('db'));
+  var connectionOptions = config.get('db');
+  connectionOptions.timezone = 'Z';
+  var connection = mysql.createConnection(connectionOptions);
   connection.connect();
   if (callback) {
     connection.query(query, parameters, callback);
