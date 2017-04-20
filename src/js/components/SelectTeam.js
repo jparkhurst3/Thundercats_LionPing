@@ -18,7 +18,7 @@ export default class SelectTeam extends React.Component {
 	}
 
 	componentWillMount() {
-		axios.get("http://localhost:8080/api/teams/getTeams")
+		axios.get("/api/teams/getTeams")
 			.then((result) => {
 				console.log('got teams')
 				console.log(result.data)

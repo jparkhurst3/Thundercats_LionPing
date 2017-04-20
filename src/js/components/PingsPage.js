@@ -20,7 +20,7 @@ export default class PingsPage extends React.Component {
     // displays two PingTables
     // 1) the user's pings
     // 2) all pings
-    render() { 
+    render() {
         return (
             <div className="container"> 
                 <MyPingTable Username={this.state.usname} />

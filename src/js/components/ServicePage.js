@@ -52,7 +52,7 @@ class SelectService extends React.Component {
 	}
 
 	componentWillMount() {
-		axios.get("http://localhost:8080/api/services/getNames")
+		axios.get("/api/services/getNames")
 			.then((result) => {
 				console.log('got services')
 				console.log(result.data)

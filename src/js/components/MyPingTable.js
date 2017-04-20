@@ -10,7 +10,7 @@ export default class MyPingTable extends React.Component {
 		this.state = {
 			pings: null,
 			activePage: 0,
-			mappedPingRows: <tr style={{textAlign:"center"}}><td colSpan="4"><LogoLoading /></td></tr>
+			mappedPingRows: <tr style={{textAlign:"center"}}><td colSpan="5"><LogoLoading /></td></tr>
 		}
 	}
 
