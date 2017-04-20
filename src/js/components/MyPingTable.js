@@ -68,7 +68,7 @@ export default class MyPingTable extends React.Component {
 		//database call for all pings for this service
 		var apiCall = "";
 		// how to populate table based on if it's called from ServicePage or PingsPage
-		if (this.props.title == "MyPings") {
+		if (this.props.title == "My Pings") {
 			apiCall = `/api/pings/getMyPings?Username=${this.props.Username}` // unresolved pings for given user
 		} else {
 			apiCall = `/api/pings/getAllPings` // all pings
