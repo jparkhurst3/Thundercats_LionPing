@@ -92,7 +92,7 @@ class OverrideCard extends React.Component {
     		ID: this.props.parentShift.ID,
 			TeamID : this.props.teamID,
 			ScheduleName : this.props.name,
-			Timestamp: moment(this.state.start).format(),
+			Timestamp: moment(this.state.start).utc().format(),
 			Duration: moment.duration(moment(this.state.end).diff(moment(this.state.start))).asMinutes(),
 			Username: this.state.user.value.Username
     	}
@@ -113,7 +113,7 @@ class OverrideCard extends React.Component {
     	const newParentShift = {
 			TeamID : this.props.teamID,
 			ScheduleName : this.props.name,
-			Timestamp: moment(this.state.start).format(),
+			Timestamp: moment(this.state.start).utc().format(),
 			Duration: moment.duration(moment(this.state.end).diff(moment(this.state.start))).asMinutes(),
 			Username: this.state.user.value.Username
     	}

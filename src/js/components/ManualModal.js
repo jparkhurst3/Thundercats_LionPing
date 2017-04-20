@@ -57,7 +57,7 @@ class ManualCard extends React.Component {
 				user: null,
 				start: moment(props.createStart).format('YYYY-MM-DDTHH:mm'),
 				end: moment(props.createStart).add(60, 'minutes').format('YYYY-MM-DDTHH:mm'),
-				repeated: false,
+				repeated: true,
 				repeatType: "daily"
 			}
 			console.log('override card start time')
@@ -96,13 +96,13 @@ class ManualCard extends React.Component {
     	console.log("handle Submit manual")
     	const newParentShift = {
     		ID: this.props.parentShift.ID,
-			TeamID : this.props.teamID,
-			ScheduleName : this.props.name,
-			Timestamp: moment(this.state.start).format(),
-			Duration: moment.duration(moment(this.state.end).diff(moment(this.state.start))).asMinutes(),
-			Username: this.state.user.value.Username,
-			Repeated: this.state.repeated,
-			RepeatType: this.state.repeatType
+  			TeamID : this.props.teamID,
+  			ScheduleName : this.props.name,
+  			Timestamp: moment(this.state.start).utc().format(),
+  			Duration: moment.duration(moment(this.state.end).diff(moment(this.state.start))).asMinutes(),
+  			Username: this.state.user.value.Username,
+  			Repeated: this.state.repeated,
+  			RepeatType: this.state.repeatType
     	}
     	console.log("newParentShift")
     	console.log(newParentShift)
@@ -119,42 +119,49 @@ class ManualCard extends React.Component {
     handleCreate = () => {
     	console.log('handle Create manual')
     	const newParentShift = {
-			TeamID : this.props.teamID,
-			ScheduleName : this.props.name,
-			Timestamp: moment(this.state.start).format(),
-			Duration: moment.duration(moment(this.state.end).diff(moment(this.state.start))).asMinutes(),
-			Username: this.state.user.value.Username,
-			Repeated: this.state.repeated,
-			RepeatType: this.state.repeatType
+  			TeamID : this.props.teamID,
+  			ScheduleName : this.props.name,
+  			Timestamp: moment(this.state.start).utc().format(),
+  			Duration: moment.duration(moment(this.state.end).diff(moment(this.state.start))).asMinutes(),
+  			Username: this.state.user.value.Username,
+  			Repeated: this.state.repeated,
+  			RepeatType: this.state.repeatType
     	}
+      console.log("create new parent shift to submit")
+      console.log(newParentShift)
+      console.log("this.state.start")
+      console.log(this.state.start)
 
     	this.props.handleCreate(newParentShift)
     	this.props.onModalClose()
     }
 
     handleChange = (event) => {
-		const target = event.target;
-		const value = target.type === 'checkbox' ? target.checked : target.value;
-		const name = target.name;
+  		const target = event.target;
+      const value = target.type === 'radio' ? target.checked : target.value;
+  		const name = target.name;
 	    this.setState({
 	    	[name]: value
 	    });
-
-	}
+	  }
 
 	handleRepeatedChange = (event) => {
+    console.log(event)
 		this.setState({
-			repeated: target.checked
+			repeated: false,
+      repeatType: ''
 		})
 	}
 
-	handleRepeatTypeChange = (event) => {
-		console.log(event);
+	handleRepeatTypeChange = (d) => {
+		console.log("handle repeattype change");
 		this.setState({
-			repeatType: event.target.value
+			repeatType: d,
+      repeated: true
 		})
 		console.log(this.state.repeatType)
 	}
+
 
 	handleUserChange = (user) => {
 		console.log("handleuserchange")
@@ -183,32 +190,34 @@ class ManualCard extends React.Component {
 							<Select name="user" clearable={false} value={this.state.user} placeholder="Select User" options={mappedAllUsers} onChange={this.handleUserChange} />
 						</div>
 
-						<div>
-							<label>
-							Repeated:
-								<input
-								name="repeated"
-								type="checkbox"
-								checked={this.state.repeated}
-								onChange={this.handleChange} />
-							</label>
-						</div>
-
 						<div class="form-group">
-							<div>
-								<input class="form-control" name="repeatType" placeholder="daily | weekly" type="text" onChange={this.handleChange} value={this.state.repeatType}></input>
-							</div>
+              <h4 style={{textAlign: "left", float:"left"}}>Repeated</h4>
+              <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                  <input class="form-check-input" type="radio" name="noRepeat" value={!this.state.repeated} checked={!this.state.repeated} onChange={this.handleRepeatedChange} />None
+                </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                  <input class="form-check-input" type="radio" name="daily" checked={this.state.repeatType == "daily"} onChange={() => this.handleRepeatTypeChange("daily")} />Daily
+                </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                  <input class="form-check-input" type="radio" name="weekly" checked={this.state.repeatType == "weekly"} onChange={() => this.handleRepeatTypeChange('weekly')} />Weekly
+                </label>
+              </div>
 						</div>
 
 						<div class="form-group">
 							{this.props.updateItem ?
 								<div class="" style={{display: 'inline'}}>
-		                			<input type="button" value="Update Shift" class="btn" onClick={this.handleUpdate}></input>
-		                			<input type="button" value="Delete Shift" class="btn" onClick={this.handleDelete}></input>
+            			<input type="button" value="Update Shift" class="btn" onClick={this.handleUpdate}></input>
+            			<input type="button" value="Delete Shift" class="btn" onClick={this.handleDelete}></input>
 								</div>
 								:
 								<div class="" style={{display: 'inline'}}>
-		                			<input type="button" value="Create Shift" class="btn" onClick={this.handleCreate}></input>
+		              <input type="button" value="Create Shift" class="btn" onClick={this.handleCreate}></input>
 								</div>
 							}
 						</div>

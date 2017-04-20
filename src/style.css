@@ -442,7 +442,8 @@ thead th:last-child {
 .react-calendar-timeline .rct-items .rct-item.manual {
   z-index: 175!important;
   /*pointer-events: none!important;*/
-  background: #3FA2FF;
+  /*background: #3FA2FF;*/
+  background: #1E89DD;
 }
 
 .react-calendar-timeline .rct-items .rct-item.rotation {
@@ -483,6 +484,7 @@ thead th:last-child {
 .rct-label-group {
   background: #FFFFFF !important;
   border-left:none!important;
+  color:black;
 }
 
 .selected {

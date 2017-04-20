@@ -95,10 +95,12 @@ class LoginCard extends React.Component {
               <h3>Login to Lion Ping</h3>
             </div>
             <div class="card-block">
-              <input type="text" style={{marginBottom: "20px"}} class="form-control" id="uname" onChange={this.usernameChanged} placeholder="Username" />
-              <input type="password" style={{marginBottom: "20px"}} class="form-control" id="passw" onChange={this.passwordChanged} placeholder="Password" />
-              <input type="button" style={{width: "40%", float:"left"}} class="btn form-control" value="Login" onClick={this.handleLogin}></input>
-              <input type="button" style={{width: "40%", float:"right"}} class="btn form-control" value="Register" onClick={this.handleRegister}></input>
+              <form>
+                <input type="text" style={{marginBottom: "20px"}} class="form-control" id="uname" onChange={this.usernameChanged} placeholder="Username" />
+                <input type="password" style={{marginBottom: "20px"}} class="form-control" id="passw" onChange={this.passwordChanged} placeholder="Password" />
+                <input type="submit" style={{width: "40%", float:"left"}} class="btn form-control" value="Login" onClick={this.handleLogin}></input>
+                <input type="button" style={{width: "40%", float:"right"}} class="btn form-control" value="Register" onClick={this.handleRegister}></input>
+              </form>
             </div>
           </div>
         )
