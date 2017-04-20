@@ -232,7 +232,7 @@ class NotFound extends React.Component {
   render() {
   	return (
   	  <div class="container">
-  		<h1>404 Not Found</h1>
+  		  <h1>404 Not Found</h1>
   	  </div>
   	)
   }

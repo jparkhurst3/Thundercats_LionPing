@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactModal from 'react-modal'
-import {Link} from 'react-router'
+import {Link, browserHistory} from 'react-router'
 import axios from 'axios'
 import Select from 'react-select';
 
@@ -65,7 +65,6 @@ class CreateTeamCard extends React.Component {
         super(props)
         this.state = {
             teamName: '',
-            teamDescription: '',
             created: false,
             allUsers: [], // all users from the databse
             teamMembers: [] // users on the created team
@@ -84,7 +83,6 @@ class CreateTeamCard extends React.Component {
             })
     }
 
-    // TODO: not working for some reason
     createTeam = (event) => {
         event.preventDefault()
         console.log("Create Team");
@@ -99,6 +97,8 @@ class CreateTeamCard extends React.Component {
                 this.setState({
                     created: true
                 })
+                browserHistory.push(`/teams/${this.state.teamName}`);
+
             })
             .catch(err => {
                 console.log('Team not created'); // SHIT!
@@ -134,11 +134,10 @@ class CreateTeamCard extends React.Component {
         return (
             <div class="card modal-card">
                 <div class="card-header home-card-header"><h3>Create Team</h3></div>
-                <div class="card-block">
+                <div class="card-block" style={{height:"400px"}}>
                     <form>
                         <div class = "form-group">
-                            <input type="text" name="teamName" class="form-control" placeholder="Team Name" value={this.state.teamName} onChange={this.handleChange}/>
-                            <input type="text" name="teamDescription" class="form-control" aria-describedby="emailHelp" placeholder="Description (Optional)" value={this.state.teamDescription} onChange={this.handleChange}/>
+                            <input type="text" style={{marginBottom:"20px"}} name="teamName" class="form-control" placeholder="Team Name" value={this.state.teamName} onChange={this.handleChange}/>
                             <Select multi value={this.state.teamMembers} options={mappedUsers} onChange={this.handleSelected.bind(this)} />
                         </div>
                         <button type="submit" class="btn" onClick={this.createTeam}>Create Team</button>

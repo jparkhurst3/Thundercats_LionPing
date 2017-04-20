@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactModal from 'react-modal'
-import {Link} from 'react-router'
+import {Link, browserHistory} from 'react-router'
 import axios from 'axios'
 
 export default class CreateServiceModal extends React.Component {
@@ -62,7 +62,6 @@ class CreateServiceCard extends React.Component {
 		super(props)
 		this.state = {
 			serviceName: '',
-			serviceDescription: '',
 			created: false
 		}
 	}
@@ -87,6 +86,7 @@ class CreateServiceCard extends React.Component {
 				this.setState({
 					created: true
 				})
+        browserHistory.push(`/services/${this.state.serviceName}`);
 
 			})
 			.catch(err => {
@@ -120,7 +120,6 @@ class CreateServiceCard extends React.Component {
 					<form>
 						<div class="form-group">
 							<input type="text" name="serviceName" class="form-control" id="exampleInputEmail1" placeholder="Service Name" value={this.state.serviceName} onChange={this.handleChange}/>
-							<input type="text" name="serviceDescription" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Description (Optional)" value={this.state.serviceDescription} onChange={this.handleChange}/>
 						</div>
 						<button type="submit" class="btn" onClick={this.createService}>Create Service</button>
 					</form>

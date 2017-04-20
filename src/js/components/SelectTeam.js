@@ -18,6 +18,10 @@ export default class SelectTeam extends React.Component {
 	}
 
 	componentWillMount() {
+		this.getTeams()
+	}
+
+	getTeams = () => {
 		axios.get("/api/teams/getTeams")
 			.then((result) => {
 				console.log('got teams')
@@ -39,6 +43,7 @@ export default class SelectTeam extends React.Component {
 			this.setState({
 				value: nextProps.team
 			})
+			this.getTeams()
 		}
 	}
 

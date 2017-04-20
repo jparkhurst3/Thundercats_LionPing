@@ -49,9 +49,14 @@ class SelectService extends React.Component {
 				value: nextProps.service
 			})
 		}
+		this.getNames()
 	}
 
 	componentWillMount() {
+		this.getNames()
+	}
+
+	getNames = () => {
 		axios.get("/api/services/getNames")
 			.then((result) => {
 				console.log('got services')
