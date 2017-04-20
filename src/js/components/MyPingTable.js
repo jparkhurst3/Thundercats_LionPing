@@ -69,9 +69,9 @@ export default class MyPingTable extends React.Component {
 		var apiCall = "";
 		// how to populate table based on if it's called from ServicePage or PingsPage
 		if (this.props.Username != undefined) {
-			apiCall = `/api/pings/getMyUnresolvedPings?Username=${this.props.Username}` // unresolved pings for given user
+			apiCall = `/api/pings/getMyPings?Username=${this.props.Username}` // unresolved pings for given user
 		} else {
-			apiCall = `/api/pings/getUnresolvedPings` // all unresolved pings
+			apiCall = `/api/pings/getAllPings` // all pings
 		}
 		// console.log(apiCall);
 		axios.get(apiCall)
@@ -184,25 +184,6 @@ class PingPagination extends React.Component {
 }
 
 class PingRow extends React.Component {
- //    constructor(props) {
- //        super(props);
- //        this.state = {
- //            services: null
- //        }
- //    }
-
-	// componentDidMount() {
-	// 	axios.get("http://localhost:8080/api/services/getNames")
-	// 		.then((result) => {
-	// 			// console.log('got services')
-	// 			console.log(result.data)
-	// 			this.setState({services: result.data});
-	// 		})
-	// 		.catch((err) => {
-	// 			console.log(err);
-	// 		})
-	// }
-
 	onClick = (id) => {
 		// console.log("onclick: " + id)
 		browserHistory.push(`/pings/${id}`);
@@ -210,32 +191,14 @@ class PingRow extends React.Component {
 
 	render() {
 		const time = moment(this.props.ping.CreatedTime).calendar()
-		// console.log(this.state.services);
-		// const serviceList = this.state.services;
-		// const serviceList = ["Database", "UI", "Server", "Sam Service", "Backend"];
-		// console.log(serviceList);
-		// if (serviceList != null) {
-		// 	return (
-		// 		<tr onClick={() => this.onClick(this.props.ping.ID)}>
-		// 			<td>{time}</td>
-		// 			<td>{serviceList[this.props.ping.ServiceID]}</td>
-		// 			<td>{this.props.ping.Name}</td>
-		// 			<td>{this.props.ping.Description}</td>
-		// 			<td>{this.props.ping.Status}</td>
-		// 		</tr>
-		// 	)
-		// } else {
-			return (
-				<tr onClick={() => this.onClick(this.props.ping.ID)}>
-					<td>{time}</td>
-					<td>{this.props.ping.ServiceID}</td>
-					<td>{this.props.ping.Name}</td>
-					<td>{this.props.ping.Description}</td>
-					<td>{this.props.ping.Status}</td>
-				</tr>
-			)
-		// }
+		return (
+			<tr onClick={() => this.onClick(this.props.ping.ID)}>
+				<td>{time}</td>
+				<td>{this.props.ping.ServiceName}</td>
+				<td>{this.props.ping.Name}</td>
+				<td>{this.props.ping.Description}</td>
+				<td>{this.props.ping.Status}</td>
+			</tr>
+		)
 	}
 }
-
-//this.state.services[this.props.ping.ServiceID - 1]

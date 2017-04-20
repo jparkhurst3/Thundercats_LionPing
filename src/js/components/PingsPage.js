@@ -18,8 +18,8 @@ export default class PingsPage extends React.Component {
         });
     }
     // displays two PingTables
-    // 1) the user's unresolved pings
-    // 2) all unresolved pings
+    // 1) the user's pings
+    // 2) all pings
     render() { 
         return (
             <div className="container"> 
