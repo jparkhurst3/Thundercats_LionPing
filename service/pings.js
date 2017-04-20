@@ -127,6 +127,47 @@ var getOpenPingsForUser = function(username) {
   });
 }
 
+var getPingsForUser = function(username, limit) {
+  return new Promise((resolve,reject)=>{
+    serviceServce.getServicesForUser(username).then((services)=>{
+      if (services.length == 0) {
+        resolve([]);
+        return;
+      }
+      var serviceIDs = services.map((service)=>{ return service.ID; });
+      var query = 'SELECT p.*, s.Name as ServiceName FROM PING p JOIN SERVICE s ON (p.ServiceID = s.ID) WHERE p.ServiceID IN (' + serviceIDs.join(",") + ") " +
+        " ORDER BY FIELD(p.Status,'Open','Acknowledged','Resolved'), p.CreatedTime DESC ";
+      if (limit) {
+        query += " LIMIT " + limit;
+      }
+      database.executeQuery(query, (error, rows, fields) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+  });
+}
+
+var getAllPings = function(limit) {
+  return new Promise((resolve,reject)=>{
+    var query = 'SELECT p.*, s.Name as ServiceName FROM PING p JOIN SERVICE s ON (p.ServiceID = s.ID) ' +
+      " ORDER BY FIELD(p.Status,'Open','Acknowledged','Resolved'), p.CreatedTime DESC ";
+    if (limit) {
+      query += " LIMIT " + limit;
+    }
+    database.executeQuery(query, (error, rows, fields) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(rows);
+      }
+    })
+  });
+}
+
 module.exports = {
 	getPingsForService : getPingsForService,
 	createPing : createPing,
@@ -135,5 +176,7 @@ module.exports = {
   acknowledgePing : acknowledgePing,
   getUnresolvedPings : getUnresolvedPings,
   getUnresolvedPingsForUser : getUnresolvedPingsForUser,
-  getOpenPingsForUser : getOpenPingsForUser
+  getOpenPingsForUser : getOpenPingsForUser,
+  getPingsForUser : getPingsForUser,
+  getAllPings : getAllPings
 }

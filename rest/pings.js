@@ -110,6 +110,32 @@ var getMyOpenPings = function(req, res) {
   });
 }
 
+var getMyPings = function(req, res) {
+  res.setHeader('Content-Type', 'text/plain');
+
+  pingService.getPingsForUser(req.user.Username).then((result)=>{
+    res.statusCode = 200;
+    res.send(JSON.stringify(result));
+  }).catch((error)=>{
+    console.log(error);
+    res.statusCode = 500;
+    res.end("error");
+  });
+}
+
+var getAllPings = function(req, res) {
+  res.setHeader('Content-Type', 'text/plain');
+
+  pingService.getAllPings().then((result)=>{
+    res.statusCode = 200;
+    res.send(JSON.stringify(result));
+  }).catch((error)=>{
+    console.log(error);
+    res.statusCode = 500;
+    res.end("error");
+  });
+}
+
 module.exports = {
 	getPingsForService : getPingsForService,
 	createPing : createPing,
@@ -118,5 +144,7 @@ module.exports = {
   acknowledgePing : acknowledgePing,
   getUnresolvedPings : getUnresolvedPings,
   getMyUnresolvedPings : getMyUnresolvedPings,
-  getMyOpenPings : getMyOpenPings
+  getMyOpenPings : getMyOpenPings,
+  getMyPings : getMyPings,
+  getAllPings : getAllPings
 }
