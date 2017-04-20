@@ -22,9 +22,9 @@ export default class PingsPage extends React.Component {
     // 2) all pings
     render() {
         return (
-            <div className="container"> 
-                <MyPingTable Username={this.state.usname} />
-                <MyPingTable/>
+            <div className="container">
+              <MyPingTable title="My Pings" Username={this.state.usname} />
+              <MyPingTable title="All Pings" />
             </div>
         )
     }

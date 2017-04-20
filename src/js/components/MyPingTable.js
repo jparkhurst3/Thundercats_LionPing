@@ -68,7 +68,7 @@ export default class MyPingTable extends React.Component {
 		//database call for all pings for this service
 		var apiCall = "";
 		// how to populate table based on if it's called from ServicePage or PingsPage
-		if (this.props.Username != undefined) {
+		if (this.props.title == "MyPings") {
 			apiCall = `/api/pings/getMyPings?Username=${this.props.Username}` // unresolved pings for given user
 		} else {
 			apiCall = `/api/pings/getAllPings` // all pings
@@ -95,61 +95,32 @@ export default class MyPingTable extends React.Component {
 	}
 
 	render() {
-		if (this.props.Username != undefined) {
-			return (
-				<div class="card home-card">
-					<div class="card-header home-card-header">
-						<h3>My Pings</h3>
-					</div>
-					<div class="card-block services-card-block">
-						<table class="table table-hover">
-							<thead className="thead">
-								<tr>
-									<th>Created At</th>
-									<th>Service</th>
-									<th>Name</th>
-									<th>Description</th>
-									<th>Status</th>
-								</tr>
-							</thead>
-							<tbody>
-								{this.state.mappedPingRows}
-							</tbody>
-						</table>
-					</div>
-					{this.state.pings ?
-						<PingPagination prevDisabled={this.state.activePage == 0} nextDisabled={this.state.pings.length / 5 <= this.state.activePage+1} numPings={this.state.pings.length} handleNextClick={this.handleNextClick} handlePrevClick={this.handlePrevClick} />
-						: null }
+		return (
+			<div class="card home-card">
+				<div class="card-header home-card-header">
+					<h3>{this.props.title}</h3>
 				</div>
-			)
-		} else {
-			return (
-				<div class="card home-card">
-					<div class="card-header home-card-header">
-						<h3>All Pings</h3>
-					</div>
-					<div class="card-block services-card-block">
-						<table class="table table-hover">
-							<thead className="thead">
-								<tr>
-									<th>Created At</th>
-									<th>Service</th>
-									<th>Name</th>
-									<th>Description</th>
-									<th>Status</th>
-								</tr>
-							</thead>
-							<tbody>
-								{this.state.mappedPingRows}
-							</tbody>
-						</table>
-					</div>
-					{this.state.pings ?
-						<PingPagination prevDisabled={this.state.activePage == 0} nextDisabled={this.state.pings.length / 5 <= this.state.activePage+1} numPings={this.state.pings.length} handleNextClick={this.handleNextClick} handlePrevClick={this.handlePrevClick} />
-						: null }
+				<div class="card-block services-card-block">
+					<table class="table table-hover">
+						<thead className="thead">
+							<tr>
+								<th>Created At</th>
+								<th>Service</th>
+								<th>Name</th>
+								<th style={{width:"50%"}}>Description</th>
+								<th>Status</th>
+							</tr>
+						</thead>
+						<tbody>
+							{this.state.mappedPingRows}
+						</tbody>
+					</table>
 				</div>
-			)
-		}
+				{this.state.pings ?
+					<PingPagination prevDisabled={this.state.activePage == 0} nextDisabled={this.state.pings.length / 5 <= this.state.activePage+1} numPings={this.state.pings.length} handleNextClick={this.handleNextClick} handlePrevClick={this.handlePrevClick} />
+					: null }
+			</div>
+		)
 	}
 }
 
