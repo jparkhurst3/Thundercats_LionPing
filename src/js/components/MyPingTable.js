@@ -212,8 +212,8 @@ class PingRow extends React.Component {
 		const time = moment(this.props.ping.CreatedTime).calendar()
 		// console.log(this.state.services);
 		// const serviceList = this.state.services;
-		const serviceList = ["Database", "UI", "Server", "Sam Service", "Backend"];
-		console.log(serviceList);
+		// const serviceList = ["Database", "UI", "Server", "Sam Service", "Backend"];
+		// console.log(serviceList);
 		// if (serviceList != null) {
 		// 	return (
 		// 		<tr onClick={() => this.onClick(this.props.ping.ID)}>
@@ -228,7 +228,7 @@ class PingRow extends React.Component {
 			return (
 				<tr onClick={() => this.onClick(this.props.ping.ID)}>
 					<td>{time}</td>
-					<td>{serviceList[this.props.ping.ServiceID - 1]}</td>
+					<td>{this.props.ping.ServiceID}</td>
 					<td>{this.props.ping.Name}</td>
 					<td>{this.props.ping.Description}</td>
 					<td>{this.props.ping.Status}</td>
