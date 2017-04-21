@@ -15,13 +15,13 @@ export default class ServicePage extends React.Component {
 	render() {
 		if (!this.props.params.service) {
 			return (
-				<div class="container">
+				<div class="cont">
 					<SelectService />
 				</div>
 			)
 		}
 		return (
-			<div className="container">
+			<div className="cont">
 				<SelectService service={this.props.params.service} />
 				<PingTable service={this.props.params.service} />
         <EscalationTable service={this.props.params.service} />

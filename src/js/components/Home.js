@@ -19,7 +19,7 @@ class HomeCards extends React.Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="cont">
         <div class="card-deck ">
           <NotificationCard />
           <NewPingCard />
@@ -56,7 +56,7 @@ class HomeTables extends React.Component {
     // )
 
     return (
-      <div className="container">
+      <div className="cont">
         <div class="home-table-deck">
           <ServicesTable onServiceClick={this.handleServiceClick} currentService={this.state.service} />
           <PingsTable service={this.state.service} />

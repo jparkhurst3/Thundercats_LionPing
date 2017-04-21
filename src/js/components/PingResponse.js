@@ -63,6 +63,7 @@ export default class PingResponse extends React.Component {
   render() {
     if (!this.state.pingData) {
       return (
+        <div class="cont">
         <div class="card home-card">
           <div class="card-header home-card-header">
             <h3>Respond to Ping</h3>
@@ -70,6 +71,7 @@ export default class PingResponse extends React.Component {
 
           <div class="card-block">
           </div>
+        </div>
         </div>
       )
     }
@@ -84,6 +86,7 @@ export default class PingResponse extends React.Component {
     }
 
     return (
+      <div class="cont">
       <div class="card home-card">
         <div class="card-header home-card-header">
           <h3>Respond to Ping</h3>
@@ -105,7 +108,7 @@ export default class PingResponse extends React.Component {
 
         </div>
 
-
+        </div>
       </div>
     )
   }

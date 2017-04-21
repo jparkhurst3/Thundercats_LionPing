@@ -22,14 +22,14 @@ export default class TeamPage extends React.Component {
 	render() {
 		if (!this.props.params.team) {
 			return (
-				<div class="container">
+				<div class="cont">
 					<SelectTeam />
 				</div>
 			)
 		}
 
 		return (
-			<div class="container">
+			<div class="cont">
 				<SelectTeam team={this.props.params.team} />
 				<SchedulePane team={this.props.params.team} />
 				<TeamMembers team={this.props.params.team} />

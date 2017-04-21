@@ -17,6 +17,11 @@ a:hover {
     text-decoration: none;
 }
 
+.cont {
+  margin-left: 20px;
+  margin-right:20px;
+}
+
 .hub-icon {
   animation: spin 3s 10 ease both;
   transform-origin: center center;

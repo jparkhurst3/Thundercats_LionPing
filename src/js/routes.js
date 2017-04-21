@@ -126,7 +126,7 @@ class Container extends React.Component {
     }
 
   	return (
-  	  <div className="container-fluid">
+  	  <div className="cont">
     		<div className="row">
     		  <div className="col-xs-2">
     			   <SideBar logout={this.logout} />
@@ -216,11 +216,11 @@ class NavBar extends React.Component {
 
   render() {
     return (
-      <div className="container row" style={{paddingBottom: '20px', paddingTop: '20px', paddingRight:'0px', marginRight: '0px'}}>
-      	<div class="col-xs-4">
+      <div className="cont row" style={{paddingLeft:"0px", paddingBottom: '20px', paddingTop: '20px', paddingRight:'0px'}}>
+      	<div class="col-xs-4" style={{paddingLeft:"0px"}}>
           <Select.Async class="" style={{paddingLeft: '0px'}} value={this.state.value} placeholder="Search" loadOptions={this.search} onChange={this.handleSelected} />
       	</div>
-      	<div class="col-xs-8" style={{textAlign: "right"}}>
+      	<div class="col-xs-8" style={{textAlign: "right", paddingRight:"0px"}}>
 			     <h4><Link style={{display:"inline-block"}} to="/profile">{this.props.currentUser.FirstName + " " + this.props.currentUser.LastName}</Link></h4>
       	</div>
       </div>
@@ -231,27 +231,17 @@ class NavBar extends React.Component {
 class NotFound extends React.Component {
   render() {
   	return (
-  	  <div class="container">
+  	  <div class="cont">
   		  <h1>404 Not Found</h1>
   	  </div>
   	)
   }
 }
 
-class Pings extends React.Component {
-  render() {
-	return (
-	  <div class="container">
-		<h1>Pings</h1>
-	  </div>
-	)
-  }
-}
-
 class FAQ extends React.Component {
   render() {
 	return (
-		<div class="container">
+		<div class="cont">
 			<h1>FAQ</h1>
 			<h2>Common Questions</h2>
 			<h3>Question 1</h3>
@@ -268,7 +258,7 @@ class FAQ extends React.Component {
 class GettingStarted extends React.Component {
   render() {
 	return (
-		<div class="container">
+		<div class="cont">
 			<h1>Getting Started</h1>
 		</div>
 	)
