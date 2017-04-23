@@ -91,9 +91,9 @@ export default class SideBar extends React.Component {
             <footer class="footer">
                 <div class="container">
                     <h6 style={{color: 'white'}}><small>
-                        <Link to="/faq">FAQ</Link>
+                        <a href="https://drive.google.com/open?id=0B1_aLCGdS07YWFZUdUJMOGdrRkE" onclick="window.open(this.href); return false;" onkeypress="window.open(this.href); return false;">FAQs</a>
                         &#160;|&#160;
-                        <Link to="/gettingstarted">Getting Started</Link>
+                        <a href="https://drive.google.com/file/d/0B1_aLCGdS07YbU0tRUswQ2RJQ0U/view?usp=sharing" onclick="window.open(this.href); return false;" onkeypress="window.open(this.href); return false;">GettingStarted</a>
                     </small></h6>
                     <h6 style={{color: 'white'}}><small>©2017 Thundercats, LLC</small></h6>
                 </div>
